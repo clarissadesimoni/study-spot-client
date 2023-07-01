@@ -13,68 +13,13 @@ function App() {
     const [ end, setEnd ] = useState(new Date());
     const [ eventName, setEventName ] = useState('');
 
-    /* if (isLoading) {
-        return <></>
-    } */
-
-    /* const googleLogin = useGoogleLogin({
-    flow: 'auth-code',
-    onSuccess: async (codeResponse) => {
-        console.log(codeResponse);
-        const tokens = await axios.post(
-            '/swap-token', {
-                code: codeResponse.code,
-            });
-
-        console.log(tokens);
-    },
-    onError: errorResponse => console.log(errorResponse),
-  }); */
-
-    /* const handleCallbackResponse = (response) => {
-    console.log(`Encoded JWT token: ${response.credential}`);
-    const userObject = jwt_decode(response.credential);
-    console.log(userObject);
-    setUser(userObject);
-  }
-
-  useEffect(() => {
-    // global google
-    google.accounts.id.initialize({
-      client_id: '492289027985-j8rpltvlipgl5qu0la561ccacu4l0uf9.apps.googleusercontent.com',
-      callback: handleCallbackResponse
-    });
-    google.accounts.id.renderButton(
-      document.getElementById('signInDiv'),
-      { theme: 'outline', size: 'large' }
-    );
-    const oauth2Client = new google.auth.OAuth2(
-        process.env.GCAL_CLIENT_ID,
-        process.env.GCAL_SECRET,
-        `http://localhost:5173/swap-token`
-    );
-    const scopes = [
-      'https://www.googleapis.com/auth/calendar'
-    ];
-    const authorizationUrl = oauth2Client.generateAuthUrl({
-      // 'online' (default) or 'offline' (gets refresh_token)
-      access_type: 'offline',
-      // * Pass in the scopes array defined above.
-      //   * Alternatively, if only one scope is needed, you can pass a scope URL as a string
-      scope: scopes,
-      // Enable incremental authorization. Recommended as a best practice.
-      include_granted_scopes: true
-    });
-    let userCredential = null;
-
-  }, []) */
-
     async function googleSignIn() {
         const { error } =  await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                scopes: 'https://www.googleapis.com/auth/calendar'
-            }
+                scopes: 'https://www.googleapis.com/auth/calendar',
+                redirectTo: window.location.origin
+            },
         });
         if (error) {
             alert('Error signing in with google');
