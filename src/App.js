@@ -14,6 +14,7 @@ function App() {
     const [ eventName, setEventName ] = useState('');
 
     async function googleSignIn() {
+        console.log(window.location.origin)
         const { error } =  await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
