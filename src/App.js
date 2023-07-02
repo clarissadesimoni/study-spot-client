@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
-import { getStartOfWeek, getEndOfWeek } from './utilities/dates'
+import { getStartOfWeek, getEndOfWeek } from './utilities/dates';
+import './misc.css';
 
 function App() {
 
@@ -98,7 +99,7 @@ function App() {
             })
             .then(response => {
                 console.log('Got a response from fetch');
-                response.json();
+                return response.json();
             })
             .then(events => events.items.map(ev => {
                 return {
@@ -112,7 +113,6 @@ function App() {
             .catch(err => console.error(err));
         }
         setEventList(completeList);
-        console.log('Reduced events');
         console.log('Finished getWeeklyEvents function');
     }
 
