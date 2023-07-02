@@ -87,8 +87,9 @@ function App() {
     }
 
     async function getWeeklyEvents() {
-        console.log('In getWeeklyEvents function')
-        setEventList(calendars.keys().map(calendarId => {
+        console.log('In getWeeklyEvents function');
+        var completeList = [];
+        for (var calendarId in calendars) {
             fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${getStartOfWeek(new Date()).toISOString()}&timeMax=${getEndOfWeek(new Date()).toISOString()}`, {
                 method: 'GET',
                 headers: {
@@ -107,14 +108,12 @@ function App() {
                     calendar: calendars[calendarId]
                 }
             }))
+            .then(events => completeList.push(...events))
             .catch(err => console.error(err));
-            console.log('Finished getWeeklyEvents function');
-        }).reduce((acc, evs) => {
-            console.log('Reducing events');
-            acc.push(evs);
-            return acc;
-        }, []));
+        }
+        setEventList(completeList);
         console.log('Reduced events');
+        console.log('Finished getWeeklyEvents function');
     }
 
     return (
