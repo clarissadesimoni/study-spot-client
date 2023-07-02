@@ -103,7 +103,10 @@ function App() {
                     calendar: calendars[calendarId]
                 }
             }))
-        }).reduce((acc, evs) => acc.push(evs), []));
+        }).reduce((acc, evs) => {
+            acc.push(evs);
+            return acc;
+        }, []));
     }
 
     return (
@@ -125,6 +128,7 @@ function App() {
                         <hr />
                         <div>
                             <button onClick={() => fetchCalendars()}>Fetch Calendars</button>
+                            <p>{JSON.stringify(calendars, null, 4)}</p>
                             <button onClick={() => getWeeklyEvents()}>Fetch Weekly Events</button>
                             <p>{JSON.stringify(eventList, null, 4)}</p>
                         </div>
