@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
 import { getStartOfWeek, getEndOfWeek } from './utilities/dates'
@@ -87,6 +87,7 @@ function App() {
     }
 
     async function getWeeklyEvents() {
+        console.log('In getWeeklyEvents function')
         setEventList(calendars.keys().map(calendarId => {
             fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${getStartOfWeek(new Date()).toISOString()}&timeMax=${getEndOfWeek(new Date()).toISOString()}`, {
                 method: 'GET',
@@ -94,7 +95,10 @@ function App() {
                     Authorization: 'Bearer ' + session.provider_token
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Got a response from fetch');
+                response.json();
+            })
             .then(events => events.items.map(ev => {
                 return {
                     summary: ev.summary,
@@ -103,10 +107,14 @@ function App() {
                     calendar: calendars[calendarId]
                 }
             }))
+            .catch(err => console.error(err));
+            console.log('Finished getWeeklyEvents function');
         }).reduce((acc, evs) => {
+            console.log('Reducing events');
             acc.push(evs);
             return acc;
         }, []));
+        console.log('Reduced events');
     }
 
     return (
