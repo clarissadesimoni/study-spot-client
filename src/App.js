@@ -9,7 +9,7 @@ function App() {
     const supabase = useSupabaseClient();
     const [ start, setStart ] = useState(new Date());
     const [ end, setEnd ] = useState(new Date());
-    const [calendars, setCalendars ] = useState(new Object());
+    const [calendars, setCalendars ] = useState({});
     const [ eventName, setEventName ] = useState('');
     const [ eventList, setEventList ] = useState([]);
 
