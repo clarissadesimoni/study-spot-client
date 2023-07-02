@@ -1,41 +1,17 @@
 import { useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import DateTimePicker from 'react-datetime-picker';
 import { getStartOfWeek, getEndOfWeek } from './utilities/dates';
-import Calendar from './Calendar';
+import './misc.css';
 
 function App() {
 
-    const session = useSession(); // tokens
-    const supabase = useSupabaseClient();
+    const session = useSession();
     const [ start, setStart ] = useState(new Date());
     const [ end, setEnd ] = useState(new Date());
     const [calendars, setCalendars ] = useState({});
     const [ eventName, setEventName ] = useState('');
     const [ eventList, setEventList ] = useState([]);
-
-    async function googleSignIn() {
-        // console.log(window.location.origin)
-        const { error } =  await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                scopes: 'https://www.googleapis.com/auth/calendar',
-                queryParams: {
-                    access_type: 'offline',
-                    prompt: 'consent',
-                }
-            },
-        });
-        if (error) {
-            alert('Error signing in with google');
-            console.log(error.message);
-        } else {
-            // fetchCalendars();
-        }
-    }
-
-    async function signOut() {
-        await supabase.auth.signOut();
-    }
 
     function fetchCalendars() {
         fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
@@ -58,7 +34,7 @@ function App() {
     }
 
     async function createCalendarEvent() {
-        const event = {
+        const events = {
             summary: eventName,
             start: {
                 dateTime: start.toISOString(),
@@ -74,7 +50,7 @@ function App() {
             headers: {
                 Authorization: 'Bearer ' + session.provider_token // Access token for google
             },
-            body: JSON.stringify(event)
+            body: JSON.stringify(events)
         }).then((data) => data.json())
         .then((data) => {
             console.log(data);
@@ -118,18 +94,23 @@ function App() {
     return (
         <div className="app">
             <div style={{width: '400px', margin: "30px auto"}}>
-                {
-                    session ?
-                    <>
-                        <Calendar />
-                        <hr />
-                        <button onClick={() => signOut()}>Sign out</button>
-                    </>
-                    :
-                    <>
-                        <button onClick={() => googleSignIn()}>Sign in with Google</button>
-                    </>
-                }
+                <h2>Hey user {session.user.email}</h2>
+                <div>
+                    <p>Start of event:</p>
+                    <DateTimePicker onChange={setStart} value={start} />
+                    <p>End of event:</p>
+                    <DateTimePicker onChange={setEnd} value={end} />
+                    <p>Name of event:</p>
+                    <input type="text" onChange={(e) => setEventName(e.target.value)} />
+                </div>
+                <button onClick={() => createCalendarEvent()}>Create calendar event</button>
+                <hr />
+                <div>
+                    <button onClick={() => fetchCalendars()}>Fetch Calendars</button>
+                    <p>{JSON.stringify(calendars, null, 4)}</p>
+                    <button onClick={() => getWeeklyEvents()}>Fetch Weekly Events</button>
+                    <p>{JSON.stringify(eventList, null, 4)}</p>
+                </div>
             </div>
         </div>
     );
