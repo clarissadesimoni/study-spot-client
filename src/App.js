@@ -8,28 +8,54 @@ function App() {
 
     const session = useSession(); // tokens
     const supabase = useSupabaseClient();
-    const isLoading = useSessionContext();
     const [ start, setStart ] = useState(new Date());
     const [ end, setEnd ] = useState(new Date());
+    const [calendars, setCalendars ] = useState(new Object());
     const [ eventName, setEventName ] = useState('');
+    const [ eventList, setEventList ] = useState([]);
 
     async function googleSignIn() {
-        console.log(window.location.origin)
+        // console.log(window.location.origin)
         const { error } =  await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
                 scopes: 'https://www.googleapis.com/auth/calendar',
-                redirectTo: window.location.origin
+                queryParams: {
+                    access_type: 'offline',
+                    prompt: 'consent',
+                }
             },
         });
         if (error) {
             alert('Error signing in with google');
-            console.log(error);
+            console.log(error.message);
+        } else {
+            // fetchCalendars();
         }
     }
 
     async function signOut() {
         await supabase.auth.signOut();
+    }
+
+    function fetchCalendars() {
+        fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + session.provider_token
+            }
+        })
+        .then(response => response.json())
+        .then(data => data.items.reduce((acc, cal) => {
+            acc[cal.id] = cal.summary;
+            return acc;
+        }, {}))
+        .then(dict => setCalendars(dict))
+        .then(() => console.log('Fetched calendars'))
+        .catch(error => {
+            alert('Error fetching calendars');
+            console.log(error.message);
+        });
     }
 
     async function createCalendarEvent() {
@@ -47,14 +73,22 @@ function App() {
         await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
             method: "POST",
             headers: {
-                'Authorization':'Bearer ' + session.provider_token // Access token for google
+                Authorization: 'Bearer ' + session.provider_token // Access token for google
             },
             body: JSON.stringify(event)
-        }).then((data) => data.json)
+        }).then((data) => data.json())
         .then((data) => {
             console.log(data);
             alert("Event created, check your Google Calendar!");
+        })
+        .catch(error => {
+            alert('Error creating event');
+            console.log(error);
         });
+    }
+
+    async function getWeeklyEvents() {
+
     }
 
     return (
@@ -73,6 +107,11 @@ function App() {
                             <input type="text" onChange={(e) => setEventName(e.target.value)} />
                         </div>
                         <button onClick={() => createCalendarEvent()}>Create calendar event</button>
+                        <hr />
+                        <div>
+                            <button onClick={() => fetchCalendars()}>Fetch calendars</button>
+                            <p>{JSON.stringify(calendars, null, 4)}</p>
+                        </div>
                         <hr />
                         <button onClick={() => signOut()}>Sign out</button>
                     </>
