@@ -91,7 +91,7 @@ function App() {
         console.log('In getWeeklyEvents function');
         var completeList = [];
         for (var calendarId in calendars) {
-            fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${getStartOfWeek(new Date()).toISOString()}&timeMax=${getEndOfWeek(new Date()).toISOString()}`, {
+            await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${getStartOfWeek(new Date()).toISOString()}&timeMax=${getEndOfWeek(new Date()).toISOString()}`, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + session.provider_token
