@@ -87,8 +87,7 @@ function App() {
     }
 
     async function getWeeklyEvents() {
-        if (calendars.keys().length === 0)
-            fetchCalendars();
+        fetchCalendars();
         setEventList(calendars.keys().map(calendarId => {
             fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${getStartOfWeek(new Date()).toISOString()}&timeMax=${getEndOfWeek(new Date()).toISOString()}`, {
                 method: 'GET',
