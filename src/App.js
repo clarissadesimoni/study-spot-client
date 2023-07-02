@@ -87,7 +87,6 @@ function App() {
     }
 
     async function getWeeklyEvents() {
-        fetchCalendars();
         setEventList(calendars.keys().map(calendarId => {
             fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${getStartOfWeek(new Date()).toISOString()}&timeMax=${getEndOfWeek(new Date()).toISOString()}`, {
                 method: 'GET',
@@ -125,6 +124,7 @@ function App() {
                         <button onClick={() => createCalendarEvent()}>Create calendar event</button>
                         <hr />
                         <div>
+                            <button onClick={() => fetchCalendars()}>Fetch Calendars</button>
                             <button onClick={() => getWeeklyEvents()}>Fetch Weekly Events</button>
                             <p>{JSON.stringify(eventList, null, 4)}</p>
                         </div>
