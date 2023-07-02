@@ -1,8 +1,7 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
-import jwt_decode from 'jwt-decode';
-import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
+import { getStartOfWeek, getEndOfWeek } from './utilities/dates'
 
 function App() {
 
@@ -88,7 +87,25 @@ function App() {
     }
 
     async function getWeeklyEvents() {
-
+        if (calendars.keys().length === 0)
+            fetchCalendars();
+        setEventList(calendars.keys().map(calendarId => {
+            fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${getStartOfWeek(new Date()).toISOString()}&timeMax=${getEndOfWeek(new Date()).toISOString()}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + session.provider_token
+                }
+            })
+            .then(response => response.json())
+            .then(events => events.items.map(ev => {
+                return {
+                    summary: ev.summary,
+                    start: ev.start,
+                    end: ev.end,
+                    calendar: calendars[calendarId]
+                }
+            }))
+        }).reduce((acc, evs) => acc.push(evs), []));
     }
 
     return (
@@ -109,8 +126,8 @@ function App() {
                         <button onClick={() => createCalendarEvent()}>Create calendar event</button>
                         <hr />
                         <div>
-                            <button onClick={() => fetchCalendars()}>Fetch calendars</button>
-                            <p>{JSON.stringify(calendars, null, 4)}</p>
+                            <button onClick={() => getWeeklyEvents()}>Fetch Weekly Events</button>
+                            <p>{JSON.stringify(eventList, null, 4)}</p>
                         </div>
                         <hr />
                         <button onClick={() => signOut()}>Sign out</button>
