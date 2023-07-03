@@ -1,17 +1,12 @@
 import { useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
-import { getStartOfWeek, getEndOfWeek } from './utilities/dates';
-import Calendar from './Calendar';
+import { Auth, Calendar } from './components';
 
 function App() {
 
-    const session = useSession(); // tokens
+    const session = useSession();
     const supabase = useSupabaseClient();
-    const [ start, setStart ] = useState(new Date());
-    const [ end, setEnd ] = useState(new Date());
-    const [calendars, setCalendars ] = useState({});
-    const [ eventName, setEventName ] = useState('');
-    const [ eventList, setEventList ] = useState([]);
+    const [ section, setSection ] = useState('calendar');
 
     async function googleSignIn() {
         // console.log(window.location.origin)
@@ -37,99 +32,35 @@ function App() {
         await supabase.auth.signOut();
     }
 
-    function fetchCalendars() {
-        fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
-            method: 'GET',
-            headers: {
-                Authorization: 'Bearer ' + session.provider_token
-            }
-        })
-        .then(response => response.json())
-        .then(data => data.items.reduce((acc, cal) => {
-            acc[cal.id] = cal.summary;
-            return acc;
-        }, {}))
-        .then(dict => setCalendars(dict))
-        .then(() => console.log('Fetched calendars'))
-        .catch(error => {
-            alert('Error fetching calendars');
-            console.log(error.message);
-        });
-    }
-
-    async function createCalendarEvent() {
-        const event = {
-            summary: eventName,
-            start: {
-                dateTime: start.toISOString(),
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-            },
-            end: {
-                dateTime: end.toISOString(),
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-            }
-        }
-        await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
-            method: "POST",
-            headers: {
-                Authorization: 'Bearer ' + session.provider_token // Access token for google
-            },
-            body: JSON.stringify(event)
-        }).then((data) => data.json())
-        .then((data) => {
-            console.log(data);
-            alert("Event created, check your Google Calendar!");
-        })
-        .catch(error => {
-            alert('Error creating event');
-            console.log(error);
-        });
-    }
-
-    async function getWeeklyEvents() {
-        console.log('In getWeeklyEvents function');
-        var completeList = [];
-        for (var calendarId in calendars) {
-            await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${getStartOfWeek(new Date()).toISOString()}&timeMax=${getEndOfWeek(new Date()).toISOString()}`, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + session.provider_token
-                }
-            })
-            .then(response => {
-                console.log('Got a response from fetch');
-                return response.json();
-            })
-            .then(events => events.items.map(ev => {
-                return {
-                    summary: ev.summary,
-                    start: ev.start,
-                    end: ev.end,
-                    calendar: calendars[calendarId]
-                }
-            }))
-            .then(events => completeList.push(...events))
-            .catch(err => console.error(err));
-        }
-        setEventList(completeList);
-        console.log('Finished getWeeklyEvents function');
-    }
-
     return (
         <div className="app">
+            <div className="sections">
+                <button onClick={() => setSection('calendar')}>Calendar</button>
+                <p />
+                <button onClick={() => setSection('tasks')}>Attività</button>
+                <p />
+                <button onClick={() => setSection('chat')}>Chat</button>
+            </div>
             <div style={{width: '400px', margin: "30px auto"}}>
                 {
-                    session ?
+                    session &&
                     <>
-                        <Calendar />
+                        {
+                            section.localeCompare('calendar') == 0 ?
+                            <Calendar />
+                            :
+                            section.localeCompare('tasks') == 0 ?
+                            <></>
+                            :
+                            section.localeCompare('chat') == 0 ?
+                            <></>
+                            :
+                            <></>
+                        }
                         <hr />
-                        <button onClick={() => signOut()}>Sign out</button>
-                    </>
-                    :
-                    <>
-                        <button onClick={() => googleSignIn()}>Sign in with Google</button>
                     </>
                 }
+                <Auth />
             </div>
         </div>
     );

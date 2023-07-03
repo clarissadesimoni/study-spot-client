@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
-import { getStartOfWeek, getEndOfWeek } from './utilities/dates';
+import { getStartOfWeek, getEndOfWeek } from '../utilities/dates';
 import './misc.css';
 
 function App() {
