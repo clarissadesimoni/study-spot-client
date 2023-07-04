@@ -9,7 +9,7 @@ function TaskManager({ filters }) {
     const [ token, setToken ] = useState('');
     const [ tmpToken, setTmpToken ] = useState('');
     const [ filterString, setFilterString ] = useState(generateFilter());
-    let api = null;
+    const [ api, setApi ] = useState(null);
 
     async function getToken() {
         let { data, error } = await supabase
@@ -18,7 +18,7 @@ function TaskManager({ filters }) {
         .eq('id', session.user.id);
         if (data.length > 0) {
             setToken(data[0].token);
-            api = new TodoistApi(data[0].token);
+            setApi(new TodoistApi(token));
         }
         if (error) {
             alert('Error retrieving token: ' + error.message);
