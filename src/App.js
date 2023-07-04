@@ -6,7 +6,7 @@ function App() {
 
     const session = useSession();
     const supabase = useSupabaseClient();
-    const [ section, setSection ] = useState('calendar');
+    const [ section, setSection ] = useState('tasks');
 
     let tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);

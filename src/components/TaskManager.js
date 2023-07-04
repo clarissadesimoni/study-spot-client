@@ -12,12 +12,12 @@ function TaskManager({ filters }) {
     let api = null;
 
     async function getToken() {
-        let { data: todoist_tokens, error } = await supabase
+        let { data, error } = await supabase
         .from('todoist_tokens')
         .select('token')
         .eq('id', session.user.id);
-        if (todoist_tokens.length > 0) {
-            setToken(todoist_tokens[0].token);
+        if (data.length > 0) {
+            setToken(data[0].token);
             api = new TodoistApi(token);
         }
         if (error) {
