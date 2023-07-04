@@ -8,8 +8,6 @@ function TodoistTaskListView({ token, filters }) {
     const [ api, setApi ] = useState(null);
     const [ tasks, setTasks ] = useState([]);
 
-    setApi(new TodoistApi(token));
-
     async function generateFilter() {
         var res = [];
         if (filters.dates) {
@@ -33,8 +31,12 @@ function TodoistTaskListView({ token, filters }) {
         const filter_str = await generateFilter();
         console.log(filter_str);
         api.getTasks(filter=filter_str)
-        .then(res => res.map(task => new Task(id=task.id, title=task.content, projectId=task.projectId, labels=task.labels, isCompleted=task.isCompleted, duration=task.duration, due_dict=task.due)))
+        .then(res => res.map(task => {
+            console.log(task);
+            return new Task(isTodoist=true, id=task.id, title=task.content, projectId=task.projectId, labels=task.labels, isCompleted=task.isCompleted, duration=task.duration, due_dict=task.due);
+        }))
         .then(res => res.sort((t1, t2) => {
+            console.log('sort');
             if (t1.project_id.localeCompare(t2.project_id) != 0)
                 return t1.project_id.localeCompare(t2.project_id);
             if (t1.due !== t2.due)
@@ -49,7 +51,7 @@ function TodoistTaskListView({ token, filters }) {
         console.log('hello 1');
         await getTasks();
         console.log('hello 2');
-    }, []);
+    }, [api]);
 
     async function close(task_obj) {
         if (task_obj.isTodoist) {
