@@ -36,7 +36,7 @@ function TodoistTaskListView({ token, filters }) {
         console.log(api);
         const filter_str = await generateFilter();
         console.log(filter_str);
-        api.getTasks(filter=filter_str)
+        api.getTasks(filter_str)
         .then(res => res.map(task => {
             console.log(task);
             return new Task(isTodoist=true, id=task.id, title=task.content, projectId=task.projectId, labels=task.labels, isCompleted=task.isCompleted, duration=task.duration, due_dict=task.due);
