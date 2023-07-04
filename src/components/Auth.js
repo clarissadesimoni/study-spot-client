@@ -56,7 +56,6 @@ function Auth() {
     }
 
     if (session) {
-        console.log(session);
         return <button onClick={() => signOut()}>Sign out</button>
     } else {
         return (

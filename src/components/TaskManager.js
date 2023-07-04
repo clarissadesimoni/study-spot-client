@@ -19,8 +19,6 @@ function TaskManager({ filters }) {
         if (todoist_tokens.length > 0) {
             setToken(todoist_tokens[0].token);
             api = new TodoistApi(token);
-        } else {
-            alert('Error retrieving token');
         }
         if (error) {
             alert('Error retrieving token: ' + error.message);
@@ -53,7 +51,7 @@ function TaskManager({ filters }) {
     }
 
     async function generateFilter() {
-        res = [];
+        var res = [];
         if (filters.dates) {
             start = `${filters.dates.start.getMonth()}/${filters.dates.start.getDate()}/${filters.dates.start.getFullYear()}`;
             end = `${filters.dates.end.getMonth()}/${filters.dates.end.getDate()}/${filters.dates.end.getFullYear()}`;
