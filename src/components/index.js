@@ -4,4 +4,4 @@ import TaskComponent from './TaskComponent';
 import TaskManager from './TaskManager';
 import TodoistTaskListView from './TodoistTaskListView';
 
-export { Auth, Calendar, TaskComponent, TaskManager, TodoistTaskListView as TodoistTaskView }
+export { Auth, Calendar, TaskComponent, TaskManager, TodoistTaskListView }
