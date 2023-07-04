@@ -92,8 +92,6 @@ function App() {
         console.log('Finished getWeeklyEvents function');
     }
 
-    fetchCalendars();
-
     return (
         <div className="app">
             <div style={{width: '400px', margin: "30px auto"}}>
