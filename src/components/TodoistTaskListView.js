@@ -26,6 +26,7 @@ function TodoistTaskListView({ api, filters }) {
     }
 
     async function getTasks() {
+        console.log(api);
         const filter = await generateFilter();
         console.log(filter);
         api.getTasks(filter=filter)
