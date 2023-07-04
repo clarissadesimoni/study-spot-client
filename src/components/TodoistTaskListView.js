@@ -5,7 +5,7 @@ import { Task } from '../classes';
 import { TaskComponent } from '../components';
 
 function TodoistTaskListView({ token, filters }) {
-    const [ api, setApi ] = useState(null);
+    const [ api, setApi ] = useState(new TodoistApi(token));
     const [ tasks, setTasks ] = useState([]);
 
     useEffect(async () => {
@@ -36,7 +36,7 @@ function TodoistTaskListView({ token, filters }) {
         console.log(api);
         const filter_str = await generateFilter();
         console.log(filter_str);
-        api.getTasks(filter_str)
+        api.getTasks({filter: filter_str})
         .then(res => res.map(task => {
             console.log(task);
             return new Task(isTodoist=true, id=task.id, title=task.content, projectId=task.projectId, labels=task.labels, isCompleted=task.isCompleted, duration=task.duration, due_dict=task.due);
@@ -53,7 +53,7 @@ function TodoistTaskListView({ token, filters }) {
         .catch(error => console.log(error));
     }
 
-    useEffect(async () => {
+    /* useEffect(async () => {
         console.log('hello 1');
         if (!api) {
             setApi(new TodoistApi(token));
@@ -61,7 +61,7 @@ function TodoistTaskListView({ token, filters }) {
             await getTasks();
         }
         console.log('hello 2');
-    }, []);
+    }, []); */
 
     async function close(task_obj) {
         if (task_obj.isTodoist) {
