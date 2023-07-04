@@ -61,6 +61,8 @@ function TodoistTaskListView({ token, filters }) {
         }
     }
 
+    if(!api) return <span>Loading...</span>;
+
     return (
         <ul>
         {
