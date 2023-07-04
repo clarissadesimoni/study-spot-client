@@ -8,6 +8,8 @@ function TodoistTaskListView({ token, filters }) {
     const [ api, setApi ] = useState(null);
     const [ tasks, setTasks ] = useState([]);
 
+    setApi(new TodoistApi(token));
+
     async function generateFilter() {
         var res = [];
         if (filters.dates) {
@@ -49,7 +51,6 @@ function TodoistTaskListView({ token, filters }) {
 
     useEffect(async () => {
         console.log('hello 1');
-        setApi(new TodoistApi(token));
         await getTasks();
         console.log('hello 2');
     }, []);
