@@ -18,7 +18,7 @@ function TaskManager({ filters }) {
         .eq('id', session.user.id);
         if (data.length > 0) {
             setToken(data[0].token);
-            setApi(new TodoistApi(token));
+            setApi(new TodoistApi(data[0].token));
         }
         if (error) {
             alert('Error retrieving token: ' + error.message);
@@ -76,7 +76,7 @@ function TaskManager({ filters }) {
     return (
         <>
         {
-            token.length == 0 ? (
+            (token.length == 0 || api == null || api == undefined) ? (
                 <>
                     <input type="text" autocomplete="off" onChange={e => setTmpToken(e.target.value)} />
                     <button onClick={() => insertToken()}>Set todoist token</button>
