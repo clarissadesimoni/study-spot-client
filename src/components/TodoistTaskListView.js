@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { Task } from '../classes';
 import { TaskComponent } from '../components';
 
-function TodoistTaskListView({ api, filters }) {
+function TodoistTaskListView({ token, filters }) {
+    const [ api, setApi ] = useState(null);
     const [ tasks, setTasks ] = useState([]);
 
     async function generateFilter() {
@@ -44,6 +45,7 @@ function TodoistTaskListView({ api, filters }) {
 
     useEffect(async () => {
         console.log('hello 1');
+        setApi(new TodoistApi(token));
         await getTasks();
         console.log('hello 2');
     }, []);
@@ -66,7 +68,7 @@ function TodoistTaskListView({ api, filters }) {
 }
 
 TodoistTaskListView.propTypes = {
-    api: PropTypes.instanceOf(TodoistApi).isRequired,
+    api: PropTypes.string.isRequired,
     filters: PropTypes.shape({
         dates: PropTypes.shape({
             start: PropTypes.object.isRequired,
