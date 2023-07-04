@@ -8,10 +8,10 @@ function TodoistTaskListView({ api, filters }) {
     const [ tasks, setTasks ] = useState([]);
 
     async function generateFilter() {
-        res = [];
+        var res = [];
         if (filters.dates) {
-            start = `${filters.dates.start.getMonth()}/${filters.dates.start.getDate()}/${filters.dates.start.getFullYear()}`;
-            end = `${filters.dates.end.getMonth()}/${filters.dates.end.getDate()}/${filters.dates.end.getFullYear()}`;
+            const start = `${filters.dates.start.getMonth()}/${filters.dates.start.getDate()}/${filters.dates.start.getFullYear()}`;
+            const end = `${filters.dates.end.getMonth()}/${filters.dates.end.getDate()}/${filters.dates.end.getFullYear()}`;
             res.push(`(due after: ${start} | due before: ${end})`);
         }
         if (filters.project_id) {
