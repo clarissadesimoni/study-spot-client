@@ -43,14 +43,17 @@ function TodoistTaskListView({ api, filters }) {
     }
 
     useEffect(async () => {
-        await this.getTasks();
+        console.log('hello 1');
+        await getTasks();
+        console.log('hello 2');
     }, []);
 
     async function close(task_obj) {
-        if (task_obj.isTodoist)
+        if (task_obj.isTodoist) {
             await api.closeTask(task_obj.id)
             .catch(error => console.log(error));
-            getTasks();
+            await getTasks();
+        }
     }
 
     return (
