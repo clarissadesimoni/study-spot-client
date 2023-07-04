@@ -16,8 +16,6 @@ function TaskManager({ filters }) {
         .from('todoist_tokens')
         .select('token')
         .eq('id', session.user.id);
-        console.log(data);
-        console.log(error);
         if (data.length > 0) {
             setToken(data[0].token);
             api = new TodoistApi(data[0].token);
@@ -47,8 +45,6 @@ function TaskManager({ filters }) {
             { id: session.user.id, token: tmpToken }
         ])
         .select();
-        if (data)
-            console.log(data);
         if (error) {
             alert('Error inserting token: ' + error.message);
             console.log(error);
@@ -73,8 +69,8 @@ function TaskManager({ filters }) {
         return res.reduce((acc, f) => acc + f);
     }
 
-    useEffect(() => {
-        getToken();
+    useEffect(async () => {
+        await getToken();
     }, []);
 
     return (

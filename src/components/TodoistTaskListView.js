@@ -27,7 +27,8 @@ function TodoistTaskListView({ api, filters }) {
 
     async function getTasks() {
         const filter = await generateFilter();
-        await api.getTasks(filter=filter)
+        console.log(filter);
+        api.getTasks(filter=filter)
         .then(res => res.map(task => new Task(id=task.id, title=task.content, projectId=task.projectId, labels=task.labels, isCompleted=task.isCompleted, duration=task.duration, due_dict=task.due)))
         .then(res => res.sort((t1, t2) => {
             if (t1.project_id.localeCompare(t2.project_id) != 0)
