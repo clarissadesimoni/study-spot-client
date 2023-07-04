@@ -78,7 +78,8 @@ function App() {
             })
             .then(events => events.items.map(ev => {
                 return {
-                    summary: ev.summary,
+                    id: ev.id,
+                    name: ev.summary,
                     start: ev.start,
                     end: ev.end,
                     calendar: calendars[calendarId]
@@ -90,6 +91,8 @@ function App() {
         setEventList(completeList);
         console.log('Finished getWeeklyEvents function');
     }
+
+    fetchCalendars();
 
     return (
         <div className="app">

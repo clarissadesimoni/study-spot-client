@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
-import { Auth, Calendar } from './components';
+import { Auth, Calendar, TaskManager } from './components';
 
 function App() {
 
@@ -8,29 +8,10 @@ function App() {
     const supabase = useSupabaseClient();
     const [ section, setSection ] = useState('calendar');
 
-    async function googleSignIn() {
-        // console.log(window.location.origin)
-        const { error } =  await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                scopes: 'https://www.googleapis.com/auth/calendar',
-                queryParams: {
-                    access_type: 'offline',
-                    prompt: 'consent',
-                }
-            },
-        });
-        if (error) {
-            alert('Error signing in with google');
-            console.log(error.message);
-        } else {
-            // fetchCalendars();
-        }
-    }
-
-    async function signOut() {
-        await supabase.auth.signOut();
-    }
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
 
     return (
         <div className="app">
@@ -50,7 +31,7 @@ function App() {
                             <Calendar />
                             :
                             section.localeCompare('tasks') == 0 ?
-                            <></>
+                            <TaskManager filters={{dates: {start: yesterday, end: tomorrow}}} />
                             :
                             section.localeCompare('chat') == 0 ?
                             <></>
