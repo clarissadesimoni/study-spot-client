@@ -7,8 +7,8 @@ function TaskManager({ filters }) {
     const session = useSession();
     const supabase = useSupabaseClient();
     const [ token, setToken ] = useState('');
+    const [ tmpToken, setTmpToken ] = useState('');
     const [ filterString, setFilterString ] = useState(generateFilter());
-    let tmpToken = '';
     let api = null;
 
     async function getToken() {
@@ -79,7 +79,7 @@ function TaskManager({ filters }) {
         {
             token.length == 0 ? (
                 <>
-                    <input type="text" autocomplete="off" onChange={e => tmpToken = e.target.value} />
+                    <input type="text" autocomplete="off" onChange={e => setTmpToken(e.target.value)} />
                     <button onClick={() => insertToken()}>Set todoist token</button>
                     {/* ProjectsView (change filter) */}
                     {/* LabelsView (change filter) */}
