@@ -41,11 +41,14 @@ function TaskManager({ filters }) {
         if (!valid)
             return;
         setToken(tmpToken);
-        const { error } = await supabase
+        const { data, error } = await supabase
         .from('todoist_tokens')
         .insert([
-            { id: session.user.id, token: token }
-        ]);
+            { id: session.user.id, token: tmpToken }
+        ])
+        .select();
+        if (data)
+            console.log(data);
         if (error) {
             alert('Error inserting token: ' + error.message);
             console.log(error);
