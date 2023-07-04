@@ -20,7 +20,7 @@ function TaskManager({ filters }) {
         console.log(error);
         if (data.length > 0) {
             setToken(data[0].token);
-            api = new TodoistApi(token);
+            api = new TodoistApi(data[0].token);
         }
         if (error) {
             alert('Error retrieving token: ' + error.message);

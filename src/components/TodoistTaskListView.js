@@ -41,7 +41,7 @@ function TodoistTaskListView({ api, filters }) {
     }
 
     useEffect(async () => {
-        getTasks();
+        await this.getTasks();
     }, []);
 
     async function close(task_obj) {
