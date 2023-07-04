@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { TodoistApi } from "@doist/todoist-api-typescript";
 import { TodoistTaskListView } from '../components';
@@ -68,7 +68,9 @@ function TaskManager({ filters }) {
         return res.reduce((acc, f) => acc + f);
     }
 
-    getToken();
+    useEffect(() => {
+        getToken();
+    }, []);
 
     return (
         <>
