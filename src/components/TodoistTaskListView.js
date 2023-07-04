@@ -8,7 +8,11 @@ function TodoistTaskListView({ token, filters }) {
     const [ api, setApi ] = useState(null);
     const [ tasks, setTasks ] = useState([]);
 
-    useEffect(() => {}, [api]);
+    useEffect(async () => {
+        console.log('hello tasks 1');
+        if (api) await getTasks();
+        console.log('hello tasks 2');
+    }, [api]);
 
     async function generateFilter() {
         var res = [];
