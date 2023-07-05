@@ -69,9 +69,9 @@ function Auth() {
                 isSignIn ? (
                     <>
                         <p />
-                        <input type='email' autoComplete='email' onchange={(e) => setEmail(e.target.value)} />
+                        <input type='email' autoComplete='email' onChange={(e) => setEmail(e.target.value)} />
                         <p />
-                        <input type='password' autoComplete='password' onchange={(e) => setPassword(e.target.value)} />
+                        <input type='password' autoComplete='password' onChange={(e) => setPassword(e.target.value)} />
                         <p />
                         <button onClick={() => emailSignIn()}>Submit</button>
                     </>
@@ -86,9 +86,9 @@ function Auth() {
                 isSignUp ? (
                     <>
                         <p />
-                        <input type='email' autoComplete='email' onchange={(e) => setEmail(e.target.value)} />
+                        <input type='email' autoComplete='email' onChange={(e) => setEmail(e.target.value)} />
                         <p />
-                        <input type='password' autoComplete='password' onchange={(e) => setPassword(e.target.value)} />
+                        <input type='password' autoComplete='password' onChange={(e) => setPassword(e.target.value)} />
                         <p />
                         <button onClick={() => signUp()}>Submit</button>
                         <p>{bottomText}</p>
