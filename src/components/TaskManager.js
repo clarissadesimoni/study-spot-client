@@ -98,7 +98,7 @@ function TaskManager() {
                 console.log(error);
             }
         }
-        setProjects(res);
+        return res;
     }
 
     async function getLabels() {
@@ -123,13 +123,13 @@ function TaskManager() {
                 console.log(error);
             }
         }
-        setLabels(res);
+        return res;
     }
 
     useEffect(async () => {
         await getToken();
-        await getProjects();
-        await getLabels();
+        setProjects(await getProjects());
+        setLabels(await getLabels());
         console.log(projects);
         console.log(labels);
         setIsLoading(false);
