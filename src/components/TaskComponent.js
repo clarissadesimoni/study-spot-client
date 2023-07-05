@@ -3,8 +3,10 @@ import { TodoistApi } from "@doist/todoist-api-typescript";
 import PropTypes from 'prop-types';
 import { Task } from '../classes';
 
-function TaskComponent({ api, obj, closeFunc }) {
+function TaskComponent({ obj, closeFunc }) {
     const [checked, setChecked] = useState(false);
+
+    console.log(obj);
 
     async function handleCheck() {
         setChecked(!checked);
@@ -21,7 +23,6 @@ function TaskComponent({ api, obj, closeFunc }) {
 }
 
 TaskComponent.propTypes = {
-    api: PropTypes.instanceOf(TodoistApi).isRequired,
     obj: PropTypes.instanceOf(Task).isRequired,
     closeFunc: PropTypes.func.isRequired
 }

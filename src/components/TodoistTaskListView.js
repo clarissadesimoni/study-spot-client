@@ -5,16 +5,11 @@ import { Task } from '../classes';
 import { TaskComponent } from '../components';
 
 function TodoistTaskListView({ token, filters }) {
-    console.log(token);
-
     const [ api, setApi ] = useState(new TodoistApi(token));
     const [ tasks, setTasks ] = useState([]);
 
     useEffect(async () => {
-        console.log('hello tasks 1');
-        console.log(token);
         if (api) await getTasks();
-        console.log('hello tasks 2');
     }, [api]);
 
     async function generateFilter() {
@@ -36,16 +31,12 @@ function TodoistTaskListView({ token, filters }) {
     }
 
     async function getTasks() {
-        console.log(api);
         const filter_str = await generateFilter();
-        console.log(filter_str);
         api.getTasks({filter: filter_str})
         .then(res => res.map(task => {
-            console.log(task);
             return new Task(true, task.id, task.content, task.projectId, task.labels, task.isCompleted, task.duration, null, task.due);
         }))
         .then(res => res.sort((t1, t2) => {
-            console.log('sort');
             if (t1.projectId.localeCompare(t2.projectId) != 0)
                 return t1.projectId.localeCompare(t2.projectId);
             if (t1.due !== t2.due)
