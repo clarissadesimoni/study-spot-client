@@ -17,7 +17,7 @@ function TaskComponent({ obj, closeFunc }) {
         // handle edit name
         <>
             <input type="checkbox" onchange={handleCheck} />
-            <text>{obj.name} - {obj.project_id} - {obj.due.toISOString()} - {obj.labels.reduce((acc, label) => acc + ',' + label)}</text>
+            <text>{obj.name} - {obj.project_id} - {obj.due.toISOString()} - {obj.labels.reduce((acc, label) => acc + ',' + label, [])}</text>
         </>
     )
 }

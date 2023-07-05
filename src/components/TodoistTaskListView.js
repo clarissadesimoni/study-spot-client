@@ -3,6 +3,7 @@ import { TodoistApi } from "@doist/todoist-api-typescript";
 import PropTypes from 'prop-types';
 import { Task } from '../classes';
 import { TaskComponent } from '../components';
+import { todoistFilterToString } from '../utilities/dates';
 
 function TodoistTaskListView({ token, filters }) {
     const [ api, setApi ] = useState(new TodoistApi(token));
@@ -15,9 +16,16 @@ function TodoistTaskListView({ token, filters }) {
     async function generateFilter() {
         var res = [];
         if (filters.dates) {
-            const start = `${filters.dates.start.getMonth() + 1}/${filters.dates.start.getDate()}/${filters.dates.start.getFullYear()}`;
-            const end = `${filters.dates.end.getMonth() + 1}/${filters.dates.end.getDate()}/${filters.dates.end.getFullYear()}`;
-            res.push(`(due after: ${start} | due before: ${end})`);
+            let tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0);
+            tomorrow.setMinutes(0);
+            tomorrow.setSeconds(0);
+            if (filters.dates.start >= tomorrow) {
+                res.push(`(due after: ${filters.dates.start} | due before: ${filters.dates.end})`);
+            } else {
+                res.push(`due before: ${filters.dates.end}`);
+            }
         }
         if (filters.project_id) {
             const project_name = await api.getProject(filters.project_id).then(project => project.name).catch(error => console.log(`Project: ${error.message}`));
