@@ -89,7 +89,10 @@ function TaskManager() {
             .from('projects')
             .select('id,name')
             .eq('owner', session.user.id);
-            if (data) res = data;
+            if (data) {
+                console.log(data);
+                res = data;
+            }
             if (error) {
                 alert(error.message);
                 console.log(error);
@@ -111,7 +114,10 @@ function TaskManager() {
             .from('labels')
             .select('id,name')
             .eq('owner', session.user.id);
-            if (data) res = data;
+            if (data) {
+                console.log(data);
+                res = data;
+            }
             if (error) {
                 alert(error.message);
                 console.log(error);
