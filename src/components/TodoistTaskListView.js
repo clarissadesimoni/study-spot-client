@@ -22,9 +22,9 @@ function TodoistTaskListView({ token, filters }) {
             tomorrow.setMinutes(0);
             tomorrow.setSeconds(0);
             if (filters.dates.start >= tomorrow) {
-                res.push(`(due after: ${filters.dates.start} | due before: ${filters.dates.end})`);
+                res.push(`(due after: ${todoistFilterToString(filters.dates.start)} | due before: ${todoistFilterToString(filters.dates.end)})`);
             } else {
-                res.push(`due before: ${filters.dates.end}`);
+                res.push(`due before: ${todoistFilterToString(filters.dates.end)}`);
             }
         }
         if (filters.project_id) {
