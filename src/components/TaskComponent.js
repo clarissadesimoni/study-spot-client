@@ -10,7 +10,7 @@ function TaskComponent({ token, obj, closeFunc }) {
     async function handleCheck() {
         setChecked(!checked);
         console.log('check');
-        if (checked) await closeFunc(obj);
+        closeFunc(obj);
         // if (checked) await closeTask(token, obj.id);
     }
 
