@@ -46,8 +46,8 @@ function TodoistTaskListView({ token, filters }) {
         }))
         .then(res => res.sort((t1, t2) => {
             console.log('sort');
-            if (t1.project_id.localeCompare(t2.project_id) != 0)
-                return t1.project_id.localeCompare(t2.project_id);
+            if (t1.projectId.localeCompare(t2.projectId) != 0)
+                return t1.projectId.localeCompare(t2.projectId);
             if (t1.due !== t2.due)
                 return t1.due - t2.due;
             return 0;
@@ -55,16 +55,6 @@ function TodoistTaskListView({ token, filters }) {
         .then(res => setTasks(res))
         .catch(error => console.log(error));
     }
-
-    /* useEffect(async () => {
-        console.log('hello 1');
-        if (!api) {
-            setApi(new TodoistApi(token));
-        } else {
-            await getTasks();
-        }
-        console.log('hello 2');
-    }, []); */
 
     async function close(task_obj) {
         if (task_obj.isTodoist) {
