@@ -57,6 +57,7 @@ function TodoistTaskListView({ token, filters }) {
     }
 
     async function close(task_obj) {
+        console.log('started closing');
         if (task_obj.isTodoist) {
             console.log('closing');
             await api.closeTask(task_obj.id)
