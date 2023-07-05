@@ -1,5 +1,5 @@
 class Task {
-    constructor(isTodoist, id, title, projectId, labels, isCompleted, duration, due_obj=null, due_dict=null) {
+    constructor(isTodoist, id, title, projectId, labels, isCompleted, duration=null, due_obj=null, due_dict=null) {
         this.isTodoist = isTodoist;
         this.id = id;
         this.name = title;

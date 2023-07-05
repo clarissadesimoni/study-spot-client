@@ -1,32 +1,40 @@
-import { useEffect, useState } from 'react';
-import { TodoistApi } from "@doist/todoist-api-typescript";
-import PropTypes from 'prop-types';
+import { useRef, useState } from 'react';
 import { Task } from '../classes';
-import { closeTask } from '../utilities/todoist';
 
-function TaskComponent({ token, obj, closeFunc }) {
-    const [checked, setChecked] = useState(false);
+function TaskComponent({ obj, editFunc, closeFunc, deleteFunc }) {
+    // const [checked, setChecked] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    var newName = useRef('');
+
+    async function handleEdit() {
+        editFunc(obj.id, newName.current);
+        setIsEditing(false);
+    }
 
     async function handleCheck() {
-        setChecked(!checked);
-        console.log('check');
-        closeFunc(obj);
-        // if (checked) await closeTask(token, obj.id);
+        closeFunc(obj.id);
+    }
+
+    async function handleDelete() {
+        deleteFunc(obj.id);
     }
 
     return (
-        // handle edit name
         <>
             <input type="checkbox" onChange={handleCheck} />
             <text>{obj.name} - {obj.projectId} - {obj.due.toISOString()} - {obj.labels.reduce((acc, label) => acc + ',' + label, [])}</text>
+            <button onClick={() => setIsEditing(true)}>Rinomina</button>
+            {
+                isEditing && (
+                    <>
+                        <input type='text' autoComplete='off' onChange={e => newName.current = e.target.value} />
+                        <button onClick={handleEdit}>Invia</button>
+                    </>
+                )
+            }
+            <button onClick={handleDelete}>Rimuovi</button>
         </>
     )
-}
-
-TaskComponent.propTypes = {
-    token: PropTypes.string.isRequired,
-    obj: PropTypes.instanceOf(Task).isRequired,
-    closeFunc: PropTypes.func
 }
 
 export default TaskComponent;

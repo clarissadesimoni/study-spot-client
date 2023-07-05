@@ -8,6 +8,10 @@ function todoistFilterToString(date = new Date()) {
     return Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' }).format(date);
 }
 
+function supabaseFilterToString(date = new Date()) {
+    return Intl.DateTimeFormat('en-CA', {}).format(date);
+}
+
 function getStartOfWeek(d) {
     d = new Date(d);
     var day = d.getDay(), diff = d.getDate() - day + (day == 0 ? -6 : 1);
@@ -19,4 +23,4 @@ function getEndOfWeek(d) {
     return new Date(d.setDate(diff));
 }
 
-export { getStartOfWeek, getEndOfWeek, todoistFilterToString }
+export { getStartOfWeek, getEndOfWeek, supabaseFilterToString, todoistFilterToString }

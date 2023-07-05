@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
 import { getStartOfWeek, getEndOfWeek } from '../utilities/dates';
-import '../misc.css';
+import 'react-datetime-picker/dist/DateTimePicker.css';
 
 function App() {
 
@@ -98,9 +98,9 @@ function App() {
                 <h2>Hey user {session.user.email}</h2>
                 <div>
                     <p>Start of event:</p>
-                    <DateTimePicker onChange={setStart} value={start} />
+                    <DateTimePicker isCalendarOpen={true} isClockOpen={true} onChange={setStart} value={start} />
                     <p>End of event:</p>
-                    <DateTimePicker onChange={setEnd} value={end} />
+                    <DateTimePicker isCalendarOpen={true} isClockOpen={true} onChange={setEnd} value={end} />
                     <p>Name of event:</p>
                     <input type="text" onChange={(e) => setEventName(e.target.value)} />
                 </div>

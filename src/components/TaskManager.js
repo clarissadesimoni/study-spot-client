@@ -1,15 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { TodoistApi } from "@doist/todoist-api-typescript";
-import { TodoistTaskListView } from '../components';
+import { TaskListView, TodoistTaskListView, TodoistProjectsView, TodoistLabelsView, ProjectsView, LabelsView } from '../components';
 
-function TaskManager({ filters }) {
+function TaskManager() {
     const session = useSession();
     const supabase = useSupabaseClient();
+    const [ isLoading, setIsLoading ] = useState(true);
     const [ token, setToken ] = useState('');
     const [ tmpToken, setTmpToken ] = useState('');
-    const [ filterString, setFilterString ] = useState(generateFilter());
     const [ api, setApi ] = useState(null);
+    const [ projects, setProjects ] = useState({});
+    const [ labels, setLabels ] = useState({});
+    const [ filter, setFilter ] = useState({dates: {start: yesterday, end: tomorrow}});
+    
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
 
     async function getToken() {
         let { data, error } = await supabase
@@ -24,7 +32,6 @@ function TaskManager({ filters }) {
             alert('Error retrieving token: ' + error.message);
             console.log(error);
         }
-
     }
 
     async function insertToken() {
@@ -51,7 +58,7 @@ function TaskManager({ filters }) {
         }
     }
 
-    async function generateFilter() {
+    async function generateFilter(filters) {
         var res = [];
         if (filters.dates) {
             const start = `${filters.dates.start.getMonth()}/${filters.dates.start.getDate()}/${filters.dates.start.getFullYear()}`;
@@ -69,42 +76,85 @@ function TaskManager({ filters }) {
         return res.reduce((acc, f) => acc + f);
     }
 
+    async function getProjects() {
+        var res = null;
+        if (api) {
+            res = await api.getProjects().then(values => values.reduce((acc, p) => {
+                acc[p.id] = p.name;
+                return acc;
+            }, {}))
+            .catch(error => console.log(error));
+        } else {
+            let { data, error } = await supabase
+            .from('projects')
+            .select('id,name')
+            .eq('owner', session.user.id);
+            if (data) res = data;
+            if (error) {
+                alert(error.message);
+                console.log(error);
+            }
+        }
+        setProjects(res);
+    }
+
+    async function getLabels() {
+        var res = null;
+        if (api) {
+            res = await api.getLabels().then(values => values.reduce((acc, l) => {
+                acc[l.id] = l.name;
+                return acc;
+            }, {}))
+            .catch(error => console.log(error));
+        } else {
+            let { data, error } = await supabase
+            .from('labels')
+            .select('id,name')
+            .eq('owner', session.user.id);
+            if (data) res = data;
+            if (error) {
+                alert(error.message);
+                console.log(error);
+            }
+        }
+        setLabels(res);
+    }
+
     useEffect(async () => {
         await getToken();
+        await getProjects();
+        await getLabels();
+        setIsLoading(false);
     }, []);
 
     return (
         <>
         {
+            isLoading ? (
+                <span>Loading...</span>
+            )
+            :
             (token.length == 0 || api == null || api == undefined) ? (
                 <>
                     <input type="text" autocomplete="off" onChange={e => setTmpToken(e.target.value)} />
                     <button onClick={() => insertToken()}>Set todoist token</button>
-                    {/* ProjectsView (change filter) */}
-                    {/* LabelsView (change filter) */}
-                    {/* TaskListView */}
+                    <hr />
+                    <ProjectsView projects={projects} filterFunc={setFilter} />
+                    <LabelsView labels={labels} filterFunc={setFilter} />
+                    <hr />
+                    <TaskListView projects={projects} labels={labels} filters={filter} />
                 </>
             ) : (
                 <>
-                    {/* TodoistProjectsView (change filter) */}
-                    {/* TodoistLabelsView (change filter) */}
-                    <TodoistTaskListView token={token} filters={filters} />
+                    <TodoistProjectsView projects={projects} filterFunc={setFilter} />
+                    <TodoistLabelsView labels={labels} filterFunc={setFilter} />
+                    <hr />
+                    <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter)} />
                 </>
             )
         }
         </>
     );
-}
-
-TaskManager.propTypes = {
-    filters: PropTypes.shape({
-        dates: PropTypes.shape({
-            start: PropTypes.object.isRequired,
-            end: PropTypes.object.isRequired
-        }),
-        project_id: PropTypes.string,
-        label_id: PropTypes.string
-    })
 }
 
 export default TaskManager;

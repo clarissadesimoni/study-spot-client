@@ -8,11 +8,6 @@ function App() {
     const supabase = useSupabaseClient();
     const [ section, setSection ] = useState('tasks');
 
-    let tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    let yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-
     return (
         <div className="app">
             <div className="sections">
@@ -22,7 +17,7 @@ function App() {
                 <p />
                 <button onClick={() => setSection('chat')}>Chat</button>
             </div>
-            <div style={{width: '400px', margin: "30px auto"}}>
+            <div style={{width: '800px', margin: "30px auto"}}>
                 {
                     session &&
                     <>
@@ -31,7 +26,7 @@ function App() {
                             <Calendar />
                             :
                             section.localeCompare('tasks') == 0 ?
-                            <TaskManager filters={{dates: {start: yesterday, end: tomorrow}}} />
+                            <TaskManager />
                             :
                             section.localeCompare('chat') == 0 ?
                             <></>
