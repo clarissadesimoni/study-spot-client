@@ -124,6 +124,8 @@ function TaskManager() {
         await getToken();
         await getProjects();
         await getLabels();
+        console.log(projects);
+        console.log(labels);
         setIsLoading(false);
     }, []);
 
