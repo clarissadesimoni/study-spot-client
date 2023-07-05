@@ -88,7 +88,7 @@ function TaskManager({ filters }) {
                 <>
                     {/* TodoistProjectsView (change filter) */}
                     {/* TodoistLabelsView (change filter) */}
-                    <TodoistTaskListView api={api} filters={filters} />
+                    <TodoistTaskListView token={token} filters={filters} />
                 </>
             )
         }
