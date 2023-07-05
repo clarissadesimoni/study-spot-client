@@ -128,10 +128,12 @@ function TaskManager() {
 
     useEffect(async () => {
         await getToken();
-        setProjects(await getProjects());
-        setLabels(await getLabels());
-        console.log(projects);
-        console.log(labels);
+        const prg = await getProjects();
+        setProjects(prg);
+        const lbl = await getLabels();
+        setLabels(lbl);
+        console.log(prg);
+        console.log(prg);
         setIsLoading(false);
     }, []);
 
