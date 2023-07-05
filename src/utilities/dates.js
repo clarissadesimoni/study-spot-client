@@ -5,7 +5,7 @@ function getOffset(timeZone = 'UTC', date = new Date()) {
 }
 
 function todoistFilterToString(date = new Date()) {
-    return Intl.DateTimeFormat('en-US', { format: 'MMMM d' }).format(date);
+    return Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' }).format(date);
 }
 
 function getStartOfWeek(d) {
