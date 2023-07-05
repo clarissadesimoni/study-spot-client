@@ -102,8 +102,6 @@ function TaskListView({ projects, labels, filters }) {
         await getTasks();
     }
 
-    if(!api) return <span>Loading...</span>;
-
     return (
         <>
             <button onClick={() => setIsAdding(true)}>Aggiungi attività</button>
