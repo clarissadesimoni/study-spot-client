@@ -7,19 +7,18 @@ import { closeTask } from '../utilities/todoist';
 function TaskComponent({ token, obj, closeFunc }) {
     const [checked, setChecked] = useState(false);
 
-    console.log(closeFunc ?? 'none');
-
     async function handleCheck() {
         setChecked(!checked);
         console.log('check');
-        await closeTask(token, obj.id);
+        if (checked) await closeFunc(obj);
+        // if (checked) await closeTask(token, obj.id);
     }
 
     return (
         // handle edit name
         <>
-            <input type="checkbox" onChange={closeFunc} />
-            <text>{obj.name} - {obj.project_id} - {obj.due.toISOString()} - {obj.labels.reduce((acc, label) => acc + ',' + label, [])}</text>
+            <input type="checkbox" onChange={handleCheck} />
+            <text>{obj.name} - {obj.projectId} - {obj.due.toISOString()} - {obj.labels.reduce((acc, label) => acc + ',' + label, [])}</text>
         </>
     )
 }
