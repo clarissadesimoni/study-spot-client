@@ -54,10 +54,11 @@ function TaskListView({ projects, labels, filters }) {
     }
 
     async function createTask() {
+        console.log({ title: newTaskName.current, projectId: newTaskProject.current, labels: newTaskLabels.current, due: new String(newTaskDue.current.valueOf()), isCompleted: false, owner: session.user.id });
         const { error } = await supabase
         .from('tasks')
         .insert([
-        { title: newTaskName.current, projectId: newTaskProject.current, labels: newTaskLabels.current, due: newTaskDue.current.valueOf(), isCompleted: false, owner: session.user.id },
+        { title: newTaskName.current, projectId: newTaskProject.current, labels: newTaskLabels.current, due: new String(newTaskDue.current.valueOf()), isCompleted: false, owner: session.user.id },
         ]);
         if (error) {
             alert(error.message);
@@ -104,9 +105,8 @@ function TaskListView({ projects, labels, filters }) {
 
     return (
         <>
-            <button onClick={() => setIsAdding(true)}>Aggiungi attività</button>
             {
-                isAdding && (
+                isAdding ? (
                     <>
                         <input type='text' autoComplete='off' onChange={(e) => newTaskName.current = e.target.value} />
                         {
@@ -134,7 +134,7 @@ function TaskListView({ projects, labels, filters }) {
                         </select>
                         <button onClick={createTask}>Invia</button>
                     </>
-                )
+                ) : <button onClick={() => setIsAdding(true)}>Aggiungi attività</button>
             }
             <ul>
             {
