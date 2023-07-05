@@ -7,8 +7,6 @@ import DateTimePicker from 'react-datetime-picker';
 import DatePicker from 'react-date-picker';
 import TimePicker from 'react-time-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
-import 'react-datetime-picker/dist/Calendar.css';
-import 'react-datetime-picker/dist/Clock.css';
 
 function TodoistTaskListView({ token, projects, labels, filters }) {
     const [ api, setApi ] = useState(new TodoistApi(token));

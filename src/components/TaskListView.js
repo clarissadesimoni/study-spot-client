@@ -8,8 +8,6 @@ import DateTimePicker from 'react-datetime-picker';
 import DatePicker from 'react-date-picker';
 import TimePicker from 'react-time-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
-import 'react-datetime-picker/dist/Calendar.css';
-import 'react-datetime-picker/dist/Clock.css';
 
 function TaskListView({ projects, labels, filters }) {
     const session = useSession();
