@@ -7,7 +7,7 @@ import { closeTask } from '../utilities/todoist';
 function TaskComponent({ token, obj, closeFunc }) {
     const [checked, setChecked] = useState(false);
 
-    console.log(obj);
+    console.log(closeFunc ?? 'none');
 
     async function handleCheck() {
         setChecked(!checked);
