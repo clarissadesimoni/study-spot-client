@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Task } from '../classes';
 import { closeTask } from '../utilities/todoist';
 
-function TaskComponent({ token, obj }) {
+function TaskComponent({ token, obj, closeFunc }) {
     const [checked, setChecked] = useState(false);
 
     console.log(obj);
@@ -18,7 +18,7 @@ function TaskComponent({ token, obj }) {
     return (
         // handle edit name
         <>
-            <input type="checkbox" onChange={handleCheck} />
+            <input type="checkbox" onChange={closeFunc} />
             <text>{obj.name} - {obj.project_id} - {obj.due.toISOString()} - {obj.labels.reduce((acc, label) => acc + ',' + label, [])}</text>
         </>
     )
@@ -26,7 +26,8 @@ function TaskComponent({ token, obj }) {
 
 TaskComponent.propTypes = {
     token: PropTypes.string.isRequired,
-    obj: PropTypes.instanceOf(Task).isRequired
+    obj: PropTypes.instanceOf(Task).isRequired,
+    closeFunc: PropTypes.func
 }
 
 export default TaskComponent;

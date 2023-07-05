@@ -72,14 +72,14 @@ function TodoistTaskListView({ token, filters }) {
     return (
         <ul>
         {
-            tasks.map((task) => <li key={task.id}><TaskComponent api={api} obj={task} closeFunc={close} /></li>)
+            tasks.map((task) => <li key={task.id}><TaskComponent token={token} obj={task} closeFunc={close} /></li>)
         }
         </ul>
     );
 }
 
 TodoistTaskListView.propTypes = {
-    api: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
     filters: PropTypes.shape({
         dates: PropTypes.shape({
             start: PropTypes.object.isRequired,
