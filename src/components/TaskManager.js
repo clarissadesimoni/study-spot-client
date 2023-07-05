@@ -90,7 +90,6 @@ function TaskManager() {
             .select('id,name')
             .eq('owner', session.user.id);
             if (data) {
-                console.log(data);
                 res = data;
             }
             if (error) {
@@ -115,7 +114,6 @@ function TaskManager() {
             .select('id,name')
             .eq('owner', session.user.id);
             if (data) {
-                console.log(data);
                 res = data;
             }
             if (error) {
@@ -132,8 +130,6 @@ function TaskManager() {
         setProjects(prg);
         const lbl = await getLabels();
         setLabels(lbl);
-        console.log(prg);
-        console.log(prg);
         setIsLoading(false);
     }, []);
 

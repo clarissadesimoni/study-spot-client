@@ -54,11 +54,11 @@ function TaskListView({ projects, labels, filters }) {
     }
 
     async function createTask() {
-        console.log({ title: newTaskName.current, projectId: newTaskProject.current, labels: newTaskLabels.current, due: new String(newTaskDue.current.valueOf()), isCompleted: false, owner: session.user.id });
+        console.log({ title: newTaskName.current, projectId: newTaskProject.current, labels: newTaskLabels.current, due: (newTaskDue.toISOString()).toLocaleString('it-IT'), isCompleted: false, owner: session.user.id });
         const { error } = await supabase
         .from('tasks')
         .insert([
-        { title: newTaskName.current, projectId: newTaskProject.current, labels: newTaskLabels.current, due: new String(newTaskDue.current.valueOf()), isCompleted: false, owner: session.user.id },
+        { title: newTaskName.current, projectId: newTaskProject.current, labels: newTaskLabels.current, due: (newTaskDue.toISOString()).toLocaleString('it-IT'), isCompleted: false, owner: session.user.id },
         ]);
         if (error) {
             alert(error.message);
