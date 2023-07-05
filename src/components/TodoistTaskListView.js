@@ -27,7 +27,9 @@ function TodoistTaskListView({ token, filters }) {
             const label_name = await api.getLabel(filters.label_id).then(label => label.name).catch(error => console.log(`Label: ${error.message}`));
             res.push(`#${label_name}`);
         }
-        return res.reduce((acc, f) => acc + f);
+        res = res.reduce((acc, f) => acc + f);
+        console.log(res);
+        return res;
     }
 
     async function getTasks() {
