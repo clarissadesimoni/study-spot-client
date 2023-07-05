@@ -36,7 +36,6 @@ function TodoistTaskListView({ token, filters }) {
             res.push(`#${label_name}`);
         }
         res = res.reduce((acc, f) => acc + f);
-        console.log(res);
         return res;
     }
 
@@ -59,9 +58,12 @@ function TodoistTaskListView({ token, filters }) {
 
     async function close(task_obj) {
         if (task_obj.isTodoist) {
+            console.log('closing');
             await api.closeTask(task_obj.id)
             .catch(error => console.log(error));
+            console.log('closed');
             await getTasks();
+            console.log('updated');
         }
     }
 
