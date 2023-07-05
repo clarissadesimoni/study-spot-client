@@ -42,7 +42,7 @@ function TodoistTaskListView({ token, filters }) {
         api.getTasks({filter: filter_str})
         .then(res => res.map(task => {
             console.log(task);
-            return new Task(isTodoist=true, id=task.id, title=task.content, projectId=task.projectId, labels=task.labels, isCompleted=task.isCompleted, duration=task.duration, due_dict=task.due);
+            return new Task(true, task.id, task.content, task.projectId, task.labels, task.isCompleted, task.duration, null, task.due);
         }))
         .then(res => res.sort((t1, t2) => {
             console.log('sort');
