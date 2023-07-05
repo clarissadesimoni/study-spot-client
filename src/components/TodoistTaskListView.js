@@ -5,11 +5,14 @@ import { Task } from '../classes';
 import { TaskComponent } from '../components';
 
 function TodoistTaskListView({ token, filters }) {
+    console.log(token);
+
     const [ api, setApi ] = useState(new TodoistApi(token));
     const [ tasks, setTasks ] = useState([]);
 
     useEffect(async () => {
         console.log('hello tasks 1');
+        console.log(token);
         if (api) await getTasks();
         console.log('hello tasks 2');
     }, [api]);
@@ -17,16 +20,16 @@ function TodoistTaskListView({ token, filters }) {
     async function generateFilter() {
         var res = [];
         if (filters.dates) {
-            const start = `${filters.dates.start.getMonth()}/${filters.dates.start.getDate()}/${filters.dates.start.getFullYear()}`;
-            const end = `${filters.dates.end.getMonth()}/${filters.dates.end.getDate()}/${filters.dates.end.getFullYear()}`;
+            const start = `${filters.dates.start.getMonth() + 1}/${filters.dates.start.getDate()}/${filters.dates.start.getFullYear()}`;
+            const end = `${filters.dates.end.getMonth() + 1}/${filters.dates.end.getDate()}/${filters.dates.end.getFullYear()}`;
             res.push(`(due after: ${start} | due before: ${end})`);
         }
         if (filters.project_id) {
-            const project_name = await api.getProject(filters.project_id).then(project => project.name);
+            const project_name = await api.getProject(filters.project_id).then(project => project.name).catch(error => console.log(`Project: ${error.message}`));
             res.push(`#${project_name}`);
         }
         if (filters.label_id) {
-            const label_name = await api.getLabel(filters.label_id).then(label => label.name);
+            const label_name = await api.getLabel(filters.label_id).then(label => label.name).catch(error => console.log(`Label: ${error.message}`));
             res.push(`#${label_name}`);
         }
         return res.reduce((acc, f) => acc + f);
