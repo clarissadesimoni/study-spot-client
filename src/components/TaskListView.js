@@ -21,7 +21,7 @@ function TaskListView({ projects, labels, filters }) {
     var newTaskAllDay = useRef(false);
 
     useEffect(async () => {
-        console.log(projects);
+        if (projects.length == 0) newTaskProject.current = projects[0].id;
         await getTasks();
     }, []);
 
