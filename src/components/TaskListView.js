@@ -33,10 +33,10 @@ function TaskListView({ projects, labels, filters }) {
             console.log('dates');
             let { data, error } = await supabase
             .from('tasks')
-            .select()
             .eq('isCompleted', false)
             .gte('due', supabaseFilterToString(filters.dates.start))
-            .lte('due', supabaseFilterToString(filters.dates.end));
+            .lte('due', supabaseFilterToString(filters.dates.end))
+            .select()
             if (data) res = data;
             if (error) err = error;
         }
@@ -44,9 +44,9 @@ function TaskListView({ projects, labels, filters }) {
             console.log('project');
             let { data, error } = await supabase
             .from('tasks')
-            .select()
             .eq('isCompleted', false)
-            .eq('projectId', filters.project);
+            .eq('projectId', filters.project)
+            .select()
             if (data) res = data;
             if (error) err = error;
         }
@@ -54,9 +54,9 @@ function TaskListView({ projects, labels, filters }) {
             console.log('label');
             let { data, error } = await supabase
             .from('tasks')
-            .select()
             .eq('isCompleted', false)
-            .contains('labels', filters.label);
+            .contains('labels', filters.label)
+            .select()
             if (data) res = data;
             if (error) err = error;
         } else {
