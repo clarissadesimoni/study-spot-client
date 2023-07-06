@@ -125,11 +125,11 @@ function TaskManager() {
         setProjects(prg);
         const lbl = await getLabels();
         setLabels(lbl);
-        let tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        let yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        setFilter(filter ?? {dates: {start: yesterday, end: tomorrow}});
+        // let tomorrow = new Date();
+        // tomorrow.setDate(tomorrow.getDate() + 1);
+        // let yesterday = new Date();
+        // yesterday.setDate(yesterday.getDate() - 1);
+        // setFilter(filter ?? {dates: {start: yesterday, end: tomorrow}});
         setIsLoading(false);
     }, []);
 
