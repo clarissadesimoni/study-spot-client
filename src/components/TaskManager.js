@@ -71,8 +71,7 @@ function TaskManager() {
         return res.reduce((acc, f) => acc + f);
     }
 
-    async function generateQuery(filters) {
-        if (filters instanceof Promise) await filters;
+    function generateQuery(filters) {
         let query = supabase
         .from('tasks')
         .select()
