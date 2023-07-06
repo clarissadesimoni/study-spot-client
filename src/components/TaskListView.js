@@ -30,6 +30,7 @@ function TaskListView({ projects, labels, filters }) {
         let res = null;
         let err = null;
         if (filters.dates) {
+            console.log('dates');
             let { data, error } = await supabase
             .from('tasks')
             .select()
@@ -40,6 +41,7 @@ function TaskListView({ projects, labels, filters }) {
             if (error) err = error;
         }
         if (filters.project) {
+            console.log('project');
             let { data, error } = await supabase
             .from('tasks')
             .select()
@@ -49,6 +51,7 @@ function TaskListView({ projects, labels, filters }) {
             if (error) err = error;
         }
         if (filters.label) {
+            console.log('label');
             let { data, error } = await supabase
             .from('tasks')
             .select()
@@ -57,6 +60,7 @@ function TaskListView({ projects, labels, filters }) {
             if (data) res = data;
             if (error) err = error;
         }
+        console.log('end');
         if (res) {
             console.log(res);
             res = res.map(task => {
