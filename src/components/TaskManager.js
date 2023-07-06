@@ -73,6 +73,7 @@ function TaskManager() {
     }
 
     async function generateQuery(filters) {
+        if (filters instanceof Promise) await filters;
         let query = supabase
         .from('tasks')
         .select()
@@ -142,10 +143,6 @@ function TaskManager() {
         console.log(newFilter);
         setFilter(newFilter);
         console.log('changed filter');
-        if (token.length == 0 || api == null || api == undefined)
-            setTasklist(<TaskListView projects={projects} labels={labels} filters={filter} query={generateQuery(newFilter)} />);
-        else
-            setTasklist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(newFilter)} />);
     }
 
     useEffect(async () => {
@@ -174,17 +171,17 @@ function TaskManager() {
                     <input type="text" autocomplete="off" onChange={e => setTmpToken(e.target.value)} />
                     <button onClick={() => insertToken()}>Set todoist token</button>
                     <hr />
-                    <ProjectsView projects={projects} filterFunc={setFilter} />
+                    <ProjectsView projects={projects} filterFunc={changeFilter} />
                     <hr />
-                    <LabelsView labels={labels} filterFunc={setFilter} />
+                    <LabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
                     <TaskListView projects={projects} labels={labels} filters={filter} query={generateQuery(filter)} />
                 </>
             ) : (
                 <>
-                    <TodoistProjectsView projects={projects} filterFunc={setFilter} />
+                    <TodoistProjectsView projects={projects} filterFunc={changeFilter} />
                     <hr />
-                    <TodoistLabelsView labels={labels} filterFunc={setFilter} />
+                    <TodoistLabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
                     <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter)} />
                 </>
