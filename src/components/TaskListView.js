@@ -30,16 +30,21 @@ function TaskListView({ projects, labels, filters }) {
         .from('tasks')
         .select()
         .eq('isCompleted', false);
-        if (filters.dates)
+        if (filters.dates) {
+            console.log('d');
             query = query.gte('due', supabaseFilterToString(filters.dates.start)).lte('due', supabaseFilterToString(filters.dates.end));
-        if (filters.project)
+        }
+        if (filters.project) {
+            console.log('p');
             query = query.eq('projectId', filters.project);
-        if (filters.label)
+        }
+        if (filters.label) {
+            console.log('l');
             query = query.contains('labels', [filters.label]);
+        }
         let { data, error } = await query;
         if (data) {
             console.log(data);
-            console.log(new Date(Date.parse(data[0].due + 'Z')));
             data = data.map(task => {
                 const tmp = new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, new Date(Date.parse(task.due + 'Z')), null);
                 console.log(tmp);
