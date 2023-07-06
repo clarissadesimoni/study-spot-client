@@ -23,7 +23,7 @@ function TaskListView({ projects, labels, query }) {
     useEffect(async () => {
         console.log('in task list view');
         await getTasks();
-    }, [query]);
+    }, []);
 
     async function getTasks() {
         // let query = supabase
