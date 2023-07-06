@@ -15,7 +15,7 @@ function TaskListView({ projects, labels, filters }) {
     const [ tasks, setTasks ] = useState([]);
     const [ isAdding, setIsAdding ] = useState(false);
     var newTaskName = useRef('');
-    var newTaskProject = useRef('');
+    var newTaskProject = useRef(projects.keys().length == 1 ? projects.keys()[0] : '');
     var newTaskLabels = useRef([]);
     var newTaskDue = useRef(new Date());
     var newTaskAllDay = useRef(false);
@@ -45,7 +45,8 @@ function TaskListView({ projects, labels, filters }) {
                 if (t1.due !== t2.due)
                     return t1.due - t2.due;
                 return 0;
-            })
+            });
+            setTasks(data);
         }
         if (error) {
             alert(error.message);
@@ -122,7 +123,7 @@ function TaskListView({ projects, labels, filters }) {
                                 </>
                             )
                         }
-                        <select onChange={e => newTaskProject.current = e.target.value}>
+                        <select onClick={e => newTaskProject.current = e.target.value}>
                         {
                             projects.map(p => <option value={p.id} onClick={() => newTaskProject.current = p.id}>{p.name}</option>)
                         }
