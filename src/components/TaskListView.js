@@ -27,51 +27,26 @@ function TaskListView({ projects, labels, filters }) {
     
     async function getTasks() {
         console.log(filters);
-        let res = null;
-        let err = null;
-        if (filters.dates) {
-            console.log('dates');
-            let { data, error } = await supabase
-            .from('tasks')
-            .select()
-            .eq('isCompleted', false)
-            .gte('due', supabaseFilterToString(filters.dates.start))
-            .lte('due', supabaseFilterToString(filters.dates.end));
-            if (data) res = data;
-            if (error) err = error;
-        }
-        else if (filters.project) {
-            console.log('project');
-            let { data, error } = await supabase
-            .from('tasks')
-            .select()
-            .eq('isCompleted', false)
-            .eq('projectId', filters.project);
-            if (data) res = data;
-            if (error) err = error;
-        }
-        else if (filters.label) {
-            console.log('label');
-            let { data, error } = await supabase
-            .from('tasks')
-            .select()
-            .eq('isCompleted', false)
-            .contains('labels', `{"${filters.label}"}`);
-            if (data) res = data;
-            if (error) err = error;
-        } else {
-            console.log('no filter');
-            let { data, error } = await supabase
-            .from('tasks')
-            .select()
-            .eq('isCompleted', false);
-            if (data) res = data;
-            if (error) err = error;
-        }
-        console.log('end');
-        if (res) {
-            console.log(res);
-            res = res.map(task => {
+        console.log('no filter');
+        let { data, error } = await supabase
+        .from('tasks')
+        .select()
+        .eq('isCompleted', false);
+        if (data) {
+            if (filters.dates) {
+                data = data.filter(task => {
+                    let due = new Date(Date.parse(task.due + 'Z'));
+                    return filters.dates.start <= due <= filters.dates.end;
+                })
+            }
+            if (filters.project) {
+                data = data.filter(task => task.projectId == filters.project);
+            }
+            if (filters.dates) {
+                data = data.filter(task => task.labels.includes(filters.labels));
+            }
+            console.log(data);
+            data = data.map(task => {
                 const tmp = new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, new Date(Date.parse(task.due + 'Z')), null);
                 console.log(tmp);
                 return tmp;
@@ -82,11 +57,11 @@ function TaskListView({ projects, labels, filters }) {
                     return t1.due - t2.due;
                 return 0;
             });
-            setTasks(res);
+            setTasks(data);
         }
-        if (err) {
-            alert(err.message);
-            console.log(err);
+        if (error) {
+            alert(error.message);
+            console.log(error);
         }
     }
 
