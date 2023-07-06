@@ -21,28 +21,23 @@ function TaskListView({ projects, labels, filters, query }) {
     var newTaskAllDay = useRef(false);
 
     useEffect(async () => {
-        console.log('rendering TaskListView');
         await getTasks();
-    }, []);
+    }, [filters]);
 
     async function getTasks() {
-        // console.log(filters);
-        // let query = supabase
-        // .from('tasks')
-        // .select()
-        // .eq('isCompleted', false);
-        // if (filters.dates) {
-        //     console.log('d');
-        //     query = query.gte('due', supabaseFilterToString(filters.dates.start)).lte('due', supabaseFilterToString(filters.dates.end));
-        // }
-        // if (filters.project) {
-        //     console.log('p');
-        //     query = query.eq('projectId', filters.project);
-        // }
-        // if (filters.label) {
-        //     console.log('l');
-        //     query = query.contains('labels', [filters.label]);
-        // }
+        let query = supabase
+        .from('tasks')
+        .select()
+        .eq('isCompleted', false);
+        if (filters.dates) {
+            query = query.gte('due', supabaseFilterToString(filters.dates.start)).lte('due', supabaseFilterToString(filters.dates.end));
+        }
+        if (filters.project) {
+            query = query.eq('projectId', filters.project);
+        }
+        if (filters.label) {
+            query = query.contains('labels', [filters.label]);
+        }
         let { data, error } = await query;
         if (data) {
             console.log(data);
