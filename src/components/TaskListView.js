@@ -56,7 +56,7 @@ function TaskListView({ projects, labels, filters }) {
     }
 
     async function createTask() {
-        console.log({ title: newTaskName.current, projectId: newTaskProject.current, labels: newTaskLabels.current, due: (newTaskDue.current.toISOString()).toLocaleString('it-IT'), isCompleted: false, owner: session.user.id });
+        console.log({ title: newTaskName.current, projectId: projects.length == 0 ? projects[0].id : newTaskProject.current, labels: newTaskLabels.current, due: (newTaskDue.current.toISOString()).toLocaleString('it-IT'), isCompleted: false, owner: session.user.id });
         const { error } = await supabase
         .from('tasks')
         .insert([
