@@ -140,8 +140,6 @@ function TaskManager() {
 
     function changeFilter(newFilter) {
         console.log(newFilter);
-        const q = generateQuery(newFilter);
-        console.log(q);
         console.log('changing query');
         setFilter(newFilter);
         setQuery('re-render');
