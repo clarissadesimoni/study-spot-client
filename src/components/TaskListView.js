@@ -27,7 +27,6 @@ function TaskListView({ projects, labels, filters }) {
     
     async function getTasks() {
         console.log(filters);
-        console.log('no filter');
         let { data, error } = await supabase
         .from('tasks')
         .select()

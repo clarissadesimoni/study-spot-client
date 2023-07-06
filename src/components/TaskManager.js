@@ -151,10 +151,6 @@ function TaskManager() {
             setTlist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(newFilter)} />);
     }
 
-    useEffect(() => {
-
-    }, [query]);
-
     useEffect(async () => {
         await getToken();
         const prg = await getProjects();
