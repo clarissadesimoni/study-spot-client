@@ -50,8 +50,8 @@ function TaskListView({ projects, labels, filters }) {
                 console.log(tmp);
                 return tmp;
             }).sort((t1, t2) => {
-                if (t1.projectId.localeCompare(t2.projectId) != 0)
-                    return t1.projectId.localeCompare(t2.projectId);
+                if (t1.projectId - t2.projectId != 0)
+                    return t1.projectId - t2.projectId;
                 if (t1.due !== t2.due)
                     return t1.due - t2.due;
                 return 0;
