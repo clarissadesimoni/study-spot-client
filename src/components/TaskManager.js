@@ -119,6 +119,12 @@ function TaskManager() {
         return res;
     }
 
+    async function changeFilter(newFilter) {
+        console.log('in changeFilter');
+        console.log(newFilter);
+        setFilter(newFilter);
+    }
+
     useEffect(async () => {
         await getToken();
         const prg = await getProjects();
@@ -145,17 +151,17 @@ function TaskManager() {
                     <input type="text" autocomplete="off" onChange={e => setTmpToken(e.target.value)} />
                     <button onClick={() => insertToken()}>Set todoist token</button>
                     <hr />
-                    <ProjectsView projects={projects} filterFunc={setFilter} />
+                    <ProjectsView projects={projects} filterFunc={changeFilter} />
                     <hr />
-                    <LabelsView labels={labels} filterFunc={setFilter} />
+                    <LabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
                     <TaskListView projects={projects} labels={labels} filters={filter} />
                 </>
             ) : (
                 <>
-                    <TodoistProjectsView projects={projects} filterFunc={setFilter} />
+                    <TodoistProjectsView projects={projects} filterFunc={changeFilter} />
                     <hr />
-                    <TodoistLabelsView labels={labels} filterFunc={setFilter} />
+                    <TodoistLabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
                     <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter)} />
                 </>
