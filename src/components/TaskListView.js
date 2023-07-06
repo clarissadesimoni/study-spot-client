@@ -15,12 +15,13 @@ function TaskListView({ projects, labels, filters }) {
     const [ tasks, setTasks ] = useState([]);
     const [ isAdding, setIsAdding ] = useState(false);
     var newTaskName = useRef('');
-    var newTaskProject = useRef(projects.keys().length == 1 ? projects.keys()[0] : '');
+    var newTaskProject = useRef('');
     var newTaskLabels = useRef([]);
     var newTaskDue = useRef(new Date());
     var newTaskAllDay = useRef(false);
 
     useEffect(async () => {
+        console.log(projects);
         await getTasks();
     }, []);
 
