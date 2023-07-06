@@ -21,6 +21,7 @@ function TaskListView({ projects, labels, query }) {
     var newTaskAllDay = useRef(false);
 
     useEffect(async () => {
+        console.log('in task list view');
         await getTasks();
     }, [query]);
 

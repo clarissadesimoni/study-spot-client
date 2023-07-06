@@ -142,7 +142,7 @@ function TaskManager() {
         const q = generateQuery(newFilter);
         console.log(q);
         console.log('changing query');
-        setQuery(q);
+        setQuery('re-render');
         console.log('changed query');
         if (token.length == 0 || api == null || api == undefined)
             setTlist(<TaskListView projects={projects} labels={labels} query={q} />);
