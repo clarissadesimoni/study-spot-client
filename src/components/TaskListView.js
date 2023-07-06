@@ -9,7 +9,7 @@ import DatePicker from 'react-date-picker';
 import TimePicker from 'react-time-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 
-function TaskListView({ projects, labels, filters }) {
+function TaskListView({ projects, labels, filters, query }) {
     const session = useSession();
     const supabase = useSupabaseClient();
     const [ tasks, setTasks ] = useState([]);
@@ -27,22 +27,22 @@ function TaskListView({ projects, labels, filters }) {
 
     async function getTasks() {
         console.log(filters);
-        let query = supabase
-        .from('tasks')
-        .select()
-        .eq('isCompleted', false);
-        if (filters.dates) {
-            console.log('d');
-            query = query.gte('due', supabaseFilterToString(filters.dates.start)).lte('due', supabaseFilterToString(filters.dates.end));
-        }
-        if (filters.project) {
-            console.log('p');
-            query = query.eq('projectId', filters.project);
-        }
-        if (filters.label) {
-            console.log('l');
-            query = query.contains('labels', [filters.label]);
-        }
+        // let query = supabase
+        // .from('tasks')
+        // .select()
+        // .eq('isCompleted', false);
+        // if (filters.dates) {
+        //     console.log('d');
+        //     query = query.gte('due', supabaseFilterToString(filters.dates.start)).lte('due', supabaseFilterToString(filters.dates.end));
+        // }
+        // if (filters.project) {
+        //     console.log('p');
+        //     query = query.eq('projectId', filters.project);
+        // }
+        // if (filters.label) {
+        //     console.log('l');
+        //     query = query.contains('labels', [filters.label]);
+        // }
         let { data, error } = await query;
         if (data) {
             console.log(data);

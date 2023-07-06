@@ -71,6 +71,26 @@ function TaskManager() {
         return res.reduce((acc, f) => acc + f);
     }
 
+    async function generateQuery(filters) {
+        let query = supabase
+        .from('tasks')
+        .select()
+        .eq('isCompleted', false);
+        if (filters.dates) {
+            console.log('d');
+            query = query.gte('due', supabaseFilterToString(filters.dates.start)).lte('due', supabaseFilterToString(filters.dates.end));
+        }
+        if (filters.project) {
+            console.log('p');
+            query = query.eq('projectId', filters.project);
+        }
+        if (filters.label) {
+            console.log('l');
+            query = query.contains('labels', [filters.label]);
+        }
+        return query;
+    }
+
     async function getProjects() {
         var res = null;
         if (api) {
@@ -161,7 +181,7 @@ function TaskManager() {
                     <hr />
                     <LabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
-                    <TaskListView projects={projects} labels={labels} filters={filter} />
+                    <TaskListView projects={projects} labels={labels} filters={filter} query={generateQuery(filter)} />
                 </>
             ) : (
                 <>
