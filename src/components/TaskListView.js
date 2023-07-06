@@ -26,7 +26,6 @@ function TaskListView({ projects, labels, filters }) {
     }, []);
 
     async function getTasks() {
-        console.log(filters);
         let query = supabase
         .from('tasks')
         .select()
@@ -40,7 +39,7 @@ function TaskListView({ projects, labels, filters }) {
         let { data, error } = await query;
         if (data) {
             data = data.map(task => {
-                return new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, new Date(+task.due), null);
+                return new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, Date.parse(task.due), null);
             }).sort((t1, t2) => {
                 if (t1.projectId.localeCompare(t2.projectId) != 0)
                     return t1.projectId.localeCompare(t2.projectId);
