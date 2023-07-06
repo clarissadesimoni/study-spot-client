@@ -1,4 +1,4 @@
-function LabelsView({ labels, filterFunc}) {
+function LabelsView({ labels, filterFunc }) {
 
     async function handleFilter(label) {
         filterFunc({label: label});

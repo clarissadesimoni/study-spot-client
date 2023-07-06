@@ -128,17 +128,15 @@ function TaskManager() {
 
     useEffect(async () => {
         await getToken();
-        const prg = await getProjects();
-        setProjects(prg);
-        const lbl = await getLabels();
-        setLabels(lbl);
+        setProjects(await getProjects());
+        setLabels(await getLabels());
         // let tomorrow = new Date();
         // tomorrow.setDate(tomorrow.getDate() + 1);
         // let yesterday = new Date();
         // yesterday.setDate(yesterday.getDate() - 1);
         // setFilter(filter ?? {dates: {start: yesterday, end: tomorrow}});
         setIsLoading(false);
-    }, []);
+    }, [filter]);
 
     return (
         <>
