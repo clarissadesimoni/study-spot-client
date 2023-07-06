@@ -176,11 +176,11 @@ function TaskManager() {
                     <input type="text" autocomplete="off" onChange={e => setTmpToken(e.target.value)} />
                     <button onClick={() => insertToken()}>Set todoist token</button>
                     <hr />
-                    <ProjectsView projects={projects} filterFunc={changeFilter} />
+                    {/* <ProjectsView projects={projects} filterFunc={changeFilter} />
                     <hr />
                     <LabelsView labels={labels} filterFunc={changeFilter} />
-                    <hr />
-                    {tlist}
+                    <hr /> */}
+                    <TaskListView projects={projects} labels={labels} filters={filter} />
                 </>
             ) : (
                 <>
