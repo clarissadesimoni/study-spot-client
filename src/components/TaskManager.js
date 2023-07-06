@@ -146,6 +146,7 @@ function TaskManager() {
                     <button onClick={() => insertToken()}>Set todoist token</button>
                     <hr />
                     <ProjectsView projects={projects} filterFunc={setFilter} />
+                    <hr />
                     <LabelsView labels={labels} filterFunc={setFilter} />
                     <hr />
                     <TaskListView projects={projects} labels={labels} filters={filter} />
@@ -153,6 +154,7 @@ function TaskManager() {
             ) : (
                 <>
                     <TodoistProjectsView projects={projects} filterFunc={setFilter} />
+                    <hr />
                     <TodoistLabelsView labels={labels} filterFunc={setFilter} />
                     <hr />
                     <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter)} />
