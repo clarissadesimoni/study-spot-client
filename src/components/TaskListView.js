@@ -21,24 +21,23 @@ function TaskListView({ projects, labels, filters, query }) {
     var newTaskAllDay = useRef(false);
 
     useEffect(async () => {
-        if (filters instanceof Promise) await filters;
         await getTasks();
-    }, [filters]);
+    }, []);
 
     async function getTasks() {
-        let query = supabase
-        .from('tasks')
-        .select()
-        .eq('isCompleted', false);
-        if (filters.dates) {
-            query = query.gte('due', supabaseFilterToString(filters.dates.start)).lte('due', supabaseFilterToString(filters.dates.end));
-        }
-        if (filters.project) {
-            query = query.eq('projectId', filters.project);
-        }
-        if (filters.label) {
-            query = query.contains('labels', [filters.label]);
-        }
+        // let query = supabase
+        // .from('tasks')
+        // .select()
+        // .eq('isCompleted', false);
+        // if (filters.dates) {
+        //     query = query.gte('due', supabaseFilterToString(filters.dates.start)).lte('due', supabaseFilterToString(filters.dates.end));
+        // }
+        // if (filters.project) {
+        //     query = query.eq('projectId', filters.project);
+        // }
+        // if (filters.label) {
+        //     query = query.contains('labels', [filters.label]);
+        // }
         let { data, error } = await query;
         if (data) {
             console.log(data);
