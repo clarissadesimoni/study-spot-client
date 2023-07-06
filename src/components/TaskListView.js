@@ -38,6 +38,7 @@ function TaskListView({ projects, labels, filters }) {
             query = query.contains('labels', [filters.label]);
         let { data, error } = await query;
         if (data) {
+            console.log(data);
             data = data.map(task => {
                 return new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, Date.parse(task.due), null);
             }).sort((t1, t2) => {
