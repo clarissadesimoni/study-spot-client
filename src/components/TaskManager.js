@@ -129,7 +129,7 @@ function TaskManager() {
         tomorrow.setDate(tomorrow.getDate() + 1);
         let yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
-        setFilter({dates: {start: yesterday, end: tomorrow}});
+        setFilter(filter ?? {dates: {start: yesterday, end: tomorrow}});
         setIsLoading(false);
     }, []);
 
