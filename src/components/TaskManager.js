@@ -12,12 +12,7 @@ function TaskManager() {
     const [ api, setApi ] = useState(null);
     const [ projects, setProjects ] = useState({});
     const [ labels, setLabels ] = useState({});
-    const [ filter, setFilter ] = useState({dates: {start: yesterday, end: tomorrow}});
-    
-    let tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    let yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
+    const [ filter, setFilter ] = useState({});
 
     async function getToken() {
         let { data, error } = await supabase
@@ -130,6 +125,11 @@ function TaskManager() {
         setProjects(prg);
         const lbl = await getLabels();
         setLabels(lbl);
+        let tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        let yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        setFilter({dates: {start: yesterday, end: tomorrow}});
         setIsLoading(false);
     }, []);
 
