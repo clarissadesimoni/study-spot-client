@@ -26,7 +26,8 @@ function TaskListView({ projects, labels, filters }) {
     }, [filters]);
 
     async function getTasks() {
-        let query = await supabase
+        console.log(filters);
+        let query = supabase
         .from('tasks')
         .select()
         .eq('isCompleted', false);
