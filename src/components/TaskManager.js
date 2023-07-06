@@ -144,7 +144,7 @@ function TaskManager() {
         console.log('changed filter');
     }
 
-    useEffect(() => {}, [query]);
+    useEffect(() => { console.log('hello'); }, [query]);
 
     useEffect(async () => {
         await getToken();
