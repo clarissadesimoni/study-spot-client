@@ -9,7 +9,7 @@ import DatePicker from 'react-date-picker';
 import TimePicker from 'react-time-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 
-function TaskListView({ projects, labels, filters, query }) {
+function TaskListView({ projects, labels, query }) {
     const session = useSession();
     const supabase = useSupabaseClient();
     const [ tasks, setTasks ] = useState([]);
@@ -22,7 +22,7 @@ function TaskListView({ projects, labels, filters, query }) {
 
     useEffect(async () => {
         await getTasks();
-    }, []);
+    }, [query]);
 
     async function getTasks() {
         // let query = supabase

@@ -13,6 +13,7 @@ function TaskManager() {
     const [ projects, setProjects ] = useState({});
     const [ labels, setLabels ] = useState({});
     const [ query, setQuery ] = useState(supabase.from('tasks').select().eq('isCompleted', false));
+    const [ tlist, setTlist ] = useState(<></>);
 
     async function getToken() {
         let { data, error } = await supabase
@@ -53,20 +54,20 @@ function TaskManager() {
         }
     }
 
-    async function generateFilter(filters) {
+    function generateFilter(filters) {
         var res = [];
         if (filters.dates) {
             const start = `${filters.dates.start.getMonth()}/${filters.dates.start.getDate()}/${filters.dates.start.getFullYear()}`;
             const end = `${filters.dates.end.getMonth()}/${filters.dates.end.getDate()}/${filters.dates.end.getFullYear()}`;
             res.push(`(due after: ${start} | due before: ${end})`);
         }
-        if (filters.project_id) {
-            const project_name = await api.getProject(filters.project_id).then(project => project.name);
-            res.push(`#${project_name}`);
+        if (filters.project) {
+            // const project_name = await api.getProject(filters.project_id).then(project => project.name);
+            res.push(`#${projects[filters.project] ?? 'Inbox'}`);
         }
-        if (filters.label_id) {
-            const label_name = await api.getLabel(filters.label_id).then(label => label.name);
-            res.push(`#${label_name}`);
+        if (filters.label) {
+            // const label_name = await api.getLabel(filters.label_id).then(label => label.name);
+            res.push(`#${filters.label}`);
         }
         return res.reduce((acc, f) => acc + f);
     }
@@ -137,16 +138,21 @@ function TaskManager() {
     }
 
     async function changeFilter(newFilter) {
-        console.log('in changeFilter');
         console.log(newFilter);
-        console.log(generateQuery(newFilter));
+        const q = generateQuery(newFilter);
+        console.log(q);
         console.log('changing query');
-        await setQuery(generateQuery(newFilter));
+        setQuery(q);
         console.log('changed query');
-        console.log('changed filter');
+        if (token.length == 0 || api == null || api == undefined)
+            setTlist(<TaskListView projects={projects} labels={labels} query={q} />);
+        else
+            setTlist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(newFilter)} />);
     }
 
-    useEffect(() => { console.log('hello'); }, [query]);
+    useEffect(() => {
+
+    }, [query]);
 
     useEffect(async () => {
         await getToken();
@@ -154,11 +160,10 @@ function TaskManager() {
         setProjects(prg);
         const lbl = await getLabels();
         setLabels(lbl);
-        // let tomorrow = new Date();
-        // tomorrow.setDate(tomorrow.getDate() + 1);
-        // let yesterday = new Date();
-        // yesterday.setDate(yesterday.getDate() - 1);
-        // setFilter(filter ?? {dates: {start: yesterday, end: tomorrow}});
+        if (token.length == 0 || api == null || api == undefined)
+            setTlist(<TaskListView projects={projects} labels={labels} query={query} />);
+        else
+            setTlist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter)} />);
         setIsLoading(false);
     }, []);
 
@@ -178,7 +183,7 @@ function TaskManager() {
                     <hr />
                     <LabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
-                    <TaskListView projects={projects} labels={labels} query={query} />
+                    {tlist}
                 </>
             ) : (
                 <>
@@ -186,7 +191,7 @@ function TaskManager() {
                     <hr />
                     <TodoistLabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
-                    <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter)} />
+                    {tlist}
                 </>
             )
         }
