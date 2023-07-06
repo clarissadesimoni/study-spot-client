@@ -123,6 +123,7 @@ function TaskManager() {
         console.log('in changeFilter');
         console.log(newFilter);
         setFilter(newFilter);
+        console.log('changed filter')
     }
 
     useEffect(async () => {
