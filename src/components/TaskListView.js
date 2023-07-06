@@ -23,10 +23,9 @@ function TaskListView({ projects, labels, filters }) {
     useEffect(async () => {
         console.log('in task list view');
         await getTasks();
-    }, [filters]);
+    }, []);
     
     async function getTasks() {
-        console.log(filters);
         let { data, error } = await supabase
         .from('tasks')
         .select()
