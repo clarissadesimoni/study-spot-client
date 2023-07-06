@@ -12,8 +12,7 @@ function TaskManager() {
     const [ api, setApi ] = useState(null);
     const [ projects, setProjects ] = useState({});
     const [ labels, setLabels ] = useState({});
-    const [ filter, setFilter ] = useState({});
-    const [ tasklist, setTasklist ] = useState(<></>);
+    const [ query, setQuery ] = useState(supabase.from('tasks').select().eq('isCompleted', false));
 
     async function getToken() {
         let { data, error } = await supabase
@@ -138,12 +137,14 @@ function TaskManager() {
         return res;
     }
 
-    function changeFilter(newFilter) {
+    async function changeFilter(newFilter) {
         console.log('in changeFilter');
         console.log(newFilter);
-        setFilter(newFilter);
+        setQuery(generateQuery(newFilter));
         console.log('changed filter');
     }
+
+    useEffect(() => {}, [query]);
 
     useEffect(async () => {
         await getToken();
@@ -175,7 +176,7 @@ function TaskManager() {
                     <hr />
                     <LabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
-                    <TaskListView projects={projects} labels={labels} filters={filter} query={generateQuery(filter)} />
+                    <TaskListView projects={projects} labels={labels} query={query} />
                 </>
             ) : (
                 <>
