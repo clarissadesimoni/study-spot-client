@@ -44,7 +44,8 @@ function TaskListView({ projects, labels, filters }) {
             query = query.contains('labels', [filters.label]);
         }
         console.log('dynamic filter label');
-        let { data, error } = await query;
+        let data = (await query).data;
+        let error = (await query).error;
         console.log('dynamic filter end');
         if (data) {
             console.log(data);
