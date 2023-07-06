@@ -145,7 +145,7 @@ function TaskManager() {
         setQuery('re-render');
         console.log('changed query');
         if (token.length == 0 || api == null || api == undefined)
-            setTlist(<TaskListView projects={projects} labels={labels} query={q} />);
+            setTlist(<TaskListView projects={projects} labels={labels} filters={newFilter} />);
         else
             setTlist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(newFilter)} />);
     }
@@ -161,7 +161,7 @@ function TaskManager() {
         const lbl = await getLabels();
         setLabels(lbl);
         if (token.length == 0 || api == null || api == undefined)
-            setTlist(<TaskListView projects={projects} labels={labels} query={query} />);
+            setTlist(<TaskListView projects={projects} labels={labels} filters={newFilter} />);
         else
             setTlist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter)} />);
         setIsLoading(false);
