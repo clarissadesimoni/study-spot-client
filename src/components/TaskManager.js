@@ -144,7 +144,7 @@ function TaskManager() {
         setFilter(newFilter);
         setQuery('re-render');
         console.log('changed query');
-        console(typeof newFilter);
+        console.log(typeof newFilter);
         if (token.length == 0 || api == null || api == undefined)
             setTlist(<TaskListView projects={projects} labels={labels} filters={newFilter} />);
         else
