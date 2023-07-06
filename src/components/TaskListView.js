@@ -124,7 +124,7 @@ function TaskListView({ projects, labels, filters }) {
                         }
                         <select onChange={e => newTaskProject.current = e.target.value}>
                         {
-                            projects.map(p => <option value={p.id}>{p.name}</option>)
+                            projects.map(p => <option value={p.id} onClick={() => newTaskProject.current = p.id}>{p.name}</option>)
                         }
                         </select>
                         <select multiple={true} onChange={e => newTaskLabels.current = Array.from(e.target.selectedOptions, option => option.value)}>
