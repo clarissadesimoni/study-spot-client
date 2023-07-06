@@ -40,7 +40,7 @@ function TaskListView({ projects, labels, filters }) {
             if (data) res = data;
             if (error) err = error;
         }
-        if (filters.project) {
+        else if (filters.project) {
             console.log('project');
             let { data, error } = await supabase
             .from('tasks')
@@ -50,13 +50,21 @@ function TaskListView({ projects, labels, filters }) {
             if (data) res = data;
             if (error) err = error;
         }
-        if (filters.label) {
+        else if (filters.label) {
             console.log('label');
             let { data, error } = await supabase
             .from('tasks')
             .select()
             .eq('isCompleted', false)
-            .contains('labels', [filters.label instanceof Object ? filters.label : '1']);
+            .contains('labels', filters.label);
+            if (data) res = data;
+            if (error) err = error;
+        } else {
+            console.log('no filter');
+            let { data, error } = await supabase
+            .from('tasks')
+            .select()
+            .eq('isCompleted', false);
             if (data) res = data;
             if (error) err = error;
         }
