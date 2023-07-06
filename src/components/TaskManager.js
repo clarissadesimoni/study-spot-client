@@ -73,7 +73,7 @@ function TaskManager() {
         return res.reduce((acc, f) => acc + f);
     }
 
-    function generateQuery(filters) {
+    /* function generateQuery(filters) {
         let query = supabase
         .from('tasks')
         .select()
@@ -88,7 +88,7 @@ function TaskManager() {
             query = query.contains('labels', [filters.label]);
         }
         return query;
-    }
+    } */
 
     async function getProjects() {
         var res = null;
@@ -138,7 +138,7 @@ function TaskManager() {
         return res;
     }
 
-    async function changeFilter(newFilter) {
+    function changeFilter(newFilter) {
         console.log(newFilter);
         const q = generateQuery(newFilter);
         console.log(q);
@@ -146,6 +146,7 @@ function TaskManager() {
         setFilter(newFilter);
         setQuery('re-render');
         console.log('changed query');
+        console(typeof newFilter);
         if (token.length == 0 || api == null || api == undefined)
             setTlist(<TaskListView projects={projects} labels={labels} filters={newFilter} />);
         else
