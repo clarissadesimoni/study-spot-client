@@ -22,7 +22,7 @@ function Auth() {
             },
         });
         if (error) {
-            alert('Error signing in with google');
+            alert('Errore durante l\'accesso con Google');
             console.log(error.message);
         }
     }
@@ -33,7 +33,7 @@ function Auth() {
             password: password
         })
         if (error) {
-            alert('Error signing in with email');
+            alert('Errore durante l\'accesso con email');
             console.log(error.message);
         }
     }
@@ -44,10 +44,10 @@ function Auth() {
             password: password
         })
         if (error) {
-            alert('Error signing up with email');
+            alert('Errore durante l\'iscrizione con email');
             console.log(error.message);
         } else {
-            setBottomText('A confirmation email has been sent to your email address. Click on the link before signing in.');
+            setBottomText('Un\'email di conferma è stata inviata a questo indirizzo email. Clicca sul link prima di effettuare l\'accesso.');
         }
     }
 
@@ -56,11 +56,11 @@ function Auth() {
     }
 
     if (session) {
-        return <button onClick={() => signOut()}>Sign out</button>
+        return <button onClick={() => signOut()}>Effettua il logout</button>
     } else {
         return (
         <>
-            <button onClick={() => googleSignIn()}>Sign in with Google</button>
+            <button onClick={() => googleSignIn()}>Entra con Google</button>
             {
                 isSignIn ? (
                     <>
@@ -69,12 +69,12 @@ function Auth() {
                         <p />
                         <input type='password' autoComplete='password' onChange={(e) => setPassword(e.target.value)} />
                         <p />
-                        <button onClick={() => emailSignIn()}>Submit</button>
+                        <button onClick={() => emailSignIn()}>Invia</button>
                     </>
                 ) : (
                     <>
                         <p />
-                        <button onClick={() => { setIsSignIn(true); setIsSignUp(false); }}>Sign in with email</button>
+                        <button onClick={() => { setIsSignIn(true); setIsSignUp(false); }}>Accedi tramite email</button>
                     </>
                 )
             }
@@ -86,13 +86,13 @@ function Auth() {
                         <p />
                         <input type='password' autoComplete='password' onChange={(e) => setPassword(e.target.value)} />
                         <p />
-                        <button onClick={() => signUp()}>Submit</button>
+                        <button onClick={() => signUp()}>Invia</button>
                         <p>{bottomText}</p>
                     </>
                 ) : (
                     <>
                         <p />
-                        <button onClick={() => { setIsSignIn(false); setIsSignUp(true); }}>Sign up</button>
+                        <button onClick={() => { setIsSignIn(false); setIsSignUp(true); }}>Iscriviti</button>
                     </>
                 )
             }
