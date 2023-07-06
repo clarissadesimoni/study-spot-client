@@ -153,9 +153,9 @@ function TaskManager() {
 
     useEffect(async () => {
         await getToken();
-        const prg = await getProjects();
+        let prg = await getProjects();
         setProjects(prg);
-        const lbl = await getLabels();
+        let lbl = await getLabels();
         setLabels(lbl);
         /* if (token.length == 0 || api == null || api == undefined)
             setTlist(<TaskListView projects={projects} labels={labels} filters={filter} />);
