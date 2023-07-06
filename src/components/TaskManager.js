@@ -140,7 +140,10 @@ function TaskManager() {
     async function changeFilter(newFilter) {
         console.log('in changeFilter');
         console.log(newFilter);
-        setQuery(generateQuery(newFilter));
+        console.log(generateQuery(newFilter));
+        console.log('changing query');
+        await setQuery(generateQuery(newFilter));
+        console.log('changed query');
         console.log('changed filter');
     }
 
