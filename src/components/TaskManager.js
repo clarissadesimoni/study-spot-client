@@ -138,6 +138,11 @@ function TaskManager() {
         // yesterday.setDate(yesterday.getDate() - 1);
         // setFilter(filter ?? {dates: {start: yesterday, end: tomorrow}});
         setIsLoading(false);
+    }, []);
+
+    useEffect(async () => {
+        console.log('useEffect');
+        console.log(filter);
     }, [filter]);
 
     return (
