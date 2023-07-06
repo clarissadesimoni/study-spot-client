@@ -56,7 +56,7 @@ function TaskListView({ projects, labels, filters }) {
             .from('tasks')
             .select()
             .eq('isCompleted', false)
-            .contains('labels', [filters.label]);
+            .contains('labels', [filters.label instanceof Object ? filters.label : '1']);
             if (data) res = data;
             if (error) err = error;
         }
