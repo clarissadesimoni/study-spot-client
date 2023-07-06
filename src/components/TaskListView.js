@@ -24,23 +24,28 @@ function TaskListView({ projects, labels, filters }) {
         console.log('in task list view');
         await getTasks();
     }, [filters]);
-
+    
     async function getTasks() {
         console.log(filters);
         let query = supabase
         .from('tasks')
         .select()
         .eq('isCompleted', false);
+        console.log('dynamic filter beginning');
         if (filters.dates) {
             query = query.gte('due', supabaseFilterToString(filters.dates.start)).lte('due', supabaseFilterToString(filters.dates.end));
         }
+        console.log('dynamic filter date');
         if (filters.project) {
             query = query.eq('projectId', filters.project);
         }
+        console.log('dynamic filter project');
         if (filters.label) {
             query = query.contains('labels', [filters.label]);
         }
+        console.log('dynamic filter label');
         let { data, error } = await query;
+        console.log('dynamic filter end');
         if (data) {
             console.log(data);
             data = data.map(task => {
