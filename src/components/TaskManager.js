@@ -145,10 +145,10 @@ function TaskManager() {
         setQuery('re-render');
         console.log('changed query');
         console.log(typeof newFilter);
-        if (token.length == 0 || api == null || api == undefined)
-            setTlist(<TaskListView projects={projects} labels={labels} filters={newFilter} />);
-        else
-            setTlist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(newFilter)} />);
+        // if (token.length == 0 || api == null || api == undefined)
+        //     setTlist(<TaskListView projects={projects} labels={labels} filters={newFilter} />);
+        // else
+        //     setTlist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(newFilter)} />);
     }
 
     useEffect(async () => {
@@ -176,10 +176,10 @@ function TaskManager() {
                     <input type="text" autocomplete="off" onChange={e => setTmpToken(e.target.value)} />
                     <button onClick={() => insertToken()}>Set todoist token</button>
                     <hr />
-                    {/* <ProjectsView projects={projects} filterFunc={changeFilter} />
+                    <ProjectsView projects={projects} filterFunc={changeFilter} />
                     <hr />
                     <LabelsView labels={labels} filterFunc={changeFilter} />
-                    <hr /> */}
+                    <hr />
                     <TaskListView projects={projects} labels={labels} filters={filter} />
                 </>
             ) : (
@@ -188,7 +188,7 @@ function TaskManager() {
                     <hr />
                     <TodoistLabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
-                    {tlist}
+                    <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(newFilter)} />
                 </>
             )
         }

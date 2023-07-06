@@ -24,7 +24,7 @@ function TaskListView({ projects, labels, filters }) {
 
     useEffect(async () => {
         console.log('in task list view');
-        // await getTasks();
+        await getTasks();
     });
 
     function handleProjectFilter(f) {
@@ -124,14 +124,14 @@ function TaskListView({ projects, labels, filters }) {
 
     return (
         <>
-            {
+            {/* {
                 projects.map(p => <><button onClick={() => handleProjectFilter(p.id)}>{p.name}</button><p /></>)
             }
             <hr />
             {
                 labels.map(l => <><button onClick={() => handleLabelFilter(l.id)}>{l.name}</button><p /></>)
             }
-            <hr />
+            <hr /> */}
             {
                 isAdding ? (
                     <>
