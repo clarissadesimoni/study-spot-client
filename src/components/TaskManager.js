@@ -12,7 +12,8 @@ function TaskManager() {
     const [ api, setApi ] = useState(null);
     const [ projects, setProjects ] = useState({});
     const [ labels, setLabels ] = useState({});
-    const [ query, setQuery ] = useState(supabase.from('tasks').select().eq('isCompleted', false));
+    const [ filter, setFilter ] = useState({});
+    const [ query, setQuery ] = useState(null);
     const [ tlist, setTlist ] = useState(<></>);
 
     async function getToken() {
@@ -142,6 +143,7 @@ function TaskManager() {
         const q = generateQuery(newFilter);
         console.log(q);
         console.log('changing query');
+        setFilter(newFilter);
         setQuery('re-render');
         console.log('changed query');
         if (token.length == 0 || api == null || api == undefined)
@@ -161,7 +163,7 @@ function TaskManager() {
         const lbl = await getLabels();
         setLabels(lbl);
         if (token.length == 0 || api == null || api == undefined)
-            setTlist(<TaskListView projects={projects} labels={labels} filters={newFilter} />);
+            setTlist(<TaskListView projects={projects} labels={labels} filters={filter} />);
         else
             setTlist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter)} />);
         setIsLoading(false);
