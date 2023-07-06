@@ -157,10 +157,10 @@ function TaskManager() {
         setProjects(prg);
         const lbl = await getLabels();
         setLabels(lbl);
-        if (token.length == 0 || api == null || api == undefined)
+        /* if (token.length == 0 || api == null || api == undefined)
             setTlist(<TaskListView projects={projects} labels={labels} filters={filter} />);
         else
-            setTlist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter)} />);
+            setTlist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter)} />); */
         setIsLoading(false);
     }, []);
 
