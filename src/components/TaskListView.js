@@ -39,9 +39,9 @@ function TaskListView({ projects, labels, filters }) {
         let { data, error } = await query;
         if (data) {
             console.log(data);
-            console.log(Date.parse(data[0].due + 'Z'));
+            console.log(new Date(Date.parse(task.due + 'Z')));
             data = data.map(task => {
-                const tmp = new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, Date.parse(task.due + 'Z'), null);
+                const tmp = new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, new Date(Date.parse(task.due + 'Z')), null);
                 console.log(tmp);
                 return tmp;
             }).sort((t1, t2) => {
