@@ -40,7 +40,7 @@ function TaskListView({ projects, labels, filters }) {
             if (filters.project) {
                 data = data.filter(task => task.projectId == filters.project);
             }
-            if (filters.dates) {
+            if (filters.label) {
                 data = data.filter(task => task.labels.includes(filters.labels));
             }
             console.log(data);
