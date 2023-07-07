@@ -1,6 +1,6 @@
-import { createContext, useState } from 'react';
+import React, { useState } from 'react';
 
-const TMApiContext = createContext(null);
+const TMApiContext = React.createContext(null);
 
 function TMApiContextProvider({ children }) {
     const [ api, setApi ] = useState(null);
@@ -13,7 +13,7 @@ function TMApiContextProvider({ children }) {
     );
 }
 
-const TMProjectsContext = createContext(null);
+const TMProjectsContext = React.createContext(null);
 
 function TMProjectsContextProvider({ children }) {
     const [ projects, setProjects ] = useState({});
@@ -26,7 +26,7 @@ function TMProjectsContextProvider({ children }) {
     );
 }
 
-const TMLabelsContext = createContext(null);
+const TMLabelsContext = React.createContext(null);
 
 function TMLabelsContextProvider({ children }) {
     const [ labels, setLabels ] = useState({});
@@ -39,7 +39,7 @@ function TMLabelsContextProvider({ children }) {
     );
 }
 
-const TMFilterContext = createContext(null);
+const TMFilterContext = React.createContext(null);
 
 function TMFilterContextProvider({ children }) {
     const [ filter, setFilter ] = useState({});

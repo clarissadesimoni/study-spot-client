@@ -1,9 +1,9 @@
-import { useContext } from 'react';
+import React from 'react';
 import { TMProjectsContext, TMFilterContext } from '../contexts/TMContext';
 
 function ProjectsView() {
-    const { projects, setProjects } = useContext(TMProjectsContext);
-    const { filter, setFilter } = useContext(TMFilterContext);
+    const { projects, setProjects } = React.useContext(TMProjectsContext);
+    const { filter, setFilter } = React.useContext(TMFilterContext);
 
     function handleFilter(projectId) {
         setFilter({project: projectId});

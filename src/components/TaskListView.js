@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Task } from '../classes';
 import { TaskComponent } from '../components';
@@ -11,9 +11,9 @@ import 'react-datetime-picker/dist/DateTimePicker.css';
 function TaskListView() {
     const session = useSession();
     const supabase = useSupabaseClient();
-    const { projects, setProjects } = useContext(TMProjectsContext);
-    const { labels, setLabels } = useContext(TMLabelsContext);
-    const { filter, setFilter } = useContext(TMFilterContext);
+    const { projects, setProjects } = React.useContext(TMProjectsContext);
+    const { labels, setLabels } = React.useContext(TMLabelsContext);
+    const { filter, setFilter } = React.useContext(TMFilterContext);
     const [ tasks, setTasks ] = useState([]);
     const [ isAdding, setIsAdding ] = useState(false);
     var newTaskName = useRef('');

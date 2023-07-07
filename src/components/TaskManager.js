@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { TodoistApi } from "@doist/todoist-api-typescript";
 import { LabelsView, ProjectsView, TaskListView, TodoistTaskListView, TodoistProjectsView, TodoistLabelsView } from '../components';
@@ -7,9 +7,9 @@ import { TMApiContext, TMProjectsContext, TMLabelsContext } from '../contexts/TM
 function TaskManager() {
     const session = useSession();
     const supabase = useSupabaseClient();
-    const { api, setApi } = useContext(TMApiContext);
-    const { projects, setProjects } = useContext(TMProjectsContext);
-    const { labels, setLabels } = useContext(TMLabelsContext);
+    const { api, setApi } = React.useContext(TMApiContext);
+    const { projects, setProjects } = React.useContext(TMProjectsContext);
+    const { labels, setLabels } = React.useContext(TMLabelsContext);
     const [ isLoading, setIsLoading ] = useState(true);
     let token = useRef('');
     // const [ api, setApi ] = useState(null);
