@@ -7,8 +7,7 @@ import { useTMContext, useTMUpdateContext } from '../contexts/TMContext';
 function TaskManager() {
     const session = useSession();
     const supabase = useSupabaseClient();
-    const context = useTMContext();
-    const updateContext = useTMUpdateContext();
+    const { api, setApi, projects, setProjects, labels, setLabels, filter, setFilter } = useTMContext();
     const [ isLoading, setIsLoading ] = useState(true);
     let token = useRef('');
     // const [ api, setApi ] = useState(null);
@@ -18,14 +17,14 @@ function TaskManager() {
 
     async function getApi() {
         console.log('started getApi');
-        let api = null;
+        let tapi = null;
         let { data, error } = await supabase
         .from('todoist_tokens')
         .select('token')
         .eq('id', session.user.id);
         if (data.length > 0) {
-            api = new TodoistApi(data[0].token);
-            updateContext({ ...context, api: api });
+            tapi = new TodoistApi(data[0].token);
+            setApi(tapi);
             console.log('retrieved token');
         }
         if (error) {
@@ -33,13 +32,13 @@ function TaskManager() {
             console.log(error);
         }
         console.log('finished getApi');
-        if (api) return api;
+        if (tapi) return tapi;
     }
 
     async function insertToken() {
-        const api = new TodoistApi(token.current);
+        const tapi = new TodoistApi(token.current);
         var valid = true;
-        api.getProjects()
+        tapi.getProjects()
         .catch((error) => {
             alert(`Token non valido: ${error.message}`);
             console.log(error);
@@ -47,7 +46,7 @@ function TaskManager() {
         })
         if (!valid)
             return;
-        updateContext({ ...context, api: api })
+        setApi(tapi);
         const { error } = await supabase
         .from('todoist_tokens')
         .insert([
@@ -61,16 +60,16 @@ function TaskManager() {
 
     function generateFilter() {                             // put this in TodoistTaskListView
         var res = [];
-        if (context.filter.dates) {
-            const start = `${context.filter.dates.start.getMonth()}/${context.filter.dates.start.getDate()}/${context.filter.dates.start.getFullYear()}`;
-            const end = `${context.filter.dates.end.getMonth()}/${context.filter.dates.end.getDate()}/${context.filter.dates.end.getFullYear()}`;
+        if (tmcontext.filter.dates) {
+            const start = `${tmcontext.filter.dates.start.getMonth()}/${tmcontext.filter.dates.start.getDate()}/${tmcontext.filter.dates.start.getFullYear()}`;
+            const end = `${tmcontext.filter.dates.end.getMonth()}/${tmcontext.filter.dates.end.getDate()}/${tmcontext.filter.dates.end.getFullYear()}`;
             res.push(`(due after: ${start} | due before: ${end})`);
         }
-        if (context.filter.project) {
-            res.push(`#${projects[context.filter.project] ?? 'Inbox'}`);
+        if (tmcontext.filter.project) {
+            res.push(`#${projects[tmcontext.filter.project] ?? 'Inbox'}`);
         }
-        if (context.filter.label) {
-            res.push(`#${context.filter.label}`);
+        if (tmcontext.filter.label) {
+            res.push(`#${tmcontext.filter.label}`);
         }
         return res.reduce((acc, f) => acc + ' & ' + f);
     }
@@ -105,7 +104,7 @@ function TaskManager() {
                 console.log(error);
             }
         }
-        updateContext({ ...context, projects: res });
+        setProjects(res);
         // return res;
         console.log('finished getProjects');
     }
@@ -137,7 +136,7 @@ function TaskManager() {
                 console.log(error);
             }
         }
-        updateContext({ ...context, labels: res });
+        setLabels(res);
         // return res;
         console.log('finished getLabels');
     }
@@ -169,7 +168,7 @@ function TaskManager() {
                 <span>Loading...</span>
             )
             :
-            (context.api) ? (
+            (tmcontext.api) ? (
                 <>
                     <input type="text" autocomplete="off" onChange={e => token.current = e.target.value} />
                     <button onClick={() => insertToken()}>Set todoist token</button>
@@ -178,7 +177,7 @@ function TaskManager() {
                     <hr />
                     <LabelsView />
                     <hr />
-                    <TaskListView projects={projects} labels={labels} filters={filter.current} rf={isLoading} />
+                    <TaskListView />
                 </>
             ) : (
                 <>

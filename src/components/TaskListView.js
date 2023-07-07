@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState, useContext } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
-import { TodoistApi } from "@doist/todoist-api-typescript";
 import { Task } from '../classes';
 import { TaskComponent } from '../components';
-import { useTMContext, useTMUpdateContext } from '../contexts/TMContext';
+import { useTMContext } from '../contexts/TMContext';
 import DateTimePicker from 'react-datetime-picker';
 import DatePicker from 'react-date-picker';
 import TimePicker from 'react-time-picker';
@@ -12,8 +11,7 @@ import 'react-datetime-picker/dist/DateTimePicker.css';
 function TaskListView() {
     const session = useSession();
     const supabase = useSupabaseClient();
-    const context = useTMContext();
-    const updateContext = useTMUpdateContext();
+    const { projects, labels, filter } = useTMContext();
     const [ tasks, setTasks ] = useState([]);
     const [ isAdding, setIsAdding ] = useState(false);
     var newTaskName = useRef('');
@@ -33,17 +31,17 @@ function TaskListView() {
         .select()
         .eq('isCompleted', false);
         if (data) {
-            if (context.filter.dates) {
+            if (filter.dates) {
                 data = data.filter(task => {
                     let due = new Date(Date.parse(task.due + 'Z'));
-                    return context.filter.dates.start <= due <= context.filter.dates.end;
+                    return filter.dates.start <= due <= filter.dates.end;
                 })
             }
-            if (context.filter.project) {
-                data = data.filter(task => task.projectId == context.filter.project);
+            if (filter.project) {
+                data = data.filter(task => task.projectId == filter.project);
             }
-            if (context.filter.label) {
-                data = data.filter(task => task.labels.includes(context.filter.labels));
+            if (filter.label) {
+                data = data.filter(task => task.labels.includes(filter.labels));
             }
             console.log(data);
             data = data.map(task => {
@@ -135,12 +133,12 @@ function TaskListView() {
                         }
                         <select onClick={e => newTaskProject.current = e.target.value}>
                         {
-                            projects.map(p => <option value={p.id} onClick={() => newTaskProject.current = p.id}>{p.name}</option>)
+                            projects.keys().map(p => <option value={p} onClick={() => newTaskProject.current = projects}>{projects[p]}</option>)
                         }
                         </select>
                         <select multiple={true} onChange={e => newTaskLabels.current = Array.from(e.target.selectedOptions, option => option.value)}>
                         {
-                            labels.map(l => <option value={l.id}>{l.name}</option>)
+                            labels.keys().map(l => <option value={l}>{labels[l]}</option>)
                         }
                         </select>
                         <button onClick={createTask}>Invia</button>

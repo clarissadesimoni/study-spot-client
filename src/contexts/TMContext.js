@@ -14,31 +14,17 @@ const useTMContext = () => {
     return createContext(TMContext);
 }
 
-const useTMUpdateContext = () => {
-    return createContext(TMUpdateContext);
-}
-
 const TMProvider = ({ children }) => {
-    const [ session, setSession ] = useState(initialState);
-
-    function handleSession(args) {
-        if (args.api)
-            setSession({ ...session, api: args.api });
-        if (args.projects)
-            setSession({ ...session, projects: args.projects });
-        if (args.labels)
-            setSession({ ...session, labels: args.labels });
-        if (args.filter)
-            setSession({ ...session, filter: args.filter });
-    }
+    const [ api, setApi ] = useState(null);
+    const [ projects, setProjects ] = useState({});
+    const [ labels, setLabels ] = useState({});
+    const [ filter, setFilter ] = useState({});
 
     return (
-        <TMContext.Provider value={session}>
-            <TMUpdateContext.Provider value={handleSession}>
-                {children}
-            </TMUpdateContext.Provider>
+        <TMContext.Provider value={{ api, setApi, projects, setProjects, labels, setLabels, filter, setFilter }}>
+            {children}
         </TMContext.Provider>
     )
 }
 
-export { useTMContext, useTMUpdateContext, TMProvider }
+export { useTMContext, TMProvider }

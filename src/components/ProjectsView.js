@@ -1,18 +1,16 @@
-import { useContext } from 'react';
-import { useTMContext, useTMUpdateContext } from '../contexts/TMContext';
+import { useTMContext } from '../contexts/TMContext';
 
 function ProjectsView() {
-    const context = useTMContext();
-    const updateContext = useTMUpdateContext();
+    const { projects, setFilter } = useTMContext();
 
     function handleFilter(projectId) {
-        updateContext({ ...context, filter: {project: projectId} });
+        setFilter({project: projectId});
     }
 
     return (
         <>
         {
-            context.projects.keys().map(p => <><button onClick={() => handleFilter(p)}>{context.projects[p]}</button><p /></>)
+            projects.keys().map(p => <><button onClick={() => handleFilter(p)}>{projects[p]}</button><p /></>)
         }
         </>
     )
