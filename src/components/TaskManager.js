@@ -90,11 +90,14 @@ function TaskManager() {
             .from('projects')
             .select('id,name')
             .eq('owner', session.user.id);
+            console.log('getProjects retrieval done');
             if (data) {
+                console.log('getProjects reduce start');
                 res = data.reduce((acc, p) => {
                     acc[p.id] = p.name;
                     return acc;
                 }, {});
+                console.log('getProjects reduce done');
             }
             if (error) {
                 alert(error.message);
