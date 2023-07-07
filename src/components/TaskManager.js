@@ -156,7 +156,11 @@ function TaskManager() {
         } catch (error) {
             console.log(error);
         }
-    });
+    }, []);
+
+    useEffect(() => {
+        console.log('re-rendered bc of api');
+    }, [api]);
 
 
 
