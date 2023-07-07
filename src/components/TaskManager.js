@@ -12,10 +12,6 @@ function TaskManager() {
     const { labels, setLabels } = React.useContext(TMLabelsContext);
     const [ isLoading, setIsLoading ] = useState(true);
     let token = useRef('');
-    // const [ api, setApi ] = useState(null);
-    // const [ projects, setProjects ] = useState({});
-    // const [ labels, setLabels ] = useState({});
-    // const [ filter, setFilter ] = useState({dates: {start: new Date(2023, 6, 6), end: new Date(2023, 6, 8)}});
 
     async function getApi() {
         console.log('started getApi');
@@ -171,7 +167,7 @@ function TaskManager() {
                 <span>Loading...</span>
             )
             :
-            (tmcontext.api) ? (
+            (api) ? (
                 <>
                     <input type="text" autocomplete="off" onChange={e => token.current = e.target.value} />
                     <button onClick={() => insertToken()}>Set todoist token</button>
