@@ -10,7 +10,7 @@ const initialState = {
 const TMContext = createContext();
 
 const useTMContext = () => {
-    return createContext(TMContext);
+    return TMContext;
 }
 
 const TMProvider = ({ children }) => {
