@@ -1,18 +1,19 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { TodoistApi } from "@doist/todoist-api-typescript";
 import { LabelsView, ProjectsView, TaskListView, TodoistTaskListView, TodoistProjectsView, TodoistLabelsView } from '../components';
+import { TMContext } from '../contexts/TMContext';
 
 function TaskManager() {
     const session = useSession();
     const supabase = useSupabaseClient();
+    const { context, setContext } = useContext(TMContext);
     const [ isLoading, setIsLoading ] = useState(true);
-    const [ token, setToken ] = useState('');
-    const [ tmpToken, setTmpToken ] = useState('');
-    const [ api, setApi ] = useState(null);
-    const [ projects, setProjects ] = useState({});
-    const [ labels, setLabels ] = useState({});
-    const [ filter, setFilter ] = useState({dates: {start: new Date(2023, 6, 6), end: new Date(2023, 6, 8)}});
+    let token = useRef('');
+    // const [ api, setApi ] = useState(null);
+    // const [ projects, setProjects ] = useState({});
+    // const [ labels, setLabels ] = useState({});
+    // const [ filter, setFilter ] = useState({dates: {start: new Date(2023, 6, 6), end: new Date(2023, 6, 8)}});
 
     async function getToken() {
         let { data, error } = await supabase
@@ -20,78 +21,57 @@ function TaskManager() {
         .select('token')
         .eq('id', session.user.id);
         if (data.length > 0) {
-            setToken(data[0].token);
-            setApi(new TodoistApi(data[0].token));
+            setContext({ ...context, api: new TodoistApi(data[0].token) });
         }
         if (error) {
-            alert('Error retrieving token: ' + error.message);
+            alert('Errore nella ricerca del token: ' + error.message);
             console.log(error);
         }
     }
 
     async function insertToken() {
-        api = new TodoistApi(tmpToken);
+        api = new TodoistApi(token.current);
         var valid = true;
         api.getProjects()
         .catch((error) => {
-            alert(`Invalid token: ${error.message}`);
+            alert(`Token non valido: ${error.message}`);
             console.log(error);
             valid = false;
         })
         if (!valid)
             return;
-        setToken(tmpToken);
-        const { data, error } = await supabase
+        setContext({ ...context, api: new TodoistApi(data[0].token) })
+        const { error } = await supabase
         .from('todoist_tokens')
         .insert([
-            { id: session.user.id, token: tmpToken }
-        ])
-        .select();
+            { id: session.user.id, token: token.current }
+        ]);
         if (error) {
-            alert('Error inserting token: ' + error.message);
+            alert('Errore nell\'inserimento del token: ' + error.message);
             console.log(error);
         }
     }
 
-    function generateFilter(filters) {
+    function generateFilter() {                             // put this in TodoistTaskListView
         var res = [];
-        if (filters.dates) {
-            const start = `${filters.dates.start.getMonth()}/${filters.dates.start.getDate()}/${filters.dates.start.getFullYear()}`;
-            const end = `${filters.dates.end.getMonth()}/${filters.dates.end.getDate()}/${filters.dates.end.getFullYear()}`;
+        if (context.filter.dates) {
+            const start = `${context.filter.dates.start.getMonth()}/${context.filter.dates.start.getDate()}/${context.filter.dates.start.getFullYear()}`;
+            const end = `${context.filter.dates.end.getMonth()}/${context.filter.dates.end.getDate()}/${context.filter.dates.end.getFullYear()}`;
             res.push(`(due after: ${start} | due before: ${end})`);
         }
-        if (filters.project) {
-            // const project_name = await api.getProject(filters.project_id).then(project => project.name);
-            res.push(`#${projects[filters.project] ?? 'Inbox'}`);
+        if (context.filter.project) {
+            res.push(`#${projects[context.filter.project] ?? 'Inbox'}`);
         }
-        if (filters.label) {
-            // const label_name = await api.getLabel(filters.label_id).then(label => label.name);
-            res.push(`#${filters.label}`);
+        if (context.filter.label) {
+            res.push(`#${context.filter.label}`);
         }
-        return res.reduce((acc, f) => acc + f);
+        return res.reduce((acc, f) => acc + ' & ' + f);
     }
-
-    /* function generateQuery(filters) {
-        let query = supabase
-        .from('tasks')
-        .select()
-        .eq('isCompleted', false);
-        if (filters.dates) {
-            query = query.gte('due', supabaseFilterToString(filters.dates.start)).lte('due', supabaseFilterToString(filters.dates.end));
-        }
-        if (filters.project) {
-            query = query.eq('projectId', filters.project);
-        }
-        if (filters.label) {
-            query = query.contains('labels', [filters.label]);
-        }
-        return query;
-    } */
 
     async function getProjects() {
         var res = null;
-        if (api) {
-            res = await api.getProjects().then(values => values.reduce((acc, p) => {
+        if (context.api) {
+            res = await context.api.getProjects().then(values => values.reduce((acc, p) => {
                 acc[p.id] = p.name;
                 return acc;
             }, {}))
@@ -102,20 +82,24 @@ function TaskManager() {
             .select('id,name')
             .eq('owner', session.user.id);
             if (data) {
-                res = data;
+                res = data.reduce((acc, p) => {
+                    acc[p.id] = p.name;
+                    return acc;
+                }, {});
             }
             if (error) {
                 alert(error.message);
                 console.log(error);
             }
         }
-        return res;
+        setContext({ ...context, projects: res });
+        // return res;
     }
 
     async function getLabels() {
         var res = null;
-        if (api) {
-            res = await api.getLabels().then(values => values.reduce((acc, l) => {
+        if (context.api) {
+            res = await context.api.getLabels().then(values => values.reduce((acc, l) => {
                 acc[l.id] = l.name;
                 return acc;
             }, {}))
@@ -126,59 +110,64 @@ function TaskManager() {
             .select('id,name')
             .eq('owner', session.user.id);
             if (data) {
-                res = data;
+                res = data.reduce((acc, l) => {
+                    acc[l.id] = l.name;
+                    return acc;
+                }, {});
             }
             if (error) {
                 alert(error.message);
                 console.log(error);
             }
         }
-        return res;
+        setContext({ ...context, labels: res });
+        // return res;
     }
 
-    function changeFilter(newFilter) {
+    /* function changeFilter(newFilter) {
         console.log(newFilter);
         console.log('changing filter');
         setFilter(newFilter);
         console.log('changed filter');
-    }
+    } */
 
     useEffect(async () => {
         await getToken();
-        let prg = await getProjects();
-        setProjects(prg);
-        let lbl = await getLabels();
-        setLabels(lbl);
+        /* let prg =  */await getProjects();
+        // setProjects(prg);
+        /* let lbl =  */await getLabels();
+        // setLabels(lbl);
         setIsLoading(false);
     }, []);
 
 
 
     return (
-        <div key={filter}>
+        <div>
         {
             isLoading ? (
                 <span>Loading...</span>
             )
             :
-            (token.length == 0 || api == null || api == undefined) ? (
+            (context.api) ? (
                 <>
-                    <input type="text" autocomplete="off" onChange={e => setTmpToken(e.target.value)} />
+                    <input type="text" autocomplete="off" onChange={e => token.current = e.target.value} />
                     <button onClick={() => insertToken()}>Set todoist token</button>
                     <hr />
-                    <ProjectsView projects={projects} filterFunc={changeFilter} />
+                    <ProjectsView />
                     <hr />
-                    <LabelsView labels={labels} filterFunc={changeFilter} />
+                    <LabelsView />
                     <hr />
                     <TaskListView projects={projects} labels={labels} filters={filter.current} rf={isLoading} />
                 </>
             ) : (
                 <>
-                    <TodoistProjectsView projects={projects} filterFunc={changeFilter} />
+                    <span>WIP</span>
+                    {/* <TodoistProjectsView projects={projects} filterFunc={changeFilter} />
                     <hr />
                     <TodoistLabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
-                    <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter.current)} />
+                    <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter.current)} /> */}
                 </>
             )
         }

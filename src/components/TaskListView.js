@@ -1,17 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { TodoistApi } from "@doist/todoist-api-typescript";
 import { Task } from '../classes';
 import { TaskComponent } from '../components';
-import { supabaseFilterToString } from '../utilities/dates';
+import { TMContext } from '../contexts/TMContext';
 import DateTimePicker from 'react-datetime-picker';
 import DatePicker from 'react-date-picker';
 import TimePicker from 'react-time-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 
-function TaskListView({ projects, labels, filters }) {
+function TaskListView() {
     const session = useSession();
     const supabase = useSupabaseClient();
+    const { context, setContext } = useContext(TMContext);
     const [ tasks, setTasks ] = useState([]);
     const [ isAdding, setIsAdding ] = useState(false);
     var newTaskName = useRef('');
@@ -31,17 +32,17 @@ function TaskListView({ projects, labels, filters }) {
         .select()
         .eq('isCompleted', false);
         if (data) {
-            if (filters.dates) {
+            if (context.filter.dates) {
                 data = data.filter(task => {
                     let due = new Date(Date.parse(task.due + 'Z'));
-                    return filters.dates.start <= due <= filters.dates.end;
+                    return context.filter.dates.start <= due <= context.filter.dates.end;
                 })
             }
-            if (filters.project) {
-                data = data.filter(task => task.projectId == filters.project);
+            if (context.filter.project) {
+                data = data.filter(task => task.projectId == context.filter.project);
             }
-            if (filters.label) {
-                data = data.filter(task => task.labels.includes(filters.labels));
+            if (context.filter.label) {
+                data = data.filter(task => task.labels.includes(context.filter.labels));
             }
             console.log(data);
             data = data.map(task => {
@@ -114,14 +115,6 @@ function TaskListView({ projects, labels, filters }) {
 
     return (
         <>
-            {/* {
-                projects.map(p => <><button onClick={() => handleProjectFilter(p.id)}>{p.name}</button><p /></>)
-            }
-            <hr />
-            {
-                labels.map(l => <><button onClick={() => handleLabelFilter(l.id)}>{l.name}</button><p /></>)
-            }
-            <hr /> */}
             {
                 isAdding ? (
                     <>

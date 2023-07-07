@@ -1,13 +1,17 @@
-function LabelsView({ labels, filterFunc }) {
+import { useContext } from 'react';
+import { TMContext } from '../contexts/TMContext';
 
-    function handleFilter(label) {
-        filterFunc({label: label});
+function LabelsView() {
+    const { context, setContext } = useContext(TMContext);
+
+    function handleFilter(labelId) {
+        setContext({ ...context, filter: {labelId: labelId} });
     }
 
     return (
         <>
         {
-            labels.map(l => <><button onClick={() => handleFilter(l.id)}>{l.name}</button><p /></>)
+            context.labels.keys().map(l => <><button onClick={() => handleFilter(l)}>{context.labels[l]}</button><p /></>)
         }
         </>
     )

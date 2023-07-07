@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Auth, Calendar, TaskManager } from './components';
+import { TMProvider, initialState } from './contexts/TMContext';
 
 function App() {
 
     const session = useSession();
-    const supabase = useSupabaseClient();
     const [ section, setSection ] = useState('tasks');
 
     return (
@@ -14,8 +14,6 @@ function App() {
                 <button onClick={() => setSection('calendar')}>Calendar</button>
                 <p />
                 <button onClick={() => setSection('tasks')}>Attività</button>
-                <p />
-                <button onClick={() => setSection('chat')}>Chat</button>
             </div>
             <div style={{width: '800px', margin: "30px auto"}}>
                 {
@@ -26,10 +24,9 @@ function App() {
                             <Calendar />
                             :
                             section.localeCompare('tasks') == 0 ?
-                            <TaskManager />
-                            :
-                            section.localeCompare('chat') == 0 ?
-                            <></>
+                            <TMProvider>
+                                <TaskManager />
+                            </TMProvider>
                             :
                             <></>
                         }
