@@ -1,11 +1,12 @@
 import { useContext } from 'react';
-import { TMContext } from '../contexts/TMContext';
+import { useTMContext, useTMUpdateContext } from '../contexts/TMContext';
 
 function ProjectsView() {
-    const { context, setContext } = useContext(TMContext);
+    const context = useTMContext();
+    const updateContext = useTMUpdateContext();
 
     function handleFilter(projectId) {
-        setContext({ ...context, filter: {project: projectId} });
+        updateContext({ ...context, filter: {project: projectId} });
     }
 
     return (

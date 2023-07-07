@@ -3,7 +3,7 @@ import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { TodoistApi } from "@doist/todoist-api-typescript";
 import { Task } from '../classes';
 import { TaskComponent } from '../components';
-import { TMContext } from '../contexts/TMContext';
+import { useTMContext, useTMUpdateContext } from '../contexts/TMContext';
 import DateTimePicker from 'react-datetime-picker';
 import DatePicker from 'react-date-picker';
 import TimePicker from 'react-time-picker';
@@ -12,7 +12,8 @@ import 'react-datetime-picker/dist/DateTimePicker.css';
 function TaskListView() {
     const session = useSession();
     const supabase = useSupabaseClient();
-    const { context, setContext } = useContext(TMContext);
+    const context = useTMContext();
+    const updateContext = useTMUpdateContext();
     const [ tasks, setTasks ] = useState([]);
     const [ isAdding, setIsAdding ] = useState(false);
     var newTaskName = useRef('');

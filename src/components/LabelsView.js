@@ -1,11 +1,12 @@
 import { useContext } from 'react';
-import { TMContext } from '../contexts/TMContext';
+import { useTMContext, useTMUpdateContext } from '../contexts/TMContext';
 
 function LabelsView() {
-    const { context, setContext } = useContext(TMContext);
+    const context = useTMContext();
+    const updateContext = useTMUpdateContext();
 
     function handleFilter(labelId) {
-        setContext({ ...context, filter: {labelId: labelId} });
+        updateContext({ ...context, filter: {labelId: labelId} });
     }
 
     return (
