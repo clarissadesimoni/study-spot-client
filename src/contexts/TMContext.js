@@ -1,38 +1,8 @@
-/* import React, { createContext, useContext, useState } from 'react';
-
-const initialState = {
-    api: null,
-    projects: {},
-    labels: {},
-    filter: {}
-}
-
-const TMContext = createContext();
-
-const useTMContext = () => {
-    return createContext(TMContext);
-}
-
-const TMProvider = ({ children }) => {
-    const [ api, setApi ] = useState(null);
-    const [ projects, setProjects ] = useState({});
-    const [ labels, setLabels ] = useState({});
-    const [ filter, setFilter ] = useState({});
-
-    return (
-        <TMContext.Provider value={{ api, setApi, projects, setProjects, labels, setLabels, filter, setFilter }}>
-            {children}
-        </TMContext.Provider>
-    )
-}
-
-export { useTMContext, TMProvider } */
-
 import { createContext, useState } from 'react';
 
-export const TMApiContext = createContext(null);
+const TMApiContext = createContext(null);
 
-export function TMApiContextProvider({ children }) {
+function TMApiContextProvider({ children }) {
     const [ api, setApi ] = useState(null);
     const contextValue = {
         api,
@@ -43,9 +13,9 @@ export function TMApiContextProvider({ children }) {
     );
 }
 
-export const TMProjectsContext = createContext(null);
+const TMProjectsContext = createContext(null);
 
-export function TMProjectsContextProvider({ children }) {
+function TMProjectsContextProvider({ children }) {
     const [ projects, setProjects ] = useState({});
     const contextValue = {
         projects,
@@ -56,9 +26,9 @@ export function TMProjectsContextProvider({ children }) {
     );
 }
 
-export const TMLabelsContext = createContext(null);
+const TMLabelsContext = createContext(null);
 
-export function TMLabelsContextProvider({ children }) {
+function TMLabelsContextProvider({ children }) {
     const [ labels, setLabels ] = useState({});
     const contextValue = {
         labels,
@@ -69,9 +39,9 @@ export function TMLabelsContextProvider({ children }) {
     );
 }
 
-export const TMFilterContext = createContext(null);
+const TMFilterContext = createContext(null);
 
-export function TMFilterContextProvider({ children }) {
+function TMFilterContextProvider({ children }) {
     const [ filter, setFilter ] = useState({});
     const contextValue = {
         filter,
@@ -81,3 +51,5 @@ export function TMFilterContextProvider({ children }) {
         <TMFilterContextProvider.Provider value={contextValue}>{children}</TMFilterContextProvider.Provider>
     );
 }
+
+export { TMApiContext, TMApiContextProvider, TMProjectsContext, TMProjectsContextProvider, TMLabelsContext, TMLabelsContextProvider, TMFilterContext, TMFilterContextProvider}
