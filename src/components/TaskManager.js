@@ -150,12 +150,14 @@ function TaskManager() {
     } */
 
     useEffect(async () => {
-        await getApi();
-        /* let prg =  */await getProjects();
-        // setProjects(prg);
-        /* let lbl =  */await getLabels();
-        // setLabels(lbl);
-        setIsLoading(false);
+        try {
+            await getApi();
+            await getProjects();
+            await getLabels();
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
     }, []);
 
 
