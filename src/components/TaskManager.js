@@ -12,9 +12,7 @@ function TaskManager() {
     const [ api, setApi ] = useState(null);
     const [ projects, setProjects ] = useState({});
     const [ labels, setLabels ] = useState({});
-    const [ filter, setFilter ] = useState({});
-    const [ query, setQuery ] = useState(null);
-    const [ tlist, setTlist ] = useState(<></>);
+    var filter = useRef({});
 
     async function getToken() {
         let { data, error } = await supabase
@@ -140,15 +138,11 @@ function TaskManager() {
 
     function changeFilter(newFilter) {
         console.log(newFilter);
-        console.log('changing query');
-        setFilter(newFilter);
-        setQuery('re-render');
-        console.log('changed query');
-        console.log(typeof newFilter);
-        // if (token.length == 0 || api == null || api == undefined)
-        //     setTlist(<TaskListView projects={projects} labels={labels} filters={newFilter} />);
-        // else
-        //     setTlist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(newFilter)} />);
+        console.log('changing filter');
+        setIsLoading(true);
+        filter.current = newFilter;
+        setIsLoading(false);
+        console.log('changed filter');
     }
 
     useEffect(async () => {
@@ -157,10 +151,6 @@ function TaskManager() {
         setProjects(prg);
         let lbl = await getLabels();
         setLabels(lbl);
-        /* if (token.length == 0 || api == null || api == undefined)
-            setTlist(<TaskListView projects={projects} labels={labels} filters={filter} />);
-        else
-            setTlist(<TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter)} />); */
         setIsLoading(false);
     }, []);
 
@@ -180,7 +170,7 @@ function TaskManager() {
                     <hr />
                     <LabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
-                    <TaskListView projects={projects} labels={labels} filters={filter} />
+                    <TaskListView projects={projects} labels={labels} filters={filter.current} />
                 </>
             ) : (
                 <>
@@ -188,7 +178,7 @@ function TaskManager() {
                     <hr />
                     <TodoistLabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
-                    <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(newFilter)} />
+                    <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter.current)} />
                 </>
             )
         }

@@ -25,7 +25,7 @@ function TaskListView({ projects, labels, filters }) {
     useEffect(async () => {
         console.log('in task list view');
         await getTasks();
-    }, []);
+    }, [filters]);
 
     function handleProjectFilter(f) {
         setFilter({project: f});
