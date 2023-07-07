@@ -15,21 +15,24 @@ function TaskManager() {
     // const [ labels, setLabels ] = useState({});
     // const [ filter, setFilter ] = useState({dates: {start: new Date(2023, 6, 6), end: new Date(2023, 6, 8)}});
 
-    async function getToken() {
-        console.log('started getToken');
+    async function getApi() {
+        console.log('started getApi');
+        let api = null;
         let { data, error } = await supabase
         .from('todoist_tokens')
         .select('token')
         .eq('id', session.user.id);
         if (data.length > 0) {
-            setContext({ ...context, api: new TodoistApi(data[0].token) });
+            api = new TodoistApi(data[0].token);
+            setContext({ ...context, api: api });
             console.log('retrieved token');
         }
         if (error) {
             alert('Errore nella ricerca del token: ' + error.message);
             console.log(error);
         }
-        console.log('finished getToken');
+        console.log('finished getApi');
+        if (api) return api;
     }
 
     async function insertToken() {
@@ -71,12 +74,12 @@ function TaskManager() {
         return res.reduce((acc, f) => acc + ' & ' + f);
     }
 
-    async function getProjects() {
+    async function getProjects(tapi = null) {
         console.log('started getProjects');
         var res = null;
-        if (context.api) {
+        if (tapi) {
             console.log('getProjects todoist');
-            res = await context.api.getProjects().then(values => values.reduce((acc, p) => {
+            res = await tapi.getProjects().then(values => values.reduce((acc, p) => {
                 acc[p.id] = p.name;
                 return acc;
             }, {}))
@@ -103,12 +106,12 @@ function TaskManager() {
         console.log('finished getProjects');
     }
 
-    async function getLabels() {
+    async function getLabels(tapi = null) {
         console.log('started getLabels');
         var res = null;
-        if (context.api) {
+        if (tapi) {
             console.log('getLabels todoist');
-            res = await context.api.getLabels().then(values => values.reduce((acc, l) => {
+            res = await tapi.getLabels().then(values => values.reduce((acc, l) => {
                 acc[l.id] = l.name;
                 return acc;
             }, {}))
@@ -143,7 +146,7 @@ function TaskManager() {
     } */
 
     useEffect(async () => {
-        await getToken();
+        await getApi();
         /* let prg =  */await getProjects();
         // setProjects(prg);
         /* let lbl =  */await getLabels();
