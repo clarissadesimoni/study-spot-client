@@ -16,21 +16,24 @@ function TaskManager() {
     // const [ filter, setFilter ] = useState({dates: {start: new Date(2023, 6, 6), end: new Date(2023, 6, 8)}});
 
     async function getToken() {
+        console.log('started getToken');
         let { data, error } = await supabase
         .from('todoist_tokens')
         .select('token')
         .eq('id', session.user.id);
         if (data.length > 0) {
             setContext({ ...context, api: new TodoistApi(data[0].token) });
+            console.log('retrieved token');
         }
         if (error) {
             alert('Errore nella ricerca del token: ' + error.message);
             console.log(error);
         }
+        console.log('finished getToken');
     }
 
     async function insertToken() {
-        api = new TodoistApi(token.current);
+        const api = new TodoistApi(token.current);
         var valid = true;
         api.getProjects()
         .catch((error) => {
@@ -40,7 +43,7 @@ function TaskManager() {
         })
         if (!valid)
             return;
-        setContext({ ...context, api: new TodoistApi(data[0].token) })
+        setContext({ ...context, api: api })
         const { error } = await supabase
         .from('todoist_tokens')
         .insert([
@@ -69,14 +72,17 @@ function TaskManager() {
     }
 
     async function getProjects() {
+        console.log('started getProjects');
         var res = null;
         if (context.api) {
+            console.log('getProjects todoist');
             res = await context.api.getProjects().then(values => values.reduce((acc, p) => {
                 acc[p.id] = p.name;
                 return acc;
             }, {}))
             .catch(error => console.log(error));
         } else {
+            console.log('getProjects supabase');
             let { data, error } = await supabase
             .from('projects')
             .select('id,name')
@@ -94,17 +100,21 @@ function TaskManager() {
         }
         setContext({ ...context, projects: res });
         // return res;
+        console.log('finished getProjects');
     }
 
     async function getLabels() {
+        console.log('started getLabels');
         var res = null;
         if (context.api) {
+            console.log('getLabels todoist');
             res = await context.api.getLabels().then(values => values.reduce((acc, l) => {
                 acc[l.id] = l.name;
                 return acc;
             }, {}))
             .catch(error => console.log(error));
         } else {
+            console.log('getLabels supabase');
             let { data, error } = await supabase
             .from('labels')
             .select('id,name')
@@ -122,6 +132,7 @@ function TaskManager() {
         }
         setContext({ ...context, labels: res });
         // return res;
+        console.log('finished getLabels');
     }
 
     /* function changeFilter(newFilter) {
