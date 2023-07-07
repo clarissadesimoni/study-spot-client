@@ -2,12 +2,14 @@ import { useEffect, useState, useRef } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { TodoistApi } from "@doist/todoist-api-typescript";
 import { LabelsView, ProjectsView, TaskListView, TodoistTaskListView, TodoistProjectsView, TodoistLabelsView } from '../components';
-import { useTMContext, useTMUpdateContext } from '../contexts/TMContext';
+import { TMApiContext, TMProjectsContext, TMLabelsContext, TMFilterContext } from '../contexts/TMContext';
 
 function TaskManager() {
     const session = useSession();
     const supabase = useSupabaseClient();
-    const { api, setApi, setProjects, setLabels } = useTMContext();
+    const { api, setApi } = useContext(TMApiContext);
+    const { projects, setProjects } = useContext(TMProjectsContext);
+    const { labels, setLabels } = useContext(TMLabelsContext);
     const [ isLoading, setIsLoading ] = useState(true);
     let token = useRef('');
     // const [ api, setApi ] = useState(null);
@@ -104,7 +106,6 @@ function TaskManager() {
                 console.log(error);
             }
         }
-        console.log(typeof setProjects);
         setProjects(res);
         // return res;
         console.log('finished getProjects');
@@ -151,6 +152,7 @@ function TaskManager() {
 
     useEffect(async () => {
         try {
+            console.log(typeof setApi, typeof setProjects, typeof setLabels);
             await getApi();
             await getProjects();
             await getLabels();

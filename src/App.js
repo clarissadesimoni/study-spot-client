@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSession } from '@supabase/auth-helpers-react';
 import { Auth, Calendar, TaskManager } from './components';
-import { TMProvider } from './contexts/TMContext';
+import { TMApiContextProvider, TMProjectsContextProvider, TMLabelsContextProvider, TMFilterContextProvider } from './contexts/TMContext';
 
 function App() {
 
@@ -24,9 +24,15 @@ function App() {
                             <Calendar />
                             :
                             section.localeCompare('tasks') == 0 ?
-                            <TMProvider>
-                                <TaskManager />
-                            </TMProvider>
+                            <TMApiContextProvider>
+                                <TMProjectsContextProvider>
+                                    <TMLabelsContextProvider>
+                                        <TMFilterContextProvider>
+                                            <TaskManager />
+                                        </TMFilterContextProvider>
+                                    </TMLabelsContextProvider>
+                                </TMProjectsContextProvider>
+                            </TMApiContextProvider>
                             :
                             <></>
                         }
