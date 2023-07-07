@@ -22,7 +22,7 @@ function TMProjectsContextProvider({ children }) {
         setProjects
     }
     return (
-        <TMProjectsContextProvider.Provider value={contextValue}>{children}</TMProjectsContextProvider.Provider>
+        <TMProjectsContext.Provider value={contextValue}>{children}</TMProjectsContext.Provider>
     );
 }
 
@@ -35,7 +35,7 @@ function TMLabelsContextProvider({ children }) {
         setLabels
     }
     return (
-        <TMLabelsContextProvider.Provider value={contextValue}>{children}</TMLabelsContextProvider.Provider>
+        <TMLabelsContext.Provider value={contextValue}>{children}</TMLabelsContext.Provider>
     );
 }
 
@@ -48,7 +48,7 @@ function TMFilterContextProvider({ children }) {
         setFilter
     }
     return (
-        <TMFilterContextProvider.Provider value={contextValue}>{children}</TMFilterContextProvider.Provider>
+        <TMFilterContext.Provider value={contextValue}>{children}</TMFilterContext.Provider>
     );
 }
 
