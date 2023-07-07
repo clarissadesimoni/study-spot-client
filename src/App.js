@@ -24,15 +24,7 @@ function App() {
                             <Calendar />
                             :
                             section.localeCompare('tasks') == 0 ?
-                            <TMApiContextProvider>
-                                <TMProjectsContextProvider>
-                                    <TMLabelsContextProvider>
-                                        <TMFilterContextProvider>
-                                            <TaskManager />
-                                        </TMFilterContextProvider>
-                                    </TMLabelsContextProvider>
-                                </TMProjectsContextProvider>
-                            </TMApiContextProvider>
+                            <TMApiContextProvider children={<TMProjectsContextProvider children={<TMLabelsContextProvider children={<TMFilterContextProvider children={<TaskManager />} />} />} />} />
                             :
                             <></>
                         }
