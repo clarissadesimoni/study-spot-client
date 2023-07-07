@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSession } from '@supabase/auth-helpers-react';
 import { Auth, Calendar, TaskManager } from './components';
-import { TMProvider, initialState } from './contexts/TMContext';
+import { TMProvider } from './contexts/TMContext';
 
 function App() {
 

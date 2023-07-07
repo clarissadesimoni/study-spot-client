@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 const initialState = {
     session: {
@@ -13,7 +13,7 @@ const initialState = {
     getFilter: () => this.session.filter
 }
 
-const TMContext = useContext(initialState);
+const TMContext = createContext(initialState);
 
 const TMProvider = ({ children }) => {
     const [ session, setSession ] = useState(initialState.session);
