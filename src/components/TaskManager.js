@@ -12,6 +12,7 @@ function TaskManager() {
     const { labels, setLabels } = React.useContext(TMLabelsContext);
     const [ isLoading, setIsLoading ] = useState(true);
     let token = useRef('');
+    let tapi = useRef(null);
 
     async function getApi() {
         console.log('started getApi');
@@ -148,19 +149,14 @@ function TaskManager() {
 
     useEffect(async () => {
         try {
-            console.log(typeof setApi, typeof setProjects, typeof setLabels);
-            await getApi();
-            await getProjects();
-            await getLabels();
+            tapi.current = await getApi();
+            await getProjects(tapi.current);
+            await getLabels(tapi.current);
             setIsLoading(false);
         } catch (error) {
             console.log(error);
         }
     }, []);
-
-    useEffect(() => {
-        console.log('re-rendered bc of api');
-    }, [api]);
 
 
 
@@ -171,7 +167,16 @@ function TaskManager() {
                 <span>Loading...</span>
             )
             :
-            (api) ? (
+            (tapi.current) ? (
+                <>
+                    <span>WIP</span>
+                    {/* <TodoistProjectsView projects={projects} filterFunc={changeFilter} />
+                    <hr />
+                    <TodoistLabelsView labels={labels} filterFunc={changeFilter} />
+                    <hr />
+                    <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter.current)} /> */}
+                </>
+            ) : (
                 <>
                     <input type="text" autocomplete="off" onChange={e => token.current = e.target.value} />
                     <button onClick={() => insertToken()}>Set todoist token</button>
@@ -181,15 +186,6 @@ function TaskManager() {
                     <LabelsView />
                     <hr />
                     <TaskListView />
-                </>
-            ) : (
-                <>
-                    <span>WIP</span>
-                    {/* <TodoistProjectsView projects={projects} filterFunc={changeFilter} />
-                    <hr />
-                    <TodoistLabelsView labels={labels} filterFunc={changeFilter} />
-                    <hr />
-                    <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter.current)} /> */}
                 </>
             )
         }
