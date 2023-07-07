@@ -94,8 +94,7 @@ function App() {
 
     return (
         <div className="app">
-            <div style={{width: '400px', margin: "30px auto"}}>
-                <h2>Hey user {session.user.email}</h2>
+            <div style={{width: '800px', margin: "30px auto"}}>
                 <div>
                     <p>Start of event:</p>
                     <DateTimePicker isCalendarOpen={true} isClockOpen={true} onChange={setStart} value={start} />
