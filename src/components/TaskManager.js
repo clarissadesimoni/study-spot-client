@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { TodoistApi } from "@doist/todoist-api-typescript";
 import { LabelsView, ProjectsView, TaskListView, TodoistTaskListView, TodoistProjectsView, TodoistLabelsView } from '../components';
-import { TMApiContext, TMProjectsContext, TMLabelsContext, TMFilterContext } from '../contexts/TMContext';
+import { TMApiContext, TMProjectsContext, TMLabelsContext } from '../contexts/TMContext';
 
 function TaskManager() {
     const session = useSession();
