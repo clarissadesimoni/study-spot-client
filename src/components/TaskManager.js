@@ -1,13 +1,14 @@
-import { useEffect, useState, useContext, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { TodoistApi } from "@doist/todoist-api-typescript";
 import { LabelsView, ProjectsView, TaskListView, TodoistTaskListView, TodoistProjectsView, TodoistLabelsView } from '../components';
-import { TMContext } from '../contexts/TMContext';
+import { useTMContext, useTMUpdateContext } from '../contexts/TMContext';
 
 function TaskManager() {
     const session = useSession();
     const supabase = useSupabaseClient();
-    const { context, setContext } = useContext(TMContext);
+    const context = useTMContext();
+    const updateContext = useTMUpdateContext();
     const [ isLoading, setIsLoading ] = useState(true);
     let token = useRef('');
     // const [ api, setApi ] = useState(null);
@@ -24,7 +25,7 @@ function TaskManager() {
         .eq('id', session.user.id);
         if (data.length > 0) {
             api = new TodoistApi(data[0].token);
-            setContext({ ...context, api: api });
+            updateContext({ ...context, api: api });
             console.log('retrieved token');
         }
         if (error) {
@@ -46,7 +47,7 @@ function TaskManager() {
         })
         if (!valid)
             return;
-        setContext({ ...context, api: api })
+        updateContext({ ...context, api: api })
         const { error } = await supabase
         .from('todoist_tokens')
         .insert([
@@ -104,7 +105,7 @@ function TaskManager() {
                 console.log(error);
             }
         }
-        setContext({ ...context, projects: res });
+        updateContext({ ...context, projects: res });
         // return res;
         console.log('finished getProjects');
     }
@@ -136,7 +137,7 @@ function TaskManager() {
                 console.log(error);
             }
         }
-        setContext({ ...context, labels: res });
+        updateContext({ ...context, labels: res });
         // return res;
         console.log('finished getLabels');
     }
