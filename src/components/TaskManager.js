@@ -12,7 +12,7 @@ function TaskManager() {
     const [ api, setApi ] = useState(null);
     const [ projects, setProjects ] = useState({});
     const [ labels, setLabels ] = useState({});
-    const [ filter, setFilter ] = useState({});
+    const [ filter, setFilter ] = useState({dates: {start: new Date(2023, 6, 6), end: new Date(2023, 6, 8)}});
 
     async function getToken() {
         let { data, error } = await supabase
