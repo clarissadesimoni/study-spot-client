@@ -8,7 +8,6 @@ const initialState = {
 }
 
 const TMContext = createContext();
-const TMUpdateContext = createContext();
 
 const useTMContext = () => {
     return createContext(TMContext);

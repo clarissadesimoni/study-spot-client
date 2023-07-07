@@ -7,7 +7,7 @@ import { useTMContext, useTMUpdateContext } from '../contexts/TMContext';
 function TaskManager() {
     const session = useSession();
     const supabase = useSupabaseClient();
-    const { api, setApi, projects, setProjects, labels, setLabels, filter, setFilter } = useTMContext();
+    const { api, setApi, setProjects, setLabels } = useTMContext();
     const [ isLoading, setIsLoading ] = useState(true);
     let token = useRef('');
     // const [ api, setApi ] = useState(null);
@@ -58,7 +58,7 @@ function TaskManager() {
         }
     }
 
-    function generateFilter() {                             // put this in TodoistTaskListView
+    /* function generateFilter() {                             // put this in TodoistTaskListView
         var res = [];
         if (tmcontext.filter.dates) {
             const start = `${tmcontext.filter.dates.start.getMonth()}/${tmcontext.filter.dates.start.getDate()}/${tmcontext.filter.dates.start.getFullYear()}`;
@@ -72,7 +72,7 @@ function TaskManager() {
             res.push(`#${tmcontext.filter.label}`);
         }
         return res.reduce((acc, f) => acc + ' & ' + f);
-    }
+    } */
 
     async function getProjects(tapi = null) {
         console.log('started getProjects');
@@ -104,6 +104,7 @@ function TaskManager() {
                 console.log(error);
             }
         }
+        console.log(typeof setProjects);
         setProjects(res);
         // return res;
         console.log('finished getProjects');
