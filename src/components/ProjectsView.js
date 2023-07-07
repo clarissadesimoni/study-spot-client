@@ -1,6 +1,6 @@
 function ProjectsView({ projects, filterFunc}) {
 
-    async function handleFilter(projectId) {
+    function handleFilter(projectId) {
         filterFunc({project: projectId});
     }
 

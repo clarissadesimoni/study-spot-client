@@ -14,8 +14,6 @@ function TaskListView({ projects, labels, filters }) {
     const supabase = useSupabaseClient();
     const [ tasks, setTasks ] = useState([]);
     const [ isAdding, setIsAdding ] = useState(false);
-    const [ isUpdating, setIsUpdating ] = useState(true);
-    const [filter, setFilter ] = useState({});
     var newTaskName = useRef('');
     var newTaskProject = useRef('');
     var newTaskLabels = useRef([]);
@@ -25,15 +23,7 @@ function TaskListView({ projects, labels, filters }) {
     useEffect(async () => {
         console.log('in task list view');
         await getTasks();
-    }, [filters]);
-
-    function handleProjectFilter(f) {
-        setFilter({project: f});
-    }
-
-    function handleLabelFilter(f) {
-        setFilter({label: f});
-    }
+    }, []);
     
     async function getTasks() {
         let { data, error } = await supabase

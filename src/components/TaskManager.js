@@ -12,7 +12,7 @@ function TaskManager() {
     const [ api, setApi ] = useState(null);
     const [ projects, setProjects ] = useState({});
     const [ labels, setLabels ] = useState({});
-    var filter = useRef({});
+    const [ filter, setFilter ] = useState({});
 
     async function getToken() {
         let { data, error } = await supabase
@@ -139,9 +139,7 @@ function TaskManager() {
     function changeFilter(newFilter) {
         console.log(newFilter);
         console.log('changing filter');
-        setIsLoading(true);
-        filter.current = newFilter;
-        setIsLoading(false);
+        setFilter(newFilter);
         console.log('changed filter');
     }
 
@@ -154,8 +152,10 @@ function TaskManager() {
         setIsLoading(false);
     }, []);
 
+
+
     return (
-        <>
+        <div key={filter}>
         {
             isLoading ? (
                 <span>Loading...</span>
@@ -170,7 +170,7 @@ function TaskManager() {
                     <hr />
                     <LabelsView labels={labels} filterFunc={changeFilter} />
                     <hr />
-                    <TaskListView projects={projects} labels={labels} filters={filter.current} />
+                    <TaskListView projects={projects} labels={labels} filters={filter.current} rf={isLoading} />
                 </>
             ) : (
                 <>
@@ -182,7 +182,7 @@ function TaskManager() {
                 </>
             )
         }
-        </>
+        </div>
     );
 }
 

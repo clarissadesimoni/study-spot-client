@@ -6,16 +6,16 @@ function TaskComponent({ obj, editFunc, closeFunc, deleteFunc }) {
     const [isEditing, setIsEditing] = useState(false);
     var newName = useRef('');
 
-    async function handleEdit() {
+    function handleEdit() {
         editFunc(obj.id, newName.current);
         setIsEditing(false);
     }
 
-    async function handleCheck() {
+    function handleCheck() {
         closeFunc(obj.id);
     }
 
-    async function handleDelete() {
+    function handleDelete() {
         deleteFunc(obj.id);
     }
 
