@@ -163,7 +163,7 @@ function TaskListView() {
                                         value: k,
                                         label: projects[k]
                                     }
-                                })} onChange={selected => newTaskLabels.current = selected} />
+                                })} onChange={selected => newTaskProject.current = selected.id} />
                             ) : (
                                 <p>new task project selection</p>
                             )
@@ -180,7 +180,7 @@ function TaskListView() {
                                         value: k,
                                         label: labels[k]
                                     }
-                                })} onChange={selected => newTaskLabels.current = selected} />
+                                })} onChange={selected => newTaskLabels.current = selected.map(selected.id)} />
                             ) : (
                                 <p>new task labels selection</p>
                             )
