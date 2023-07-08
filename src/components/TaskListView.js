@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import Select from 'react-select';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Task } from '../classes';
 import { TaskComponent } from '../components';
@@ -117,6 +118,20 @@ function TaskListView() {
         await getTasks();
     }
 
+    const projectsOptions = Object.keys(projects).map(k => {
+        return {
+            value: k,
+            label: projects[k]
+        }
+    })
+
+    const labelsOptions = Object.keys(labels).map(k => {
+        return {
+            value: k,
+            label: labels[k]
+        }
+    })
+
     return (
         <>
             {
@@ -138,22 +153,24 @@ function TaskListView() {
                         }
                         {
                             projects ? (
-                                <select onClick={e => newTaskProject.current = e.value}>
-                                {
-                                    Object.keys(projects).map(p => <option value={p} onClick={() => newTaskProject.current = projects}>{projects[p]}</option>)
-                                }
-                                </select>
+                                // <select onClick={e => newTaskProject.current = e.value}>
+                                // {
+                                //     Object.keys(projects).map(p => <option value={p} onClick={(e) => newTaskProject.current = e.value}>{projects[p]}</option>)
+                                // }
+                                // </select>
+                                <Select options={projectsOptions} onChange={o => newTaskProject.current = o.value} />
                             ) : (
                                 <p>new task project selection</p>
                             )
                         }
                         {
                             labels ? (
-                                <select multiple={true} onChange={e => newTaskLabels.current = Array.from(e.target.selectedOptions, option => option.value)}>
-                                {
-                                    Object.keys(labels).map(l => <option value={l}>{labels[l]}</option>)
-                                }
-                                </select>
+                                // <select multiple={true} onChange={e => newTaskLabels.current = Array.from(e.target.selectedOptions, option => option.value)}>
+                                // {
+                                //     Object.keys(labels).map(l => <option value={l}>{labels[l]}</option>)
+                                // }
+                                // </select>
+                                <Select isMulti={true} options={labels} onChange={o => newTaskLabels.current = Array.from(o.target.selectedOptions, option => option.value)} />
                             ) : (
                                 <p>new task labels selection</p>
                             )
