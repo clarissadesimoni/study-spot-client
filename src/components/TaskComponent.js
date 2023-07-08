@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
 import { Task } from '../classes';
+import { TMProjectsContext, TMLabelsContext } from '../contexts/TMContext';
 
 function TaskComponent({ obj, editFunc, closeFunc, deleteFunc }) {
-    // const [checked, setChecked] = useState(false);
+    const { projects, setProjects } = React.useContext(TMProjectsContext);
+    const { labels, setLabels } = React.useContext(TMLabelsContext);
     const [isEditing, setIsEditing] = useState(false);
     var newName = useRef('');
 
@@ -22,7 +24,7 @@ function TaskComponent({ obj, editFunc, closeFunc, deleteFunc }) {
     return (
         <>
             <input type="checkbox" onChange={handleCheck} />
-            <text>{obj.name} - {obj.projectId} - {obj.due.toISOString()} - {obj.labels.reduce((acc, label) => acc + ',' + label)}</text>
+            <text>{obj.name} - {projects[obj.projectId]} - {obj.due.toISOString()} - {obj.labels.reduce((acc, label) => acc + ', ' + labels[label])}</text>
             <button onClick={() => setIsEditing(true)}>Rinomina</button>
             {
                 isEditing && (

@@ -26,6 +26,11 @@ function TaskListView() {
         console.log('in task list view');
         getTasks();
     }, []);
+
+    useEffect(() => {
+        console.log('updating filter and tasks');
+        getTasks();
+    }, [filter]);
     
     async function getTasks() {
         let { data, error } = await supabase
