@@ -7,7 +7,7 @@ function TodoistLabelsView({ labels, filterFunc }) {
     return (
         <>
         {
-            labels.map(l => <><button onClick={() => handleFilter(l)}>{labels[l]}</button><p /></>)
+            Object.keys(labels).map(l => <><button onClick={() => handleFilter(l)}>{labels[l]}</button><p /></>)
         }
         </>
     )

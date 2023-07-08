@@ -22,9 +22,9 @@ function TaskListView() {
     var newTaskDue = useRef(new Date());
     var newTaskAllDay = useRef(false);
 
-    useEffect(async () => {
+    useEffect(() => {
         console.log('in task list view');
-        await getTasks();
+        getTasks();
     }, []);
     
     async function getTasks() {
