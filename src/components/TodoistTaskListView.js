@@ -14,9 +14,9 @@ import 'react-datetime-picker/dist/DateTimePicker.css';
 function TodoistTaskListView() {
     const session = useSession();
     const supabase = useSupabaseClient();
-    const [ api, setApi ] = useState(new TodoistApi(token));
     const [ tasks, setTasks ] = useState([]);
     const [ isAdding, setIsAdding ] = useState(false);
+    const { api, setApi } = React.useContext(TMApiContext);
     const { projects, setProjects } = React.useContext(TMProjectsContext);
     const { labels, setLabels } = React.useContext(TMLabelsContext);
     const { filter, setFilter } = React.useContext(TMFilterContext);

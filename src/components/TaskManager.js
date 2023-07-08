@@ -71,7 +71,6 @@ function TaskManager() {
     } */
 
     async function getProjects(tapi = null) {
-        console.log('started getProjects');
         var res = null;
         if (tapi) {
             res = await tapi.getProjects().then(values => values.reduce((acc, p) => {
