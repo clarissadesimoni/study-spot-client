@@ -148,6 +148,7 @@ function TaskManager() {
             else {
                 if (!projects) await getProjects();
                 if (!labels) await getLabels();
+                setIsLoading(false);
             }
         } catch (error) {
             console.log(error);
