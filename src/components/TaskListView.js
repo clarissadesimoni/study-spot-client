@@ -180,7 +180,7 @@ function TaskListView() {
                                         value: k,
                                         label: labels[k]
                                     }
-                                })} onChange={o => newTaskLabels.current = Array.from(o.target.selectedOptions, option => option.value)} />
+                                })} onChange={o => newTaskLabels.current = Array.from(o.selectedOptions, option => option.value)} />
                             ) : (
                                 <p>new task labels selection</p>
                             )
