@@ -74,29 +74,23 @@ function TaskManager() {
     } */
 
     async function getProjects(tapi = null) {
-        console.log('started getProjects');
         var res = null;
         if (tapi) {
-            console.log('getProjects todoist');
             res = await tapi.getProjects().then(values => values.reduce((acc, p) => {
                 acc[p.id] = p.name;
                 return acc;
             }, {}))
             .catch(error => console.log(error));
         } else {
-            console.log('getProjects supabase');
             let { data, error } = await supabase
             .from('projects')
             .select('id,name')
             .eq('owner', session.user.id);
-            console.log('getProjects retrieval done');
             if (data) {
-                console.log('getProjects reduce start');
                 res = data.reduce((acc, p) => {
                     acc[p.id] = p.name;
                     return acc;
                 }, {});
-                console.log('getProjects reduce done');
             }
             if (error) {
                 alert(error.message);
@@ -105,21 +99,18 @@ function TaskManager() {
         }
         setProjects(res);
         // return res;
-        console.log('finished getProjects');
+        console.log(res);
     }
 
     async function getLabels(tapi = null) {
-        console.log('started getLabels');
         var res = null;
         if (tapi) {
-            console.log('getLabels todoist');
             res = await tapi.getLabels().then(values => values.reduce((acc, l) => {
                 acc[l.id] = l.name;
                 return acc;
             }, {}))
             .catch(error => console.log(error));
         } else {
-            console.log('getLabels supabase');
             let { data, error } = await supabase
             .from('labels')
             .select('id,name')
@@ -137,7 +128,7 @@ function TaskManager() {
         }
         setLabels(res);
         // return res;
-        console.log('finished getLabels');
+        console.log(res);
     }
 
     /* function changeFilter(newFilter) {
@@ -149,14 +140,19 @@ function TaskManager() {
 
     useEffect(async () => {
         try {
-            tapi.current = await getApi();
-            await getProjects(tapi.current);
-            await getLabels(tapi.current);
-            setIsLoading(false);
+            // tapi.current = await getApi();
+            // await getProjects(tapi.current);
+            // await getLabels(tapi.current);
+            // setIsLoading(false);
+            if (!api) tapi.current = await getApi();
+            else {
+                if (!projects) await getProjects();
+                if (!labels) await getLabels();
+            }
         } catch (error) {
             console.log(error);
         }
-    }, []);
+    });
 
 
 

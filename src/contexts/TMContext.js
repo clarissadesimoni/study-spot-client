@@ -16,7 +16,7 @@ function TMApiContextProvider({ children }) {
 const TMProjectsContext = React.createContext(null);
 
 function TMProjectsContextProvider({ children }) {
-    const [ projects, setProjects ] = useState({});
+    const [ projects, setProjects ] = useState(null);
     const contextValue = {
         projects,
         setProjects
@@ -29,7 +29,7 @@ function TMProjectsContextProvider({ children }) {
 const TMLabelsContext = React.createContext(null);
 
 function TMLabelsContextProvider({ children }) {
-    const [ labels, setLabels ] = useState({});
+    const [ labels, setLabels ] = useState(null);
     const contextValue = {
         labels,
         setLabels
