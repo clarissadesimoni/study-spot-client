@@ -4,7 +4,7 @@ import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { TodoistApi } from "@doist/todoist-api-typescript";
 import { Task } from '../classes';
 import { TaskComponent } from '../components';
-import { TMProjectsContext, TMLabelsContext, TMFilterContext } from '../contexts/TMContext';
+import { TMApiContext, TMProjectsContext, TMLabelsContext, TMFilterContext } from '../contexts/TMContext';
 import { todoistFilterToString } from '../utilities/dates';
 import DateTimePicker from 'react-datetime-picker';
 import DatePicker from 'react-date-picker';
