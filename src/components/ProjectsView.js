@@ -12,7 +12,7 @@ function ProjectsView() {
     return (
         <>
         {
-            projects.keys().map(p => <><button onClick={() => handleFilter(p)}>{projects[p]}</button><p /></>)
+            projects ? projects.keys().map(p => <><button onClick={() => handleFilter(p)}>{projects[p]}</button><p /></>) : null
         }
         </>
     )

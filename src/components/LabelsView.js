@@ -12,7 +12,7 @@ function LabelsView() {
     return (
         <>
         {
-            labels.keys().map(l => <><button onClick={() => handleFilter(l)}>{labels[l]}</button><p /></>)
+            labels ? labels.keys().map(l => <><button onClick={() => handleFilter(l)}>{labels[l]}</button><p /></>) : null
         }
         </>
     )
