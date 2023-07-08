@@ -144,6 +144,7 @@ function TaskManager() {
             // await getProjects(tapi.current);
             // await getLabels(tapi.current);
             // setIsLoading(false);
+            console('useEffect');
             if (!api) tapi.current = await getApi();
             else {
                 if (!projects) await getProjects();
