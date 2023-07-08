@@ -53,7 +53,7 @@ function TaskListView() {
         }
         if (filter.label) {
             // data = data.filter(task => task.labels.includes(filter.label));
-            query = query.contains('labels', [filter.label]);
+            query = query.contains('labels', [+filter.label]);
         }
         let { data, error } = await query;
         if (data) {
