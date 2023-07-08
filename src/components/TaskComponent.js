@@ -23,7 +23,7 @@ function TaskComponent({ obj, editFunc, closeFunc, deleteFunc }) {
     return (
         <>
             <input type="checkbox" onChange={handleCheck} />
-            <text>{obj.name} - {projects[obj.projectId]} - {obj.due ? obj.due.toISOString() : 'no due date'} - {obj.labels || obj.labels.length > 0 ? obj.labels.map(label => labels[label]).reduce((acc, label) => acc + ', ' + label, ['hello']) : 'no labels'}</text>
+            <text>{obj.name} - {projects[obj.projectId]} - {obj.due ? obj.due.toISOString() : 'no due date'} - {obj.labels && obj.labels.length > 0 ? obj.labels.map(label => labels[label]).reduce((acc, label) => acc + ', ' + label) : 'no labels'}</text>
             <button onClick={() => setIsEditing(true)}>Rinomina</button>
             {
                 isEditing && (
