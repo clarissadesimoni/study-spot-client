@@ -77,7 +77,7 @@ function TodoistTaskListView() {
     }
 
     async function createTask() {
-        await api.addTask({content: newTaskName, projectId: newTaskProject, labels: newTaskLabels, dueDatetime: newTaskDue.toISOString()})
+        await api.addTask({content: newTaskName.current, projectId: newTaskProject.current, labels: newTaskLabels.current, dueDatetime: newTaskDue.toISOString()})
         .catch(error => console.log(error));
         setIsAdding(false);
         await getTasks();
