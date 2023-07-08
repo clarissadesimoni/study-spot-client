@@ -1,16 +1,26 @@
-function TodoistProjectsView({ projects, filterFunc }) {
+import React from 'react';
+import { TMProjectsContext, TMFilterContext } from '../contexts/TMContext';
 
-    async function handleFilter(projectId) {
-        filterFunc({project: projectId});
+function TodoistProjectsView({ projects, filterFunc }) {
+    const { projects, setProjects } = React.useContext(TMProjectsContext);
+    const { filter, setFilter } = React.useContext(TMFilterContext);
+
+    function handleFilter(projectId) {
+        setFilter({projectId: projectId});
     }
 
-    return (
-        <>
-        {
-            Object.keys(projects).map(p => <><button onClick={() => handleFilter(p)}>{projects[p]}</button><p /></>)
-        }
-        </>
-    )
+    try {
+        return (
+            <>
+            {
+                projects ? Object.keys(projects).map(p => <><button onClick={() => handleFilter(p)}>{projects[p]}</button><p /></>) : null
+            }
+            </>
+        )
+    } catch (error) {
+        console.log(error);
+        return <>TodoistProjectsView</>;
+    }
 }
 
 export default TodoistProjectsView;

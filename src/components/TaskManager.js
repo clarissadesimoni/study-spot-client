@@ -151,12 +151,11 @@ function TaskManager() {
             :
             (tapi.current) ? (
                 <>
-                    <span>WIP</span>
-                    {/* <TodoistProjectsView projects={projects} filterFunc={changeFilter} />
+                    <TodoistProjectsView />
                     <hr />
-                    <TodoistLabelsView labels={labels} filterFunc={changeFilter} />
+                    <TodoistLabelsView />
                     <hr />
-                    <TodoistTaskListView token={token} projects={projects} labels={labels} filters={generateFilter(filter.current)} /> */}
+                    <TodoistTaskListView />
                 </>
             ) : (
                 <>

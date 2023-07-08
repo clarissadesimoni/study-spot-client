@@ -97,9 +97,9 @@ function App() {
             <div style={{width: '800px', margin: "30px auto"}}>
                 <div>
                     <p>Start of event:</p>
-                    <DateTimePicker isCalendarOpen={true} isClockOpen={true} onChange={setStart} value={start} />
+                    <DateTimePicker onChange={setStart} value={start} />
                     <p>End of event:</p>
-                    <DateTimePicker isCalendarOpen={true} isClockOpen={true} onChange={setEnd} value={end} />
+                    <DateTimePicker onChange={setEnd} value={end} />
                     <p>Name of event:</p>
                     <input type="text" onChange={(e) => setEventName(e.target.value)} />
                 </div>

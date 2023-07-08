@@ -1,7 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import Select from 'react-select';
+import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { TodoistApi } from "@doist/todoist-api-typescript";
 import { Task } from '../classes';
 import { TaskComponent } from '../components';
+import { TMProjectsContext, TMLabelsContext, TMFilterContext } from '../contexts/TMContext';
 import { todoistFilterToString } from '../utilities/dates';
 import DateTimePicker from 'react-datetime-picker';
 import DatePicker from 'react-date-picker';
@@ -9,9 +12,14 @@ import TimePicker from 'react-time-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 
 function TodoistTaskListView({ token, projects, labels, filters }) {
+    const session = useSession();
+    const supabase = useSupabaseClient();
     const [ api, setApi ] = useState(new TodoistApi(token));
     const [ tasks, setTasks ] = useState([]);
     const [ isAdding, setIsAdding ] = useState(false);
+    const { projects, setProjects } = React.useContext(TMProjectsContext);
+    const { labels, setLabels } = React.useContext(TMLabelsContext);
+    const { filter, setFilter } = React.useContext(TMFilterContext);
     var newTaskName = useRef('');
     var newTaskProject = useRef('');
     var newTaskLabels = useRef([]);
@@ -22,37 +30,39 @@ function TodoistTaskListView({ token, projects, labels, filters }) {
         if (api) getTasks();
     }, []);
 
-    async function generateFilter() {
+    useEffect(() => {
+        getTasks();
+    }, [filter]);
+
+    function generateFilter() {
         var res = [];
-        if (filters.dates) {
+        if (filter.dates) {
             let tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
             tomorrow.setHours(0);
             tomorrow.setMinutes(0);
             tomorrow.setSeconds(0);
-            if (filters.dates.start >= tomorrow) {
-                res.push(`(due after: ${todoistFilterToString(filters.dates.start)} | due before: ${todoistFilterToString(filters.dates.end)})`);
+            if (filter.dates.start >= tomorrow) {
+                res.push(`(due after: ${todoistFilterToString(filter.dates.start)} | due before: ${todoistFilterToString(filter.dates.end)})`);
             } else {
-                res.push(`due before: ${todoistFilterToString(filters.dates.end)}`);
+                res.push(`due before: ${todoistFilterToString(filter.dates.end)}`);
             }
         }
-        if (filters.project_id) {
-            const project_name = await api.getProject(filters.project_id).then(project => project.name).catch(error => console.log(`Project: ${error.message}`));
-            res.push(`#${project_name}`);
+        if (filter.projectId) {
+            res.push(`#${projects[filter.projectId]}`);
         }
-        if (filters.label_id) {
-            const label_name = await api.getLabel(filters.label_id).then(label => label.name).catch(error => console.log(`Label: ${error.message}`));
-            res.push(`${label_name}`);
+        if (filter.labelId) {
+            res.push(`${labels[filter.labelId]}`);
         }
         res = res.reduce((acc, f) => acc + f);
         return res;
     }
 
     async function getTasks() {
-        const filter_str = await generateFilter();
+        const filter_str = generateFilter();
         api.getTasks({filter: filter_str})
         .then(res => res.map(task => {
-            return new Task(true, task.id, task.content, task.projectId, task.labels, task.isCompleted, task.duration.unit.localeCompare('day') == 0 ? 1440 : task.duration.amount, null, task.due);
+            return new Task(true, task.id, task.content, task.projectId, task.labels, task.isCompleted, task.duration ? task.duration.unit.localeCompare('day') == 0 ? 1440 : task.duration.amount : null, null, task.due);
         }))
         .then(res => res.sort((t1, t2) => {
             if (t1.projectId.localeCompare(t2.projectId) != 0)
@@ -68,6 +78,7 @@ function TodoistTaskListView({ token, projects, labels, filters }) {
     async function createTask() {
         await api.addTask({content: newTaskName, projectId: newTaskProject, labels: newTaskLabels, dueDatetime: newTaskDue.toISOString()})
         .catch(error => console.log(error));
+        setIsAdding(false);
         await getTasks();
     }
 
@@ -93,9 +104,8 @@ function TodoistTaskListView({ token, projects, labels, filters }) {
 
     return (
         <>
-            <button onClick={() => setIsAdding(true)}>Aggiungi attività</button>
             {
-                isAdding && (
+                isAdding ? (
                     <>
                         <input type='text' autoComplete='off' onChange={(e) => newTaskName.current = e.target.value} />
                         {
@@ -111,19 +121,33 @@ function TodoistTaskListView({ token, projects, labels, filters }) {
                                 </>
                             )
                         }
-                        <select onChange={e => newTaskProject.current = e.target.value}>
                         {
-                            projects.map(p => <option value={p.id}>{p.name}</option>)
+                            projects ? (
+                                <Select options={Object.keys(projects).map(k => {
+                                    return {
+                                        value: k,
+                                        label: projects[k]
+                                    }
+                                })} onChange={selected => newTaskProject.current = selected.value} />
+                            ) : (
+                                <p>new task project selection</p>
+                            )
                         }
-                        </select>
-                        <select multiple={true} onChange={e => newTaskLabels.current = Array.from(e.target.selectedOptions, option => option.value)}>
                         {
-                            labels.map(p => <option value={p.name}>{p.name}</option>)
+                            labels ? (
+                                <Select isMulti={true} options={Object.keys(labels).map(k => {
+                                    return {
+                                        value: k,
+                                        label: labels[k]
+                                    }
+                                })} onChange={selected => newTaskLabels.current = selected.map(selected => selected.value)} />
+                            ) : (
+                                <p>new task labels selection</p>
+                            )
                         }
-                        </select>
                         <button onClick={createTask}>Invia</button>
                     </>
-                )
+                ) : <button onClick={() => setIsAdding(true)}>Aggiungi attività</button>
             }
             <ul>
             {
