@@ -39,12 +39,12 @@ function TaskListView() {
         .from('tasks')
         .select()
         .eq('isCompleted', false);
-        if (filter.dates) {
-            /* data = data.filter(task => {
-                console.log(task)
-                let due = new Date(Date.parse(task.due + 'Z'));
-                return filter.dates.start <= due <= filter.dates.end;
-            }) */
+        /* if (filter.dates) {
+            // data = data.filter(task => {
+            //     console.log(task)
+            //     let due = new Date(Date.parse(task.due + 'Z'));
+            //     return filter.dates.start <= due <= filter.dates.end;
+            // })
             query = query.gte('due', supabaseFilterToString(filter.date.start)).lte(supabaseFilterToString(filter.date.end));
         }
         if (filter.project) {
@@ -54,10 +54,10 @@ function TaskListView() {
         if (filter.label) {
             // data = data.filter(task => task.labels.includes(filter.label));
             query = query.contains('labels', [+filter.label]);
-        }
+        } */
         let { data, error } = await query;
         if (data) {
-            /* if (filter.dates) {
+            if (filter.dates) {
                 data = data.filter(task => {
                     console.log(task)
                     let due = new Date(Date.parse(task.due + 'Z'));
@@ -69,7 +69,7 @@ function TaskListView() {
             }
             if (filter.label) {
                 data = data.filter(task => task.labels.includes(filter.label));
-            } */
+            }
             console.log(data);
             data = data.map(task => {
                 const tmp = new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, new Date(Date.parse(task.due + 'Z')), null);
