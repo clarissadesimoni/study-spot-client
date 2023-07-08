@@ -1,5 +1,5 @@
 import Auth from './Auth';
-import Calendar from './Calendar';
+import CalendarComponent from './CalendarComponent';
 import LabelsView from './LabelsView';
 import ProjectsView from './ProjectsView';
 import TaskComponent from './TaskComponent';
@@ -9,4 +9,4 @@ import TodoistLabelsView from './TodoistLabelsView';
 import TodoistProjectsView from './TodoistProjectsView';
 import TodoistTaskListView from './TodoistTaskListView';
 
-export { Auth, Calendar, LabelsView, ProjectsView, TaskComponent, TaskListView, TaskManager, TodoistLabelsView, TodoistProjectsView, TodoistTaskListView }
+export { Auth, CalendarComponent, LabelsView, ProjectsView, TaskComponent, TaskListView, TaskManager, TodoistLabelsView, TodoistProjectsView, TodoistTaskListView }

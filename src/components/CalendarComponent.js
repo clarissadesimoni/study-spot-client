@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
 import { getStartOfWeek, getEndOfWeek } from '../utilities/dates';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 
-function App() {
+function CalendarComponent() {
 
     const session = useSession();
     const [ start, setStart ] = useState(new Date());
@@ -12,6 +12,10 @@ function App() {
     const [calendars, setCalendars ] = useState({});
     const [ eventName, setEventName ] = useState('');
     const [ eventList, setEventList ] = useState([]);
+
+    useEffect(() => {
+        fetchCalendars();
+    }, []);
 
     function fetchCalendars() {
         fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
@@ -116,4 +120,4 @@ function App() {
     );
 }
 
-export default App;
+export default CalendarComponent;

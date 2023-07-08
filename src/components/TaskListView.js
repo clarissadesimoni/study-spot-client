@@ -71,7 +71,6 @@ function TaskListView() {
 
     async function createTask() {
         const tmp = { title: newTaskName.current, projectId: Object.keys(projects).length == 1 ? Object.keys(projects)[0].id : newTaskProject.current, labels: newTaskLabels.current, due: (newTaskDue.toISOString()).toLocaleString('it-IT'), isCompleted: false, owner: session.user.id };
-        console.log(tmp);
         const { error } = await supabase
         .from('tasks')
         .insert([tmp]);
