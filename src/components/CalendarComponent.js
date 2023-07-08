@@ -89,13 +89,13 @@ function CalendarComponent() {
                 return response.json();
             })
             .then(events => events.items.map(ev => {
-                console.log(typeof ev.start);
-                console.log(typeof ev.end);
+                console.log(typeof ev.start.datetime ?? ev.start.date);
+                console.log(typeof ev.end.datetime ?? ev.end.date);
                 return {
                     id: ev.id,
                     title: ev.summary,
-                    start: moment(ev.start).toDate(),
-                    end: moment(ev.end).toDate(),
+                    start: moment(ev.start.datetime ?? ev.start.date).toDate(),
+                    end: moment(ev.end.datetime ?? ev.end.date).toDate(),
                     calendar: calendars[calendarId]
                 }
             }))
