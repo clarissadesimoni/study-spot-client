@@ -133,16 +133,28 @@ function TaskListView() {
                                 </>
                             )
                         }
-                        <select onClick={e => newTaskProject.current = e.target.value}>
                         {
-                            projects.keys().map(p => <option value={p} onClick={() => newTaskProject.current = projects}>{projects[p]}</option>)
+                            projects ? (
+                                <select onClick={e => newTaskProject.current = e.target.value}>
+                                {
+                                    projects.keys().map(p => <option value={p} onClick={() => newTaskProject.current = projects}>{projects[p]}</option>)
+                                }
+                                </select>
+                            ) : (
+                                <p>new task project selection</p>
+                            )
                         }
-                        </select>
-                        <select multiple={true} onChange={e => newTaskLabels.current = Array.from(e.target.selectedOptions, option => option.value)}>
                         {
-                            labels.keys().map(l => <option value={l}>{labels[l]}</option>)
+                            labels ? (
+                                <select multiple={true} onChange={e => newTaskLabels.current = Array.from(e.target.selectedOptions, option => option.value)}>
+                                {
+                                    labels.keys().map(l => <option value={l}>{labels[l]}</option>)
+                                }
+                                </select>
+                            ) : (
+                                <p>new task labels selection</p>
+                            )
                         }
-                        </select>
                         <button onClick={createTask}>Invia</button>
                     </>
                 ) : <button onClick={() => setIsAdding(true)}>Aggiungi attività</button>

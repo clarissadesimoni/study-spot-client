@@ -9,13 +9,18 @@ function LabelsView() {
         setFilter({labelId: labelId});
     }
 
-    return (
-        <>
-        {
-            labels ? labels.keys().map(l => <><button onClick={() => handleFilter(l)}>{labels[l]}</button><p /></>) : null
-        }
-        </>
-    )
+    try {
+        return (
+            <>
+            {
+                labels ? labels.keys().map(l => <><button onClick={() => handleFilter(l)}>{labels[l]}</button><p /></>) : null
+            }
+            </>
+        )
+    } catch(error) {
+        console.error(error);
+        return <>LabelsView</>;
+    }
 }
 
 export default LabelsView;

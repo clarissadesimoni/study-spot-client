@@ -74,6 +74,7 @@ function TaskManager() {
     } */
 
     async function getProjects(tapi = null) {
+        console.log('started getProjects');
         var res = null;
         if (tapi) {
             res = await tapi.getProjects().then(values => values.reduce((acc, p) => {
@@ -100,9 +101,11 @@ function TaskManager() {
         setProjects(res);
         // return res;
         console.log(res);
+        console.log('finished getProjects');
     }
 
     async function getLabels(tapi = null) {
+        console.log('started getLabels');
         var res = null;
         if (tapi) {
             res = await tapi.getLabels().then(values => values.reduce((acc, l) => {
@@ -129,6 +132,7 @@ function TaskManager() {
         setLabels(res);
         // return res;
         console.log(res);
+        console.log('finished getLabels');
     }
 
     /* function changeFilter(newFilter) {

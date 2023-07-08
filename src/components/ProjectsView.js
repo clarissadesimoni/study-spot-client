@@ -9,13 +9,18 @@ function ProjectsView() {
         setFilter({project: projectId});
     }
 
-    return (
-        <>
-        {
-            projects ? projects.keys().map(p => <><button onClick={() => handleFilter(p)}>{projects[p]}</button><p /></>) : null
-        }
-        </>
-    )
+    try {
+        return (
+            <>
+            {
+                projects ? projects.keys().map(p => <><button onClick={() => handleFilter(p)}>{projects[p]}</button><p /></>) : null
+            }
+            </>
+        )
+    } catch (error) {
+        console.log(error);
+        return <>ProjectsView</>;
+    }
 }
 
 export default ProjectsView;
