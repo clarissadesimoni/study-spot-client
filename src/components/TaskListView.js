@@ -180,7 +180,7 @@ function TaskListView() {
                                         value: k,
                                         label: labels[k]
                                     }
-                                })} onChange={selected => newTaskLabels.current = selected.map(selected.id)} />
+                                })} onChange={selected => newTaskLabels.current = selected.map(selected => selected.id)} />
                             ) : (
                                 <p>new task labels selection</p>
                             )
