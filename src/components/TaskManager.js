@@ -138,19 +138,29 @@ function TaskManager() {
         console.log('changed filter');
     } */
 
-    useEffect(async () => {
+    useEffect(() => {
+        console.log('useEffect');
         try {
             // tapi.current = await getApi();
             // await getProjects(tapi.current);
             // await getLabels(tapi.current);
             // setIsLoading(false);
-            console.log('useEffect');
-            if (!api) tapi.current = await getApi();
-            else {
-                if (!projects) await getProjects();
-                if (!labels) await getLabels();
-                setIsLoading(false);
-            }
+
+            // if (!api) tapi.current = await getApi();
+            // else {
+            //     if (!projects) await getProjects();
+            //     if (!labels) await getLabels();
+            //     setIsLoading(false);
+            // }
+
+            getApi()
+            .then((res) => {
+                tapi.current = res;
+            })
+            .then(() => getProjects())
+            .then(() => getLabels())
+            .then(() => setIsLoading(false))
+            .catch((err) => console.log(err));
         } catch (error) {
             console.log(error);
         }
