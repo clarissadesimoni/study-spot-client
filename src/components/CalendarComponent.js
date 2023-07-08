@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import moment from 'moment';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
 import { getStartOfWeek, getEndOfWeek } from '../utilities/dates';
@@ -7,6 +8,8 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
+
+const localizer = momentLocalizer(moment);
 
 function CalendarComponent() {
 
