@@ -8,14 +8,16 @@ import { TMApiContext, TMProjectsContext, TMLabelsContext, TMFilterContext } fro
 import { todoistFilterToString } from '../utilities/dates';
 import DateTimePicker from 'react-datetime-picker';
 import DatePicker from 'react-date-picker';
-import TimePicker from 'react-time-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
 
 function TodoistTaskListView() {
     const session = useSession();
     const supabase = useSupabaseClient();
     const [ tasks, setTasks ] = useState([]);
     const [ isAdding, setIsAdding ] = useState(false);
+    const [ newTaskDue, setNewTaskDue ] = useState(new Date());
     const { api, setApi } = React.useContext(TMApiContext);
     const { projects, setProjects } = React.useContext(TMProjectsContext);
     const { labels, setLabels } = React.useContext(TMLabelsContext);
@@ -23,7 +25,6 @@ function TodoistTaskListView() {
     var newTaskName = useRef('');
     var newTaskProject = useRef('');
     var newTaskLabels = useRef([]);
-    var newTaskDue = useRef(new Date());
     var newTaskAllDay = useRef(false);
 
     useEffect(() => {
@@ -112,12 +113,12 @@ function TodoistTaskListView() {
                             newTaskAllDay.current ? (
                                 <>
                                     <p />
-                                    <DatePicker minDate={new Date()} value={newTaskDue.current} onChange={(v) => newTaskDue.current = v} />
+                                    <DatePicker minDate={new Date()} value={newTaskDue} onChange={(v) => setNewTaskDue(v)} />
                                 </>
                             ) : (
                                 <>
                                     <p />
-                                    <DateTimePicker minDate={new Date()} value={newTaskDue.current} onChange={(v) => newTaskDue.current = v} />
+                                    <DateTimePicker minDate={new Date()} value={newTaskDue} onChange={(v) => setNewTaskDue(v)} />
                                 </>
                             )
                         }

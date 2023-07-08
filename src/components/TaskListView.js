@@ -7,6 +7,8 @@ import { TMProjectsContext, TMLabelsContext, TMFilterContext } from '../contexts
 import DateTimePicker from 'react-datetime-picker';
 import DatePicker from 'react-date-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
 
 function TaskListView() {
     const session = useSession();
@@ -16,10 +18,10 @@ function TaskListView() {
     const { filter, setFilter } = React.useContext(TMFilterContext);
     const [ tasks, setTasks ] = useState([]);
     const [ isAdding, setIsAdding ] = useState(false);
+    const [ newTaskDue, setNewTaskDue ] = useState(new Date());
     var newTaskName = useRef('');
     var newTaskProject = useRef('');
     var newTaskLabels = useRef([]);
-    var newTaskDue = useRef(new Date());
     var newTaskAllDay = useRef(false);
 
     useEffect(() => {
@@ -68,7 +70,7 @@ function TaskListView() {
     }
 
     async function createTask() {
-        const tmp = { title: newTaskName.current, projectId: Object.keys(projects).length == 1 ? Object.keys(projects)[0].id : newTaskProject.current, labels: newTaskLabels.current, due: (newTaskDue.current.toISOString()).toLocaleString('it-IT'), isCompleted: false, owner: session.user.id };
+        const tmp = { title: newTaskName.current, projectId: Object.keys(projects).length == 1 ? Object.keys(projects)[0].id : newTaskProject.current, labels: newTaskLabels.current, due: (newTaskDue.toISOString()).toLocaleString('it-IT'), isCompleted: false, owner: session.user.id };
         console.log(tmp);
         const { error } = await supabase
         .from('tasks')
@@ -127,12 +129,12 @@ function TaskListView() {
                             newTaskAllDay.current ? (
                                 <>
                                     <p />
-                                    <DatePicker minDate={new Date()} value={newTaskDue.current} onChange={(v) => newTaskDue.current = v} />
+                                    <DatePicker minDate={new Date()} value={newTaskDue} onChange={(v) => setNewTaskDue(v)} />
                                 </>
                             ) : (
                                 <>
                                     <p />
-                                    <DateTimePicker minDate={new Date()} value={newTaskDue.current} onChange={(v) => newTaskDue.current = v} />
+                                    <DateTimePicker minDate={new Date()} value={newTaskDue} onChange={(v) => setNewTaskDue(v)} />
                                 </>
                             )
                         }
