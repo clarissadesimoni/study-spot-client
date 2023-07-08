@@ -6,7 +6,7 @@ function ProjectsView() {
     const { filter, setFilter } = React.useContext(TMFilterContext);
 
     function handleFilter(projectId) {
-        setFilter({project: projectId});
+        setFilter({projectId: projectId});
     }
 
     console.log('re-rendering');

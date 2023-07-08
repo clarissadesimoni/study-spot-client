@@ -65,10 +65,10 @@ function TaskListView() {
                 })
             }
             if (filter.project) {
-                data = data.filter(task => task.projectId == filter.project);
+                data = data.filter(task => task.projectId == filter.projectId);
             }
             if (filter.label) {
-                data = data.filter(task => task.labels.includes(+filter.label));
+                data = data.filter(task => task.labels.includes(+filter.labelId));
             }
             console.log(data);
             data = data.map(task => {
