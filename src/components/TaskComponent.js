@@ -1,5 +1,4 @@
-import { useRef, useState } from 'react';
-import { Task } from '../classes';
+import React, { useRef, useState } from 'react';
 import { TMProjectsContext, TMLabelsContext } from '../contexts/TMContext';
 
 function TaskComponent({ obj, editFunc, closeFunc, deleteFunc }) {
