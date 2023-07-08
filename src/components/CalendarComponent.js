@@ -42,12 +42,13 @@ function CalendarComponent() {
             alert('Error fetching calendars');
             console.log(error.message);
         });
+        console.log('Calendars fetched');
         setCalendars(res);
         return res;
     }
 
     async function createCalendarEvent() {
-        const events = {
+        const event = {
             summary: eventName,
             start: {
                 dateTime: start.toISOString(),
@@ -63,7 +64,7 @@ function CalendarComponent() {
             headers: {
                 Authorization: 'Bearer ' + session.provider_token // Access token for google
             },
-            body: JSON.stringify(events)
+            body: JSON.stringify(event)
         }).then((data) => data.json())
         .then((data) => {
             console.log(data);
@@ -91,14 +92,15 @@ function CalendarComponent() {
                 return {
                     id: ev.id,
                     title: ev.summary,
-                    start: moment(ev.start),
-                    end: moment(ev.end),
+                    start: moment(ev.start).toDate(),
+                    end: moment(ev.end).toDate(),
                     calendar: calendars[calendarId]
                 }
             }))
             .then(events => completeList.push(...events))
             .catch(err => console.error(err));
         }
+        console.log('Events fetched successfully');
         setEventList(completeList);
     }
 
@@ -149,7 +151,18 @@ function CalendarComponent() {
                     localizer={localizer}
                     defaultDate={new Date()}
                     defaultView="month"
-                    events={eventList}
+                    events={[
+                        {
+                            title: "today",
+                            start: new Date(2023, 6, 8, 16, 0),
+                            end: new Date(2023, 6, 8, 17, 0)
+                        },
+                        {
+                            title: "yesterday",
+                            start: new Date(2023, 6, 7, 20, 0),
+                            end: new Date(2023, 6, 7, 22, 0)
+                        }
+                    ]}
                     style={{ height: "100vh" }}
                     />
                 </div>
