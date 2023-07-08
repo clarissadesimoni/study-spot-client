@@ -90,7 +90,7 @@ function CalendarComponent() {
             .then(events => events.items.map(ev => {
                 return {
                     id: ev.id,
-                    name: ev.summary,
+                    title: ev.summary,
                     start: ev.start,
                     end: ev.end,
                     calendar: calendars[calendarId]
