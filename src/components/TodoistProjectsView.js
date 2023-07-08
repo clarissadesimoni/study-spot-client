@@ -1,7 +1,7 @@
 import React from 'react';
 import { TMProjectsContext, TMFilterContext } from '../contexts/TMContext';
 
-function TodoistProjectsView({ projects, filterFunc }) {
+function TodoistProjectsView() {
     const { projects, setProjects } = React.useContext(TMProjectsContext);
     const { filter, setFilter } = React.useContext(TMFilterContext);
 

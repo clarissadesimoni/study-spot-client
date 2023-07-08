@@ -1,7 +1,7 @@
 import React from 'react';
 import { TMLabelsContext, TMFilterContext } from '../contexts/TMContext';
 
-function TodoistLabelsView({ labels, filterFunc }) {
+function TodoistLabelsView() {
     const { labels, setLabels } = React.useContext(TMLabelsContext);
     const { filter, setFilter } = React.useContext(TMFilterContext);
 
