@@ -10,13 +10,13 @@ function LabelsView() {
     }
 
     console.log('re-rendering');
-    console.log(projects);
+    console.log(labels);
 
     try {
         return (
             <>
             {
-                labels ? labels.keys().map(l => <><button onClick={() => handleFilter(l)}>{labels[l]}</button><p /></>) : null
+                labels ? Object.keys(labels).map(l => <><button onClick={() => handleFilter(l)}>{labels[l]}</button><p /></>) : null
             }
             </>
         )

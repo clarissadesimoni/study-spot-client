@@ -137,7 +137,7 @@ function TaskListView() {
                             projects ? (
                                 <select onClick={e => newTaskProject.current = e.target.value}>
                                 {
-                                    projects.keys().map(p => <option value={p} onClick={() => newTaskProject.current = projects}>{projects[p]}</option>)
+                                    Object.keys(projects).map(p => <option value={p} onClick={() => newTaskProject.current = projects}>{projects[p]}</option>)
                                 }
                                 </select>
                             ) : (
@@ -148,7 +148,7 @@ function TaskListView() {
                             labels ? (
                                 <select multiple={true} onChange={e => newTaskLabels.current = Array.from(e.target.selectedOptions, option => option.value)}>
                                 {
-                                    labels.keys().map(l => <option value={l}>{labels[l]}</option>)
+                                    Object.keys(labels).map(l => <option value={l}>{labels[l]}</option>)
                                 }
                                 </select>
                             ) : (

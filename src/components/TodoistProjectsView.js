@@ -7,7 +7,7 @@ function TodoistProjectsView({ projects, filterFunc }) {
     return (
         <>
         {
-            projects.keys().map(p => <><button onClick={() => handleFilter(p)}>{projects[p]}</button><p /></>)
+            Object.keys(projects).map(p => <><button onClick={() => handleFilter(p)}>{projects[p]}</button><p /></>)
         }
         </>
     )
