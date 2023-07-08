@@ -29,6 +29,7 @@ function TaskListView() {
 
     useEffect(() => {
         console.log('updating filter and tasks');
+        console.log(filter);
         getTasks();
     }, [filter]);
     
