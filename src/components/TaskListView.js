@@ -68,7 +68,7 @@ function TaskListView() {
                 data = data.filter(task => task.projectId == filter.project);
             }
             if (filter.label) {
-                data = data.filter(task => task.labels.includes(filter.label));
+                data = data.filter(task => task.labels.includes(+filter.label));
             }
             console.log(data);
             data = data.map(task => {
