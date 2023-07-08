@@ -89,6 +89,8 @@ function CalendarComponent() {
                 return response.json();
             })
             .then(events => events.items.map(ev => {
+                console.log(typeof ev.start);
+                console.log(typeof ev.end);
                 return {
                     id: ev.id,
                     title: ev.summary,
@@ -151,7 +153,7 @@ function CalendarComponent() {
                     localizer={localizer}
                     defaultDate={new Date()}
                     defaultView="month"
-                    events={[
+                    events={/* [
                         {
                             title: "today",
                             start: new Date(2023, 6, 8, 16, 0),
@@ -162,7 +164,8 @@ function CalendarComponent() {
                             start: new Date(2023, 6, 7, 20, 0),
                             end: new Date(2023, 6, 7, 22, 0)
                         }
-                    ]}
+                    ] */
+                    eventList}
                     style={{ height: "100vh" }}
                     />
                 </div>
