@@ -15,7 +15,6 @@ function TaskManager() {
     let tapi = useRef(null);
 
     async function getApi() {
-        console.log('started getApi');
         let tapi = null;
         let { data, error } = await supabase
         .from('todoist_tokens')
@@ -24,13 +23,11 @@ function TaskManager() {
         if (data.length > 0) {
             tapi = new TodoistApi(data[0].token);
             setApi(tapi);
-            console.log('retrieved token');
         }
         if (error) {
             alert('Errore nella ricerca del token: ' + error.message);
             console.log(error);
         }
-        console.log('finished getApi');
         if (tapi) return tapi;
     }
 
@@ -99,13 +96,9 @@ function TaskManager() {
             }
         }
         setProjects(res);
-        // return res;
-        console.log(res);
-        console.log('finished getProjects');
     }
 
     async function getLabels(tapi = null) {
-        console.log('started getLabels');
         var res = null;
         if (tapi) {
             res = await tapi.getLabels().then(values => values.reduce((acc, l) => {
@@ -130,17 +123,7 @@ function TaskManager() {
             }
         }
         setLabels(res);
-        // return res;
-        console.log(res);
-        console.log('finished getLabels');
     }
-
-    /* function changeFilter(newFilter) {
-        console.log(newFilter);
-        console.log('changing filter');
-        setFilter(newFilter);
-        console.log('changed filter');
-    } */
 
     useEffect(() => {
         try {

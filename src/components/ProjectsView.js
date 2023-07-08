@@ -9,9 +9,6 @@ function ProjectsView() {
         setFilter({projectId: projectId});
     }
 
-    console.log('re-rendering');
-    console.log(projects);
-
     try {
         return (
             <>

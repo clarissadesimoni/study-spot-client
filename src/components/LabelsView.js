@@ -9,9 +9,6 @@ function LabelsView() {
         setFilter({labelId: labelId});
     }
 
-    console.log('re-rendering');
-    console.log(labels);
-
     try {
         return (
             <>
@@ -21,7 +18,7 @@ function LabelsView() {
             </>
         )
     } catch(error) {
-        console.error(error);
+        console.log(error);
         return <>LabelsView</>;
     }
 }

@@ -18,9 +18,9 @@ function TodoistTaskListView({ token, projects, labels, filters }) {
     var newTaskDue = useRef(new Date());
     var newTaskAllDay = useRef(false);
 
-    useEffect(async () => {
-        if (api) await getTasks();
-    }, [api]);
+    useEffect(() => {
+        if (api) getTasks();
+    }, []);
 
     async function generateFilter() {
         var res = [];

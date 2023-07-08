@@ -24,13 +24,10 @@ function TaskListView() {
     var newTaskAllDay = useRef(false);
 
     useEffect(() => {
-        console.log('in task list view');
         getTasks();
     }, []);
 
     useEffect(() => {
-        console.log('updating filter and tasks');
-        console.log(filter);
         getTasks();
     }, [filter]);
     
@@ -39,27 +36,10 @@ function TaskListView() {
         .from('tasks')
         .select()
         .eq('isCompleted', false);
-        /* if (filter.dates) {
-            // data = data.filter(task => {
-            //     console.log(task)
-            //     let due = new Date(Date.parse(task.due + 'Z'));
-            //     return filter.dates.start <= due <= filter.dates.end;
-            // })
-            query = query.gte('due', supabaseFilterToString(filter.date.start)).lte(supabaseFilterToString(filter.date.end));
-        }
-        if (filter.project) {
-            // data = data.filter(task => task.projectId == filter.project);
-            query = query.eq('projectId', filter.project);
-        }
-        if (filter.label) {
-            // data = data.filter(task => task.labels.includes(filter.label));
-            query = query.contains('labels', [+filter.label]);
-        } */
         let { data, error } = await query;
         if (data) {
             if (filter.dates) {
                 data = data.filter(task => {
-                    console.log(task)
                     let due = new Date(Date.parse(task.due + 'Z'));
                     return filter.dates.start <= due <= filter.dates.end;
                 })
@@ -70,7 +50,6 @@ function TaskListView() {
             if (filter.labelId) {
                 data = data.filter(task => task.labels.includes(+filter.labelId));
             }
-            console.log(data);
             data = data.map(task => {
                 const tmp = new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, new Date(Date.parse(task.due + 'Z')), null);
                 return tmp;
@@ -90,11 +69,11 @@ function TaskListView() {
     }
 
     async function createTask() {
+        const tmp = { title: newTaskName.current, projectId: projects.length == 1 ? projects[0].id : newTaskProject.current, labels: newTaskLabels.current, due: (newTaskDue.current.toISOString()).toLocaleString('it-IT'), isCompleted: false, owner: session.user.id };
+        console.log(tmp);
         const { error } = await supabase
         .from('tasks')
-        .insert([
-        { title: newTaskName.current, projectId: projects.length == 1 ? projects[0].id : newTaskProject.current, labels: newTaskLabels.current, due: (newTaskDue.current.toISOString()).toLocaleString('it-IT'), isCompleted: false, owner: session.user.id },
-        ]);
+        .insert([tmp]);
         if (error) {
             alert(error.message);
             console.log(error);
