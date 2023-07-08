@@ -138,7 +138,7 @@ function TaskListView() {
                         }
                         {
                             projects ? (
-                                <select onClick={e => newTaskProject.current = e.target.value}>
+                                <select onClick={e => newTaskProject.current = e.value}>
                                 {
                                     Object.keys(projects).map(p => <option value={p} onClick={() => newTaskProject.current = projects}>{projects[p]}</option>)
                                 }
