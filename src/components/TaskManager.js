@@ -139,6 +139,7 @@ function TaskManager() {
     } */
 
     useEffect(() => {
+        console.log(`Current state: api: ${api ? 'present' : 'absent'} - ${projects ? JSON.stringify(projects, null, 4) : 'none'} - labels: ${labels ? JSON.stringify(labels, null, 4) : 'none'}`);
         console.log('useEffect');
         try {
             // tapi.current = await getApi();
