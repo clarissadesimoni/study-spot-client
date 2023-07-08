@@ -22,12 +22,12 @@ function CalendarComponent() {
 
     useEffect(() => {
         fetchCalendars()
-        .then(() => getEventsInRange(new Date(2023, 0, 1), new Date(2023, 11, 31)))
+        .then((cals) => getEventsInRange(new Date(2023, 0, 1), new Date(2023, 11, 31), cals))
         .catch(error => console.log(error));
     }, []);
 
-    function fetchCalendars() {
-        fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
+    async function fetchCalendars() {
+        const res = await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + session.provider_token
@@ -38,12 +38,12 @@ function CalendarComponent() {
             acc[cal.id] = cal.summary;
             return acc;
         }, {}))
-        .then(dict => setCalendars(dict))
-        .then(() => console.log('Fetched calendars'))
         .catch(error => {
             alert('Error fetching calendars');
             console.log(error.message);
         });
+        setCalendars(res);
+        return res;
     }
 
     async function createCalendarEvent() {
@@ -75,9 +75,9 @@ function CalendarComponent() {
         });
     }
 
-    async function getEventsInRange(start, end) {
+    async function getEventsInRange(start, end, cals = null) {
         var completeList = [];
-        for (var calendarId in calendars) {
+        for (var calendarId in (cals ?? calendars)) {
             await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${start.toISOString()}&timeMax=${end.toISOString()}`, {
                 method: 'GET',
                 headers: {
