@@ -6,7 +6,7 @@ import { TMApiContextProvider, TMProjectsContextProvider, TMLabelsContextProvide
 function App() {
 
     const session = useSession();
-    const [ section, setSection ] = useState('tasks');
+    const [ section, setSection ] = useState('calendar');
 
     return (
         <div className="app">
