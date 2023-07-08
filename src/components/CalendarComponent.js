@@ -94,8 +94,8 @@ function CalendarComponent() {
                 return {
                     id: ev.id,
                     title: ev.summary,
-                    start: moment(ev.start.datetime ?? ev.start.date).toDate(),
-                    end: moment(ev.end.datetime ?? ev.end.date).toDate(),
+                    start: moment(ev.start.dateTime ?? ev.start.date).toDate(),
+                    end: moment(ev.end.dateTime ?? ev.end.date).toDate(),
                     calendar: calendars[calendarId]
                 }
             }))
