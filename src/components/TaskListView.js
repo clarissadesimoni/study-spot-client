@@ -64,10 +64,10 @@ function TaskListView() {
                     return filter.dates.start <= due <= filter.dates.end;
                 })
             }
-            if (filter.project) {
+            if (filter.projectId) {
                 data = data.filter(task => task.projectId == filter.projectId);
             }
-            if (filter.label) {
+            if (filter.labelId) {
                 data = data.filter(task => task.labels.includes(+filter.labelId));
             }
             console.log(data);
