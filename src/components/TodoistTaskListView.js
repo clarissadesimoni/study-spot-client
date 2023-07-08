@@ -54,7 +54,7 @@ function TodoistTaskListView() {
         if (filter.labelId) {
             res.push(`${labels[filter.labelId]}`);
         }
-        res = res.reduce((acc, f) => acc + f);
+        res = res.length == 0 ? '' : res.reduce((acc, f) => acc + f);
         return res;
     }
 
