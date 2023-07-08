@@ -169,7 +169,7 @@ function TaskManager() {
         } catch (error) {
             console.log(error);
         }
-    });
+    }, []);
 
 
 
