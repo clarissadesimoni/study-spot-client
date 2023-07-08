@@ -9,6 +9,9 @@ function LabelsView() {
         setFilter({labelId: labelId});
     }
 
+    console.log('re-rendering');
+    console.log(projects);
+
     try {
         return (
             <>

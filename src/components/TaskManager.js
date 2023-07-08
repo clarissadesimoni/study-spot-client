@@ -143,27 +143,13 @@ function TaskManager() {
     } */
 
     useEffect(() => {
-        console.log(`Current state: api: ${api ? 'present' : 'absent'} - ${projects ? JSON.stringify(projects, null, 4) : 'none'} - labels: ${labels ? JSON.stringify(labels, null, 4) : 'none'}`);
-        console.log('useEffect');
         try {
-            // tapi.current = await getApi();
-            // await getProjects(tapi.current);
-            // await getLabels(tapi.current);
-            // setIsLoading(false);
-
-            // if (!api) tapi.current = await getApi();
-            // else {
-            //     if (!projects) await getProjects();
-            //     if (!labels) await getLabels();
-            //     setIsLoading(false);
-            // }
-
             getApi()
             .then((res) => {
                 tapi.current = res;
             })
-            .then(() => getProjects())
-            .then(() => getLabels())
+            .then(() => getProjects(tapi.current))
+            .then(() => getLabels(tapi.current))
             .then(() => setIsLoading(false))
             .catch((err) => console.log(err));
         } catch (error) {
