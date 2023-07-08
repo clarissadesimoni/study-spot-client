@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
 import { getStartOfWeek, getEndOfWeek } from '../utilities/dates';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
 
 function CalendarComponent() {
 
@@ -14,7 +18,9 @@ function CalendarComponent() {
     const [ eventList, setEventList ] = useState([]);
 
     useEffect(() => {
-        fetchCalendars();
+        fetchCalendars()
+        .then(() => getEventsInRange(new Date(2023, 0, 1), new Date(2023, 11, 31)))
+        .catch(error => console.log(error));
     }, []);
 
     function fetchCalendars() {
@@ -66,18 +72,16 @@ function CalendarComponent() {
         });
     }
 
-    async function getWeeklyEvents() {
-        console.log('In getWeeklyEvents function');
+    async function getEventsInRange(start, end) {
         var completeList = [];
         for (var calendarId in calendars) {
-            await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${getStartOfWeek(new Date()).toISOString()}&timeMax=${getEndOfWeek(new Date()).toISOString()}`, {
+            await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${start.toISOString()}&timeMax=${end.toISOString()}`, {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + session.provider_token
                 }
             })
             .then(response => {
-                console.log('Got a response from fetch');
                 return response.json();
             })
             .then(events => events.items.map(ev => {
@@ -93,7 +97,33 @@ function CalendarComponent() {
             .catch(err => console.error(err));
         }
         setEventList(completeList);
-        console.log('Finished getWeeklyEvents function');
+    }
+
+    async function getWeeklyEvents() {
+        var completeList = [];
+        for (var calendarId in calendars) {
+            await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${getStartOfWeek(new Date()).toISOString()}&timeMax=${getEndOfWeek(new Date()).toISOString()}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + session.provider_token
+                }
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(events => events.items.map(ev => {
+                return {
+                    id: ev.id,
+                    name: ev.summary,
+                    start: ev.start,
+                    end: ev.end,
+                    calendar: calendars[calendarId]
+                }
+            }))
+            .then(events => completeList.push(...events))
+            .catch(err => console.error(err));
+        }
+        setEventList(completeList);
     }
 
     return (
@@ -110,10 +140,15 @@ function CalendarComponent() {
                 <button onClick={() => createCalendarEvent()}>Create calendar event</button>
                 <hr />
                 <div>
-                    <button onClick={() => fetchCalendars()}>Fetch Calendars</button>
-                    <p>{JSON.stringify(calendars, null, 4)}</p>
-                    <button onClick={() => getWeeklyEvents()}>Fetch Weekly Events</button>
-                    <p>{JSON.stringify(eventList, null, 4)}</p>
+                    {/* <button onClick={() => getWeeklyEvents()}>Fetch Weekly Events</button>
+                    <p>{JSON.stringify(eventList, null, 4)}</p> */}
+                    <Calendar
+                    localizer={localizer}
+                    defaultDate={new Date()}
+                    defaultView="month"
+                    events={eventList}
+                    style={{ height: "100vh" }}
+                    />
                 </div>
             </div>
         </div>
