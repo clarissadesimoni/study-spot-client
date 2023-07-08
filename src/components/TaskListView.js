@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Task } from '../classes';
 import { TaskComponent } from '../components';
+import { supabaseFilterToString } from '../utilities/dates';
 import { TMProjectsContext, TMLabelsContext, TMFilterContext } from '../contexts/TMContext';
 import DateTimePicker from 'react-datetime-picker';
 import DatePicker from 'react-date-picker';
@@ -34,13 +35,31 @@ function TaskListView() {
     }, [filter]);
     
     async function getTasks() {
-        let { data, error } = await supabase
+        let query = supabase
         .from('tasks')
         .select()
         .eq('isCompleted', false);
+        if (filter.dates) {
+            /* data = data.filter(task => {
+                console.log(task)
+                let due = new Date(Date.parse(task.due + 'Z'));
+                return filter.dates.start <= due <= filter.dates.end;
+            }) */
+            query = query.gte('due', supabaseFilterToString(filter.date.start)).lte(supabaseFilterToString(filter.date.end));
+        }
+        if (filter.project) {
+            // data = data.filter(task => task.projectId == filter.project);
+            query = query.eq('projectId', filter.project);
+        }
+        if (filter.label) {
+            // data = data.filter(task => task.labels.includes(filter.label));
+            query = query.contains('labels', [filter.label]);
+        }
+        let { data, error } = await query;
         if (data) {
-            if (filter.dates) {
+            /* if (filter.dates) {
                 data = data.filter(task => {
+                    console.log(task)
                     let due = new Date(Date.parse(task.due + 'Z'));
                     return filter.dates.start <= due <= filter.dates.end;
                 })
@@ -49,12 +68,11 @@ function TaskListView() {
                 data = data.filter(task => task.projectId == filter.project);
             }
             if (filter.label) {
-                data = data.filter(task => task.labels.includes(filter.labels));
-            }
+                data = data.filter(task => task.labels.includes(filter.label));
+            } */
             console.log(data);
             data = data.map(task => {
                 const tmp = new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, new Date(Date.parse(task.due + 'Z')), null);
-                console.log(tmp);
                 return tmp;
             }).sort((t1, t2) => {
                 if (t1.projectId - t2.projectId != 0)
