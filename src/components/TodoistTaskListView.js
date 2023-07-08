@@ -11,7 +11,7 @@ import DatePicker from 'react-date-picker';
 import TimePicker from 'react-time-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 
-function TodoistTaskListView({ token, projects, labels, filters }) {
+function TodoistTaskListView() {
     const session = useSession();
     const supabase = useSupabaseClient();
     const [ api, setApi ] = useState(new TodoistApi(token));
