@@ -54,6 +54,7 @@ function CalendarComponent() {
         })
         .then(response => response.json())
         .then(data => data.items.reduce((acc, cal) => {
+            console.log(cal.colorId);
             acc[cal.id] = cal.summary;
             return acc;
         }, {}))
@@ -108,7 +109,6 @@ function CalendarComponent() {
                 return response.json();
             })
             .then(events => events.items.map(ev => {
-                console.log(ev.colorId);
                 return {
                     id: ev.id,
                     title: ev.summary,
