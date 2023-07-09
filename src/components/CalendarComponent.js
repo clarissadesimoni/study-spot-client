@@ -40,6 +40,7 @@ function CalendarComponent() {
             end: moment(ev.end.dateTime ?? ev.end.date).toDate(),
             calendar: ev.organizer.email,
             color: (calsTmp.current[ev.organizer.email] ?? session.user.email).color,
+            isAllDay: !ev.start.dateTime,
             isDraggable: true,
             isResizable: true,
         }
@@ -118,25 +119,23 @@ function CalendarComponent() {
     }
 
     async function editEvent(event, start, end, isAllDay) {
-        console.log(event);
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         let newEvent = eventsTmp.current.find(e => e.id === event.id);
         console.log(newEvent);
         newEvent = { ...newEvent,
             start: isAllDay ? {
-                date: new Intl.DateTimeFormat('en-CA', {}).format(start)
+                date: new Intl.DateTimeFormat('en-CA', {}).format(start).substring(0, 10)
             } : {
                 dateTime: start.toISOString(),
                 timeZone: timeZone
             },
             end: isAllDay ? {
-                date: new Intl.DateTimeFormat('en-CA', {}).format(end)
+                date: new Intl.DateTimeFormat('en-CA', {}).format(end).substring(0, 10)
             } : {
                 dateTime: end.toISOString(),
                 timeZone: timeZone
             }
         }
-        console.log(newEvent);
         let result = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${event.calendar}/events/${event.id}`, {
             method: 'PUT',
             headers: {
@@ -182,7 +181,7 @@ function CalendarComponent() {
             editEvent(event, start, end, event.isAllDay ?? false)
             .then((res) => {
                 setEvents((prev) => {
-                    const filtered = prev.filter((ev) => ev.calendar !== event.id);
+                    const filtered = prev.filter((ev) => ev.id !== event.id);
                     eventsTmp.current = [ ...filtered, res ];
                     return eventsTmp.current;
                 })
