@@ -30,14 +30,14 @@ function CalendarComponent() {
         .catch(error => console.log(error));
     }, []);
 
-    function generateRBCEvent(ev, calendarId, cals = null) {
+    function generateRBCEvent(ev, cals = null) {
         return {
             id: ev.id,
             title: ev.summary,
             start: moment(ev.start.dateTime ?? ev.start.date).toDate(),
             end: moment(ev.end.dateTime ?? ev.end.date).toDate(),
             calendar: ev.organizer.email,
-            color: (cals ?? calendars)[calendarId].color,
+            color: (cals ?? calendars)[ev.organizer.email].color,
             isDraggable: true,
             isResizable: true,
         }
@@ -230,7 +230,7 @@ function CalendarComponent() {
                     localizer={localizer}
                     defaultDate={new Date()}
                     defaultView="week"
-                    events={events.map(e => generateRBCEvent(e, e.calendarId))}
+                    events={events.map(e => generateRBCEvent(e))}
                     step={15}
                     style={{ height: "100vh" }}
                     onEventDrop={handleMove}
