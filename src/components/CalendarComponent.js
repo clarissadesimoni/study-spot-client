@@ -104,6 +104,7 @@ function CalendarComponent() {
         }).then((data) => data.json())
         .then((data) => {
             console.log(data);
+            setEvents([ ...events, { ...data, calendarId: session.user.email } ])
             alert("Event created, check your Google Calendar!");
         })
         .catch(error => {
@@ -168,7 +169,7 @@ function CalendarComponent() {
                 return response.json();
             })
             .then(events => {
-                completeList.push(...events.map(ev => {
+                completeList.push(...events.items.map(ev => {
                     return {...ev, calendarId: calendarId};
                 }))
                 return completeList;
