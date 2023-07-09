@@ -32,7 +32,8 @@ function CalendarComponent() {
     }, []);
 
     function generateRBCEvent(ev, cals = null) {
-        console.log(calsTmp.current ? 'ok' : 'no');
+        console.log(calsTmp.current);
+        console.log(ev);
         return {
             id: ev.id,
             title: ev.summary,
