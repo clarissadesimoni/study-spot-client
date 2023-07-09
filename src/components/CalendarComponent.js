@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import moment from 'moment';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
@@ -22,6 +22,7 @@ function CalendarComponent() {
     const [calendars, setCalendars ] = useState({});
     const [ eventName, setEventName ] = useState('');
     const [ events, setEvents ] = useState([]);
+    let calsTmp = useRef({});
 
     useEffect(() => {
         fetchColors()
@@ -37,7 +38,7 @@ function CalendarComponent() {
             start: moment(ev.start.dateTime ?? ev.start.date).toDate(),
             end: moment(ev.end.dateTime ?? ev.end.date).toDate(),
             calendar: ev.organizer.email,
-            color: (cals ?? calendars)[ev.organizer.email].color,
+            color: (cals ?? calsTmp.current ?? calendars)[ev.organizer.email].color,
             isDraggable: true,
             isResizable: true,
         }
@@ -79,6 +80,7 @@ function CalendarComponent() {
             console.log(error.message);
         });
         console.log('Calendars fetched');
+        calsTmp.current = res;
         setCalendars(res);
         return res;
     }
@@ -104,7 +106,7 @@ function CalendarComponent() {
         }).then((data) => data.json())
         .then((data) => {
             console.log(data);
-            setEvents([ ...events, { ...data, calendarId: session.user.email } ])
+            setEvents([ ...events, ...data.items ])
             alert("Event created, check your Google Calendar!");
         })
         .catch(error => {
@@ -145,7 +147,7 @@ function CalendarComponent() {
 
     async function getEventsInRange(start, end, cals = null) {
         var completeList = [];
-        for (var calendarId in (cals ?? calendars)) {
+        for (var calendarId in (cals ?? calsTmp.current ?? calendars)) {
             await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${start.toISOString()}&timeMax=${end.toISOString()}`, {
                 method: 'GET',
                 headers: {
