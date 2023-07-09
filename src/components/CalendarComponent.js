@@ -24,28 +24,27 @@ function CalendarComponent() {
     const [ eventList, setEventList ] = useState([]);
 
     useEffect(() => {
-        fetchCalendars()
+        fetchColors()
+        .then((cols) => fetchCalendars(cols))
         .then((cals) => getEventsInRange(new Date(2023, 0, 1), new Date(2023, 11, 31), cals))
-        .then(() => fetchColors())
         .catch(error => console.log(error));
     }, []);
 
-    function fetchColors() {
-        fetch('https://www.googleapis.com/calendar/v3/colors', {
+    async function fetchColors() {
+        let colors = await fetch('https://www.googleapis.com/calendar/v3/colors', {
             method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + session.provider_token
             }
         })
-        .then(response => response.json())
-        .then(data => console.log(data))
         .catch(error => {
             alert('Error fetching colors');
             console.log(error.message);
         });
+        return colors.json().calendar;
     }
 
-    async function fetchCalendars() {
+    async function fetchCalendars(colors = {}) {
         const res = await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
             method: 'GET',
             headers: {
@@ -55,7 +54,10 @@ function CalendarComponent() {
         .then(response => response.json())
         .then(data => data.items.reduce((acc, cal) => {
             console.log(cal.colorId);
-            acc[cal.id] = cal.summary;
+            acc[cal.id] = {
+                color: colors[cal.colorId].foreground,
+                name: cal.summary
+            };
             return acc;
         }, {}))
         .catch(error => {
@@ -82,7 +84,7 @@ function CalendarComponent() {
         await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
             method: "POST",
             headers: {
-                Authorization: 'Bearer ' + session.provider_token // Access token for google
+                Authorization: 'Bearer ' + session.provider_token
             },
             body: JSON.stringify(event)
         }).then((data) => data.json())
@@ -114,7 +116,8 @@ function CalendarComponent() {
                     title: ev.summary,
                     start: moment(ev.start.dateTime ?? ev.start.date).toDate(),
                     end: moment(ev.end.dateTime ?? ev.end.date).toDate(),
-                    calendar: calendars[calendarId],
+                    calendar: calendarId,
+                    color: (cals ?? calendars)[calendarId].color,
                     isDraggable: true,
                 }
             }))
@@ -125,8 +128,10 @@ function CalendarComponent() {
         setEventList(completeList);
     }
 
-    function handleResize(event, start, end) {
+    function handleResize(event, start = null, end = null) {
         console.log(event);
+        console.log(start);
+        console.log(end);
     }
 
     return (
@@ -152,13 +157,14 @@ function CalendarComponent() {
                     events={eventList}
                     style={{ height: "100vh" }}
                     /> */}
-                    {/* <DragAndDropCalendar
+                    <DragAndDropCalendar
                     localizer={localizer}
                     defaultDate={new Date()}
                     defaultView="week"
                     events={eventList}
                     style={{ height: "100vh" }}
-                    /> */}
+                    onEventResize={(e) => handleResize(e)}
+                    />
                 </div>
             </div>
         </div>
