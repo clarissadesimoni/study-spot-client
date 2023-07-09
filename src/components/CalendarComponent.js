@@ -21,7 +21,7 @@ function CalendarComponent() {
     const [ end, setEnd ] = useState(new Date());
     const [calendars, setCalendars ] = useState({});
     const [ eventName, setEventName ] = useState('');
-    const [ eventList, setEventList ] = useState([]);
+    const [ events, setEvents ] = useState([]);
 
     useEffect(() => {
         fetchColors()
@@ -29,6 +29,19 @@ function CalendarComponent() {
         .then((cals) => getEventsInRange(new Date(2023, 0, 1), new Date(2023, 11, 31), cals))
         .catch(error => console.log(error));
     }, []);
+
+    function generateRBCEvent(ev, calendarId, cals = null) {
+        return {
+            id: ev.id,
+            title: ev.summary,
+            start: moment(ev.start.dateTime ?? ev.start.date).toDate(),
+            end: moment(ev.end.dateTime ?? ev.end.date).toDate(),
+            calendar: ev,
+            color: (cals ?? calendars)[calendarId].color,
+            isDraggable: true,
+            isResizable: true,
+        }
+    }
 
     async function fetchColors() {
         let colors = await fetch('https://www.googleapis.com/calendar/v3/colors', {
@@ -70,7 +83,7 @@ function CalendarComponent() {
         return res;
     }
 
-    async function createCalendarEvent() {
+    async function createEvent() {
         const event = {
             summary: eventName,
             start: {
@@ -99,9 +112,10 @@ function CalendarComponent() {
         });
     }
 
-    async function editEvent(eventId, calendarId, start, end, isAllDay) {
+    async function editEvent(event, start, end, isAllDay) {
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        let newEvent = {
+        /* let newEvent = {
+            summary: event.title,
             start: isAllDay ? {
                 date: new Intl.DateTimeFormat('en-CA', {}).format(start)
             } : {
@@ -114,8 +128,23 @@ function CalendarComponent() {
                 dateTime: end.toISOString(),
                 timeZone: timeZone
             }
-        };
-        let result = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events/${eventId}`, {
+        }; */
+        let newEvent = events.find(e => e.id === event.id);
+        newEvent = { ...newEvent,
+            start: isAllDay ? {
+                date: new Intl.DateTimeFormat('en-CA', {}).format(start)
+            } : {
+                dateTime: start.toISOString(),
+                timeZone: timeZone
+            },
+            end: isAllDay ? {
+                date: new Intl.DateTimeFormat('en-CA', {}).format(end)
+            } : {
+                dateTime: end.toISOString(),
+                timeZone: timeZone
+            }
+        }
+        let result = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${event.calendar}/events/${event.id}`, {
             method: 'PUT',
             headers: {
                 Authorization: 'Bearer ' + session.provider_token
@@ -123,16 +152,7 @@ function CalendarComponent() {
             body: JSON.stringify(newEvent)
         });
         result = await result.json();
-        return {
-            id: result.id,
-            title: result.summary,
-            start: moment(result.start.dateTime ?? result.start.date).toDate(),
-            end: moment(result.end.dateTime ?? result.end.date).toDate(),
-            calendar: calendarId,
-            color: calendars[calendarId].color ?? '#ffffff',
-            isDraggable: true,
-            isResizable: true,
-        }
+        return { ...result, calendarId: event.calendar};
     }
 
     async function getEventsInRange(start, end, cals = null) {
@@ -147,23 +167,17 @@ function CalendarComponent() {
             .then(response => {
                 return response.json();
             })
-            .then(events => events.items.map(ev => {
-                return {
-                    id: ev.id,
-                    title: ev.summary,
-                    start: moment(ev.start.dateTime ?? ev.start.date).toDate(),
-                    end: moment(ev.end.dateTime ?? ev.end.date).toDate(),
-                    calendar: calendarId,
-                    color: (cals ?? calendars)[calendarId].color,
-                    isDraggable: true,
-                    isResizable: true,
-                }
-            }))
-            .then(events => completeList.push(...events))
+            .then(events => {
+                completeList.push(...events.map(ev => {
+                    return {...ev, calendarId: calendarId};
+                }))
+                return completeList;
+            })
             .catch(err => console.error(err));
         }
         console.log('Events fetched successfully');
-        setEventList(completeList);
+        console.log(completeList);
+        setEvents(completeList);
     }
 
     const handleMove = useCallback(
@@ -173,30 +187,28 @@ function CalendarComponent() {
                 event.allDay = true
             }
 
-            editEvent(event.id, event.calendar, start, end, event.isAllDay ?? false)
+            editEvent(event, start, end, event.isAllDay ?? false)
             .then((res) => {
-                setEventList((prev) => {
-                    const existing = prev.find((ev) => ev.id === event.id) ?? (res ?? {})
-                    const filtered = prev.filter((ev) => ev.id !== event.id)
-                    return [...filtered, { ...existing, allDay }]
+                setEvents((prev) => {
+                    const filtered = prev.filter((ev) => ev.calendar !== event.id);
+                    return {...filtered, res};
                 })
             })
         },
-        [setEventList]
+        [setEvents]
     )
 
     const handleResize = useCallback(
         ({ event, start, end }) => {
-            editEvent(event.id, event.calendar, start, end, false)
+            editEvent(event, start, end, false)
             .then((res) => {
-                setEventList((prev) => {
-                    const existing = prev.find((ev) => ev.id === event.id) ?? (res ?? {})
-                    const filtered = prev.filter((ev) => ev.id !== event.id)
-                    return [...filtered, existing]
+                setEvents((prev) => {
+                    const filtered = prev.filter((ev) => ev.calendar !== event.id)
+                    return {...filtered, res};
                 })
             })
         },
-        [setEventList]
+        [setEvents]
     )
 
     function eventStyleGetter(event, start, end, isSelected) {
@@ -225,15 +237,15 @@ function CalendarComponent() {
                     <p>Name of event:</p>
                     <input type="text" onChange={(e) => setEventName(e.target.value)} />
                 </div>
-                <button onClick={() => createCalendarEvent()}>Create calendar event</button>
+                <button onClick={() => createEvent()}>Create calendar event</button>
                 <hr />
                 <div>
                     <DragAndDropCalendar
                     localizer={localizer}
                     defaultDate={new Date()}
                     defaultView="week"
-                    events={eventList}
-                    step={15}
+                    events={events.map(e => generateRBCEvent(e, e.calendarId))}
+                    step={5}
                     style={{ height: "100vh" }}
                     onEventDrop={handleMove}
                     onEventResize={handleResize}
