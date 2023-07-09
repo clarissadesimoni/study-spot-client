@@ -22,8 +22,23 @@ function CalendarComponent() {
     const [calendars, setCalendars ] = useState({});
     const [ eventName, setEventName ] = useState('');
     const [ events, setEvents ] = useState([]);
+    const [selectedEvent, setSelectedEvent] = useState(undefined);
+    const [modalState, setModalState] = useState(false);
     let calsTmp = useRef({});
     let eventsTmp = useRef([]);
+
+    const Modal = () => {
+        return (
+           <div className={`modal-${modalState == true ? 'show' : 'hide'}`}>
+              {selectedEvent.title}
+           </div>
+        )
+    }
+    
+    const handleSelectedEvent = (event) => {
+        setSelectedEvent(event)
+        setModalState(true)
+    }
 
     useEffect(() => {
         fetchColors()
@@ -244,6 +259,7 @@ function CalendarComponent() {
                     onEventDrop={handleMove}
                     onEventResize={handleResize}
                     eventPropGetter={(eventStyleGetter)}
+                    onSelectEvent={(e) => handleSelectedEvent(e)}
                     />
                 </div>
             </div>
