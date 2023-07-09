@@ -56,7 +56,7 @@ function CalendarComponent() {
         .then(response => response.json())
         .then(data => data.items.reduce((acc, cal) => {
             acc[cal.id] = {
-                color: colors[cal.colorId].foreground,
+                color: colors[cal.colorId].background,
                 name: cal.summary
             };
             return acc;
@@ -120,6 +120,7 @@ function CalendarComponent() {
                     calendar: calendarId,
                     color: (cals ?? calendars)[calendarId].color,
                     isDraggable: true,
+                    resizable: true,
                 }
             }))
             .then(events => completeList.push(...events))
@@ -158,6 +159,22 @@ function CalendarComponent() {
         [setEventList]
     )
 
+    function eventStyleGetter(event, start, end, isSelected) {
+        console.log(event);
+        var backgroundColor = '#' + event.color;
+        var style = {
+            backgroundColor: backgroundColor,
+            borderRadius: '0px',
+            opacity: 0.8,
+            color: 'black',
+            border: '0px',
+            display: 'block'
+        };
+        return {
+            style: style
+        };
+    }
+
     return (
         <div className="app">
             <div style={{margin: "30px auto"}}>
@@ -189,6 +206,7 @@ function CalendarComponent() {
                     style={{ height: "100vh" }}
                     onEventDrop={handleMove}
                     onEventResize={handleResize}
+                    eventPropGetter={(eventStyleGetter)}
                     />
                 </div>
             </div>
