@@ -41,8 +41,9 @@ function CalendarComponent() {
             alert('Error fetching colors');
             console.log(error.message);
         });
-        console.log(colors.json().result.calendar);
-        return colors.json().result.calendar;
+        colors = await colors.json();
+        console.log(colors.calendar);
+        return colors.calendar;
     }
 
     async function fetchCalendars(colors = {}) {
