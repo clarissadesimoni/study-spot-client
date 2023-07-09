@@ -132,7 +132,6 @@ function CalendarComponent() {
 
     const handleMove = useCallback(
         ({ event, start, end, isAllDay: droppedOnAllDaySlot = false }) => {
-            console.log(event);
             const { allDay } = event
             if (!allDay && droppedOnAllDaySlot) {
                 event.allDay = true
@@ -161,7 +160,7 @@ function CalendarComponent() {
 
     function eventStyleGetter(event, start, end, isSelected) {
         console.log(event);
-        var backgroundColor = '#' + event.color;
+        var backgroundColor = event.color;
         var style = {
             backgroundColor: backgroundColor,
             borderRadius: '0px',
