@@ -114,22 +114,8 @@ function CalendarComponent() {
     }
 
     async function editEvent(event, start, end, isAllDay) {
+        console.log(event);
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        /* let newEvent = {
-            summary: event.title,
-            start: isAllDay ? {
-                date: new Intl.DateTimeFormat('en-CA', {}).format(start)
-            } : {
-                dateTime: start.toISOString(),
-                timeZone: timeZone
-            },
-            end: isAllDay ? {
-                date: new Intl.DateTimeFormat('en-CA', {}).format(end)
-            } : {
-                dateTime: end.toISOString(),
-                timeZone: timeZone
-            }
-        }; */
         let newEvent = events.find(e => e.id === event.id);
         newEvent = { ...newEvent,
             start: isAllDay ? {
@@ -145,6 +131,7 @@ function CalendarComponent() {
                 timeZone: timeZone
             }
         }
+        console.log(newEvent);
         let result = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${event.calendar}/events/${event.id}`, {
             method: 'PUT',
             headers: {
