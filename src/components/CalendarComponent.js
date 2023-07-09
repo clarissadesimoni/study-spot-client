@@ -31,13 +31,26 @@ function CalendarComponent() {
         return (
            <div className={`modal-${modalState == true ? 'show' : 'hide'}`}>
               {selectedEvent.title}
+              <br />
+              <button>Rinomina</button>
+              <br />
+              <button>Elimina</button>
            </div>
         )
     }
     
     const handleSelectedEvent = (event) => {
-        setSelectedEvent(event)
-        setModalState(true)
+        if (modalState) {
+            if (event.id === selectedEvent.id) {
+                setModalState(false)
+                setSelectedEvent(null)
+            } else {
+                setSelectedEvent(event)
+            }
+        } else {
+            setSelectedEvent(event)
+            setModalState(true)
+        }
     }
 
     useEffect(() => {
