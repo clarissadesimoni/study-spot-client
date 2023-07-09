@@ -103,16 +103,16 @@ function CalendarComponent() {
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         let newEvent = {
             start: isAllDay ? {
+                date: new Intl.DateTimeFormat('en-CA', {}).format(start)
+            } : {
                 dateTime: start.toISOString(),
                 timeZone: timeZone
-            } : {
-                date: new Intl.DateTimeFormat('en-CA', {}).format(start)
             },
             end: isAllDay ? {
+                date: new Intl.DateTimeFormat('en-CA', {}).format(end)
+            } : {
                 dateTime: end.toISOString(),
                 timeZone: timeZone
-            } : {
-                date: new Intl.DateTimeFormat('en-CA', {}).format(end)
             }
         };
         let result = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events/${eventId}`, {
@@ -129,7 +129,7 @@ function CalendarComponent() {
             start: moment(result.start.dateTime ?? result.start.date).toDate(),
             end: moment(result.end.dateTime ?? result.end.date).toDate(),
             calendar: calendarId,
-            color: calendars[calendarId].color,
+            color: calendars[calendarId].color ?? '#ffffff',
             isDraggable: true,
             isResizable: true,
         }
