@@ -32,13 +32,15 @@ function CalendarComponent() {
     }, []);
 
     function generateRBCEvent(ev, cals = null) {
+        console.log(calTmp.current ? 'ok' : 'no');
         return {
             id: ev.id,
             title: ev.summary,
             start: moment(ev.start.dateTime ?? ev.start.date).toDate(),
             end: moment(ev.end.dateTime ?? ev.end.date).toDate(),
             calendar: ev.organizer.email,
-            color: (cals ?? calsTmp.current ?? calendars)[ev.organizer.email].color,
+            // color: (cals ?? calsTmp.current ?? calendars)[ev.organizer.email].color,
+            color: calsTmp.current[ev.organizer.email].color,
             isDraggable: true,
             isResizable: true,
         }
