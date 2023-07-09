@@ -179,7 +179,7 @@ function CalendarComponent() {
                 event.allDay = true
             }
             console.log(droppedOnAllDaySlot, event.allDay);
-            editEvent(event, start, end, event.isAllDay ?? false)
+            editEvent(event, start, end, event.allDay ?? false)
             .then((res) => {
                 setEvents((prev) => {
                     const filtered = prev.filter((ev) => ev.id !== event.id);
