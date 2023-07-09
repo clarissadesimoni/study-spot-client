@@ -120,7 +120,7 @@ function CalendarComponent() {
     async function editEvent(event, start, end, isAllDay) {
         console.log(event);
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        let newEvent = events.find(e => e.id === event.id);
+        let newEvent = eventsTmp.current.find(e => e.id === event.id);
         console.log(newEvent);
         newEvent = { ...newEvent,
             start: isAllDay ? {
