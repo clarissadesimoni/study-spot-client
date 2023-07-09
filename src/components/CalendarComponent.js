@@ -129,7 +129,7 @@ function CalendarComponent() {
             start: moment(result.start.dateTime ?? result.start.date).toDate(),
             end: moment(result.end.dateTime ?? result.end.date).toDate(),
             calendar: calendarId,
-            color: (cals ?? calendars)[calendarId].color,
+            color: calendars[calendarId].color,
             isDraggable: true,
             isResizable: true,
         }
