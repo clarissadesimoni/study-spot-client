@@ -23,6 +23,7 @@ function CalendarComponent() {
     const [ eventName, setEventName ] = useState('');
     const [ events, setEvents ] = useState([]);
     let calsTmp = useRef({});
+    let eventsTmp = useRef([]);
 
     useEffect(() => {
         fetchColors()
@@ -31,9 +32,7 @@ function CalendarComponent() {
         .catch(error => console.log(error));
     }, []);
 
-    function generateRBCEvent(ev, cals = null) {
-        console.log(calsTmp.current);
-        console.log(ev);
+    function generateRBCEvent(ev) {
         return {
             id: ev.id,
             title: ev.summary,
@@ -108,7 +107,8 @@ function CalendarComponent() {
         }).then((data) => data.json())
         .then((data) => {
             console.log(data);
-            setEvents([ ...events, ...data.items ])
+            eventsTmp.current = [ ...events, ...data.items ];
+            setEvents(eventsTmp.current);
             alert("Event created, check your Google Calendar!");
         })
         .catch(error => {
@@ -121,6 +121,7 @@ function CalendarComponent() {
         console.log(event);
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         let newEvent = events.find(e => e.id === event.id);
+        console.log(newEvent);
         newEvent = { ...newEvent,
             start: isAllDay ? {
                 date: new Intl.DateTimeFormat('en-CA', {}).format(start)
@@ -167,6 +168,7 @@ function CalendarComponent() {
         }
         console.log('Events fetched successfully');
         console.log(completeList);
+        eventsTmp.current = completeList;
         setEvents(completeList);
     }
 
@@ -181,7 +183,8 @@ function CalendarComponent() {
             .then((res) => {
                 setEvents((prev) => {
                     const filtered = prev.filter((ev) => ev.calendar !== event.id);
-                    return {...filtered, res};
+                    eventsTmp.current = [ ...filtered, res ];
+                    return eventsTmp.current;
                 })
             })
         },
@@ -193,8 +196,9 @@ function CalendarComponent() {
             editEvent(event, start, end, false)
             .then((res) => {
                 setEvents((prev) => {
-                    const filtered = prev.filter((ev) => ev.calendar !== event.id)
-                    return {...filtered, res};
+                    const filtered = prev.filter((ev) => ev.calendar !== event.id);
+                    eventsTmp.current = [ ...filtered, res ];
+                    return eventsTmp.current;
                 })
             })
         },
@@ -234,7 +238,7 @@ function CalendarComponent() {
                     localizer={localizer}
                     defaultDate={new Date()}
                     defaultView="week"
-                    events={events.map(e => generateRBCEvent(e))}
+                    events={eventsTmp.current.map(e => generateRBCEvent(e))}
                     step={15}
                     style={{ height: "100vh" }}
                     onEventDrop={handleMove}
