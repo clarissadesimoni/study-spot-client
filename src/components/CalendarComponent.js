@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import moment from 'moment';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
@@ -42,7 +42,6 @@ function CalendarComponent() {
             console.log(error.message);
         });
         colors = await colors.json();
-        console.log(colors.calendar);
         return colors.calendar;
     }
 
@@ -55,7 +54,6 @@ function CalendarComponent() {
         })
         .then(response => response.json())
         .then(data => data.items.reduce((acc, cal) => {
-            console.log(cal.colorId);
             acc[cal.id] = {
                 color: colors[cal.colorId].foreground,
                 name: cal.summary
@@ -130,11 +128,17 @@ function CalendarComponent() {
         setEventList(completeList);
     }
 
-    function handleResize(event, start = null, end = null) {
-        console.log(event);
-        console.log(start);
-        console.log(end);
-    }
+    const handleResize = useCallback(
+        ({ event, start, end }) => {
+            console.log(event)
+            setMyEvents((prev) => {
+            const existing = prev.find((ev) => ev.id === event.id) ?? {}
+            const filtered = prev.filter((ev) => ev.id !== event.id)
+            return [...filtered, { ...existing, start, end }]
+            })
+        },
+        [setEventList]
+    )
 
     return (
         <div className="app">
@@ -165,7 +169,7 @@ function CalendarComponent() {
                     defaultView="week"
                     events={eventList}
                     style={{ height: "100vh" }}
-                    onEventResize={(e) => handleResize(e)}
+                    onEventResize={handleResize}
                     />
                 </div>
             </div>
