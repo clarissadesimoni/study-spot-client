@@ -128,6 +128,23 @@ function CalendarComponent() {
         setEventList(completeList);
     }
 
+    const handleMove = useCallback(
+        ({ event, start, end, isAllDay: droppedOnAllDaySlot = false }) => {
+            console.log(event);
+            const { allDay } = event
+            if (!allDay && droppedOnAllDaySlot) {
+                event.allDay = true
+            }
+        
+            setMyEvents((prev) => {
+                const existing = prev.find((ev) => ev.id === event.id) ?? {}
+                const filtered = prev.filter((ev) => ev.id !== event.id)
+                return [...filtered, { ...existing, start, end, allDay }]
+            })
+        },
+        [setEventList]
+    )
+
     const handleResize = useCallback(
         ({ event, start, end }) => {
             console.log(event)
@@ -169,6 +186,7 @@ function CalendarComponent() {
                     defaultView="week"
                     events={eventList}
                     style={{ height: "100vh" }}
+                    onEventDrop={handleMove}
                     onEventResize={handleResize}
                     />
                 </div>
