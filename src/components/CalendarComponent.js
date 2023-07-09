@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from 'react';
 import moment from 'moment';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
-import { getStartOfWeek, getEndOfWeek } from '../utilities/dates';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -148,7 +147,6 @@ function CalendarComponent() {
 
     const handleResize = useCallback(
         ({ event, start, end }) => {
-            console.log(event)
             setEventList((prev) => {
             const existing = prev.find((ev) => ev.id === event.id) ?? {}
             const filtered = prev.filter((ev) => ev.id !== event.id)
@@ -201,6 +199,7 @@ function CalendarComponent() {
                     defaultDate={new Date()}
                     defaultView="week"
                     events={eventList}
+                    step={15}
                     style={{ height: "100vh" }}
                     onEventDrop={handleMove}
                     onEventResize={handleResize}
