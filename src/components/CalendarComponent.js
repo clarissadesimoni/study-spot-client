@@ -120,7 +120,7 @@ function CalendarComponent() {
                     calendar: calendarId,
                     color: (cals ?? calendars)[calendarId].color,
                     isDraggable: true,
-                    resizable: true,
+                    isResizable: true,
                 }
             }))
             .then(events => completeList.push(...events))
@@ -159,7 +159,6 @@ function CalendarComponent() {
     )
 
     function eventStyleGetter(event, start, end, isSelected) {
-        console.log(event);
         var backgroundColor = event.color;
         var style = {
             backgroundColor: backgroundColor,
