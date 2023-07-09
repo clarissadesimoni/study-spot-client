@@ -4,7 +4,8 @@ import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import "react-big-calendar/lib/css/react-big-calendar.css";
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
@@ -98,6 +99,42 @@ function CalendarComponent() {
         });
     }
 
+    async function editEvent(eventId, calendarId, start, end, isAllDay) {
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        let newEvent = {
+            start: isAllDay ? {
+                dateTime: start.toISOString(),
+                timeZone: timeZone
+            } : {
+                date: new Intl.DateTimeFormat('en-CA', {}).format(start)
+            },
+            end: isAllDay ? {
+                dateTime: end.toISOString(),
+                timeZone: timeZone
+            } : {
+                date: new Intl.DateTimeFormat('en-CA', {}).format(end)
+            }
+        };
+        let result = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events/${eventId}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: 'Bearer ' + session.provider_token
+            },
+            body: JSON.stringify(newEvent)
+        });
+        result = await result.json();
+        return {
+            id: result.id,
+            title: result.summary,
+            start: moment(result.start.dateTime ?? result.start.date).toDate(),
+            end: moment(result.end.dateTime ?? result.end.date).toDate(),
+            calendar: calendarId,
+            color: (cals ?? calendars)[calendarId].color,
+            isDraggable: true,
+            isResizable: true,
+        }
+    }
+
     async function getEventsInRange(start, end, cals = null) {
         var completeList = [];
         for (var calendarId in (cals ?? calendars)) {
@@ -135,11 +172,14 @@ function CalendarComponent() {
             if (!allDay && droppedOnAllDaySlot) {
                 event.allDay = true
             }
-        
-            setEventList((prev) => {
-                const existing = prev.find((ev) => ev.id === event.id) ?? {}
-                const filtered = prev.filter((ev) => ev.id !== event.id)
-                return [...filtered, { ...existing, start, end, allDay }]
+
+            editEvent(event.id, event.calendar, start, end, event.isAllDay ?? false)
+            .then((res) => {
+                setEventList((prev) => {
+                    const existing = prev.find((ev) => ev.id === event.id) ?? (res ?? {})
+                    const filtered = prev.filter((ev) => ev.id !== event.id)
+                    return [...filtered, { ...existing, allDay }]
+                })
             })
         },
         [setEventList]
@@ -147,10 +187,13 @@ function CalendarComponent() {
 
     const handleResize = useCallback(
         ({ event, start, end }) => {
-            setEventList((prev) => {
-            const existing = prev.find((ev) => ev.id === event.id) ?? {}
-            const filtered = prev.filter((ev) => ev.id !== event.id)
-            return [...filtered, { ...existing, start, end }]
+            editEvent(event.id, event.calendar, start, end, false)
+            .then((res) => {
+                setEventList((prev) => {
+                    const existing = prev.find((ev) => ev.id === event.id) ?? (res ?? {})
+                    const filtered = prev.filter((ev) => ev.id !== event.id)
+                    return [...filtered, existing]
+                })
             })
         },
         [setEventList]
@@ -185,15 +228,6 @@ function CalendarComponent() {
                 <button onClick={() => createCalendarEvent()}>Create calendar event</button>
                 <hr />
                 <div>
-                    {/* <button onClick={() => getWeeklyEvents()}>Fetch Weekly Events</button>
-                    <p>{JSON.stringify(eventList, null, 4)}</p> */}
-                    {/* <Calendar
-                    localizer={localizer}
-                    defaultDate={new Date()}
-                    defaultView="week"
-                    events={eventList}
-                    style={{ height: "100vh" }}
-                    /> */}
                     <DragAndDropCalendar
                     localizer={localizer}
                     defaultDate={new Date()}
