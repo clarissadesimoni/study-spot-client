@@ -108,8 +108,7 @@ function CalendarComponent() {
                 return response.json();
             })
             .then(events => events.items.map(ev => {
-                console.log(typeof ev.start.datetime ?? ev.start.date);
-                console.log(typeof ev.end.datetime ?? ev.end.date);
+                console.log(ev.colorId);
                 return {
                     id: ev.id,
                     title: ev.summary,
