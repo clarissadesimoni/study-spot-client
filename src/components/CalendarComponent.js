@@ -4,10 +4,13 @@ import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
 import { getStartOfWeek, getEndOfWeek } from '../utilities/dates';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
+
+const DragAndDropCalendar = withDragAndDrop(Calendar);
 
 const localizer = momentLocalizer(moment);
 
@@ -23,8 +26,24 @@ function CalendarComponent() {
     useEffect(() => {
         fetchCalendars()
         .then((cals) => getEventsInRange(new Date(2023, 0, 1), new Date(2023, 11, 31), cals))
+        .then(() => fetchColors())
         .catch(error => console.log(error));
     }, []);
+
+    function fetchColors() {
+        fetch('https://www.googleapis.com/calendar/v3/colors', {
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + session.provider_token
+            }
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => {
+            alert('Error fetching colors');
+            console.log(error.message);
+        });
+    }
 
     async function fetchCalendars() {
         const res = await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
@@ -96,7 +115,8 @@ function CalendarComponent() {
                     title: ev.summary,
                     start: moment(ev.start.dateTime ?? ev.start.date).toDate(),
                     end: moment(ev.end.dateTime ?? ev.end.date).toDate(),
-                    calendar: calendars[calendarId]
+                    calendar: calendars[calendarId],
+                    isDraggable: true,
                 }
             }))
             .then(events => completeList.push(...events))
@@ -106,36 +126,13 @@ function CalendarComponent() {
         setEventList(completeList);
     }
 
-    async function getWeeklyEvents() {
-        var completeList = [];
-        for (var calendarId in calendars) {
-            await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${getStartOfWeek(new Date()).toISOString()}&timeMax=${getEndOfWeek(new Date()).toISOString()}`, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + session.provider_token
-                }
-            })
-            .then(response => {
-                return response.json();
-            })
-            .then(events => events.items.map(ev => {
-                return {
-                    id: ev.id,
-                    name: ev.summary,
-                    start: ev.start,
-                    end: ev.end,
-                    calendar: calendars[calendarId]
-                }
-            }))
-            .then(events => completeList.push(...events))
-            .catch(err => console.error(err));
-        }
-        setEventList(completeList);
+    function handleResize(event, start, end) {
+        console.log(event);
     }
 
     return (
         <div className="app">
-            <div style={{width: '800px', margin: "30px auto"}}>
+            <div style={{margin: "30px auto"}}>
                 <div>
                     <p>Start of event:</p>
                     <DateTimePicker onChange={setStart} value={start} />
@@ -149,25 +146,20 @@ function CalendarComponent() {
                 <div>
                     {/* <button onClick={() => getWeeklyEvents()}>Fetch Weekly Events</button>
                     <p>{JSON.stringify(eventList, null, 4)}</p> */}
-                    <Calendar
+                    {/* <Calendar
                     localizer={localizer}
                     defaultDate={new Date()}
-                    defaultView="month"
-                    events={/* [
-                        {
-                            title: "today",
-                            start: new Date(2023, 6, 8, 16, 0),
-                            end: new Date(2023, 6, 8, 17, 0)
-                        },
-                        {
-                            title: "yesterday",
-                            start: new Date(2023, 6, 7, 20, 0),
-                            end: new Date(2023, 6, 7, 22, 0)
-                        }
-                    ] */
-                    eventList}
+                    defaultView="week"
+                    events={eventList}
                     style={{ height: "100vh" }}
-                    />
+                    /> */}
+                    {/* <DragAndDropCalendar
+                    localizer={localizer}
+                    defaultDate={new Date()}
+                    defaultView="week"
+                    events={eventList}
+                    style={{ height: "100vh" }}
+                    /> */}
                 </div>
             </div>
         </div>
