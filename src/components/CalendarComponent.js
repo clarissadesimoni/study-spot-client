@@ -42,6 +42,7 @@ function CalendarComponent() {
             console.log(error.message);
         });
         colors = await colors.json();
+        console.log(colors.calendar);
         return colors.calendar;
     }
 
@@ -136,7 +137,7 @@ function CalendarComponent() {
                 event.allDay = true
             }
         
-            setMyEvents((prev) => {
+            setEventList((prev) => {
                 const existing = prev.find((ev) => ev.id === event.id) ?? {}
                 const filtered = prev.filter((ev) => ev.id !== event.id)
                 return [...filtered, { ...existing, start, end, allDay }]
@@ -148,7 +149,7 @@ function CalendarComponent() {
     const handleResize = useCallback(
         ({ event, start, end }) => {
             console.log(event)
-            setMyEvents((prev) => {
+            setEventList((prev) => {
             const existing = prev.find((ev) => ev.id === event.id) ?? {}
             const filtered = prev.filter((ev) => ev.id !== event.id)
             return [...filtered, { ...existing, start, end }]
