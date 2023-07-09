@@ -36,7 +36,7 @@ function CalendarComponent() {
             title: ev.summary,
             start: moment(ev.start.dateTime ?? ev.start.date).toDate(),
             end: moment(ev.end.dateTime ?? ev.end.date).toDate(),
-            calendar: ev,
+            calendar: ev.organizer.email,
             color: (cals ?? calendars)[calendarId].color,
             isDraggable: true,
             isResizable: true,
@@ -140,7 +140,7 @@ function CalendarComponent() {
             body: JSON.stringify(newEvent)
         });
         result = await result.json();
-        return { ...result, calendarId: event.calendar};
+        return result;
     }
 
     async function getEventsInRange(start, end, cals = null) {
@@ -156,9 +156,7 @@ function CalendarComponent() {
                 return response.json();
             })
             .then(events => {
-                completeList.push(...events.items.map(ev => {
-                    return {...ev, calendarId: calendarId};
-                }))
+                completeList.push(...events.items);
                 return completeList;
             })
             .catch(err => console.error(err));
@@ -233,7 +231,7 @@ function CalendarComponent() {
                     defaultDate={new Date()}
                     defaultView="week"
                     events={events.map(e => generateRBCEvent(e, e.calendarId))}
-                    step={5}
+                    step={15}
                     style={{ height: "100vh" }}
                     onEventDrop={handleMove}
                     onEventResize={handleResize}
