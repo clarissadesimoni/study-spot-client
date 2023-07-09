@@ -196,7 +196,7 @@ function CalendarComponent() {
             editEvent(event, start, end, false)
             .then((res) => {
                 setEvents((prev) => {
-                    const filtered = prev.filter((ev) => ev.calendar !== event.id);
+                    const filtered = prev.filter((ev) => ev.id !== event.id);
                     eventsTmp.current = [ ...filtered, res ];
                     return eventsTmp.current;
                 })
