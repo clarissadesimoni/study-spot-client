@@ -249,6 +249,7 @@ function CalendarComponent() {
                 <button onClick={() => createEvent()}>Create calendar event</button>
                 <hr />
                 <div>
+                    {selectedEvent && <Modal />}
                     <DragAndDropCalendar
                     localizer={localizer}
                     defaultDate={new Date()}
