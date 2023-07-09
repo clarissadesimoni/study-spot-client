@@ -136,6 +136,7 @@ function CalendarComponent() {
                 timeZone: timeZone
             }
         }
+        console.log(newEvent);
         let result = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${event.calendar}/events/${event.id}`, {
             method: 'PUT',
             headers: {
