@@ -262,17 +262,20 @@ function CalendarComponent() {
                     <p>Name of event:</p>
                     <input className='calendar-input' type="text" onChange={(e) => setNewEventName(e.target.value)} />
                     <p>Start of event:</p>
-                    <DateTimePicker onChange={setNewStart} value={newStart} />
+                    <div className='rdtp'>
+                        <DateTimePicker onChange={setNewStart} value={newStart} />
+                    </div>
                     <p>End of event:</p>
-                    <DateTimePicker onChange={setNewEnd} value={newEnd} />
+                    <div className='rdtp'>
+                        <DateTimePicker onChange={setNewEnd} value={newEnd} />
+                    </div>
                 </div>
                 <button className='btn calendar-btn' onClick={() => createEvent()}>Create calendar event</button>
-                <hr />
                 <div>
                     <hr />
                     {selectedEvent && <Modal />}
+                    <hr />
                     <div className='calendar-container'>
-                        <hr />
                         <DragAndDropCalendar
                             localizer={localizer}
                             defaultDate={new Date()}

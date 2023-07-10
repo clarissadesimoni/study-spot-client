@@ -53,8 +53,8 @@ body {
 	position: relative;
 }
 
-.auth-input[type="email"],
-.auth-input[type="password"] {
+.auth-input,
+.calendar-input {
 	padding: 10px;
 	margin-bottom: 5px;
 	border-radius: 6px;
@@ -63,14 +63,22 @@ body {
 	border: 1px solid rgba(27, 31, 35, 1);
 }
 
+.calendar-div {
+    margin-bottom: 5px;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
 .calendar-container,
-DateTimePicker {
+.rdtp {
 	background-color: white;
 }
 
 .calendar-container {
     width: 75%;
     padding: 10px;
+    border-radius: 6px;
 }
 
 .btn {
