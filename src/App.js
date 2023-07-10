@@ -3,6 +3,8 @@ import { useSession } from '@supabase/auth-helpers-react';
 import { Auth, CalendarComponent,  TaskManager } from './components';
 import { TMApiContextProvider, TMProjectsContextProvider, TMLabelsContextProvider, TMFilterContextProvider } from './contexts/TMContext';
 
+import './styles/styles.css';
+
 function App() {
 
     const session = useSession();

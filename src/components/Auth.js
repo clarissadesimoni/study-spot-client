@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
+import '../styles/styles.css';
 
 function Auth() {
     const session = useSession();
