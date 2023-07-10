@@ -260,7 +260,7 @@ function CalendarComponent() {
     }
 
     return (
-        <div className="app">
+        <div className="clendar-div">
             <div style={{margin: "30px auto"}}>
                 <div>
                     <p>Start of event:</p>
@@ -274,18 +274,20 @@ function CalendarComponent() {
                 <hr />
                 <div>
                     {selectedEvent && <Modal />}
-                    <DragAndDropCalendar
-                    localizer={localizer}
-                    defaultDate={new Date()}
-                    defaultView="week"
-                    events={eventsTmp.current.map(e => generateRBCEvent(e))}
-                    step={15}
-                    style={{ height: "100vh" }}
-                    onEventDrop={handleMove}
-                    onEventResize={handleResize}
-                    eventPropGetter={(eventStyleGetter)}
-                    onSelectEvent={(e) => handleSelectedEvent(e)}
-                    />
+                    <div className='calendar-container'>
+                        <DragAndDropCalendar
+                            localizer={localizer}
+                            defaultDate={new Date()}
+                            defaultView="week"
+                            events={eventsTmp.current.map(e => generateRBCEvent(e))}
+                            step={15}
+                            style={{ height: "100vh" }}
+                            onEventDrop={handleMove}
+                            onEventResize={handleResize}
+                            eventPropGetter={(eventStyleGetter)}
+                            onSelectEvent={(e) => handleSelectedEvent(e)}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
