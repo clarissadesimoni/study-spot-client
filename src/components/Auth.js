@@ -64,9 +64,11 @@ function Auth() {
         )
     } else {
         return (
-            <>
-                <div className="email-login-div">
+            <div className="auth-div-login">
+                <div className="google-login-div">
                     <button className='btn auth-btn' onClick={() => googleSignIn()}>Entra con Google</button>
+                </div>
+                <div className="email-login-div">
                     {
                         isSignIn ? (
                             <>
@@ -97,7 +99,7 @@ function Auth() {
                         )
                     }
                 </div>
-            </>
+            </div>
         )
     }
 }

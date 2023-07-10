@@ -64,6 +64,7 @@ body {
 }
 
 .calendar-div {
+    width: 90%;
     margin-bottom: 5px;
 	display: flex;
 	justify-content: center;
@@ -73,6 +74,9 @@ body {
 .calendar-container,
 .rdtp {
 	background-color: white;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
 }
 
 .calendar-container {
