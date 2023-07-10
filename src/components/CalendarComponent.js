@@ -29,7 +29,7 @@ function CalendarComponent() {
 
     const Modal = () => {
         return (
-            <div className={`modal-${modalState == true ? 'show' : 'hide'} calendar-input`}>
+            <div className={`modal-${modalState == true ? 'show' : 'hide'}`}>
                 {selectedEvent.title}
                 <p />
                 <button className='btn calendar-btn' onClick={() => handleEditEvent(selectedEvent)}>Modifica</button>
@@ -257,38 +257,36 @@ function CalendarComponent() {
 
     return (
         <div className="calendar-div">
-            <div style={{margin: "30px auto"}}>
-                <div>
-                    <p>Name of event:</p>
-                    <input className='calendar-input' type="text" onChange={(e) => setNewEventName(e.target.value)} />
-                    <p>Start of event:</p>
-                    <div className='rdtp'>
-                        <DateTimePicker onChange={setNewStart} value={newStart} />
-                    </div>
-                    <p>End of event:</p>
-                    <div className='rdtp'>
-                        <DateTimePicker onChange={setNewEnd} value={newEnd} />
-                    </div>
+            <div>
+                <br />
+                <p>Name of event:</p>
+                <input className='calendar-input' type="text" onChange={(e) => setNewEventName(e.target.value)} />
+                <p>Start of event:</p>
+                <div className='rdtp'>
+                    <DateTimePicker onChange={setNewStart} value={newStart} />
                 </div>
-                <button className='btn calendar-btn' onClick={() => createEvent()}>Create calendar event</button>
-                <div>
-                    <hr />
-                    {selectedEvent && <Modal />}
-                    <hr />
-                    <div className='calendar-container'>
-                        <DragAndDropCalendar
-                            localizer={localizer}
-                            defaultDate={new Date()}
-                            defaultView="week"
-                            events={eventsTmp.current.map(e => generateRBCEvent(e))}
-                            step={15}
-                            style={{ height: "100vh" }}
-                            onEventDrop={handleMove}
-                            onEventResize={handleResize}
-                            eventPropGetter={(eventStyleGetter)}
-                            onSelectEvent={(e) => handleSelectedEvent(e)}
-                        />
-                    </div>
+                <p>End of event:</p>
+                <div className='rdtp'>
+                    <DateTimePicker onChange={setNewEnd} value={newEnd} />
+                </div>
+            </div>
+            <button className='btn calendar-btn' onClick={() => createEvent()}>Create calendar event</button>
+            <div>
+                <hr />
+                {selectedEvent && <Modal />}
+                <div className='calendar-container'>
+                    <DragAndDropCalendar
+                        localizer={localizer}
+                        defaultDate={new Date()}
+                        defaultView="week"
+                        events={eventsTmp.current.map(e => generateRBCEvent(e))}
+                        step={15}
+                        style={{ height: "100vh" }}
+                        onEventDrop={handleMove}
+                        onEventResize={handleResize}
+                        eventPropGetter={(eventStyleGetter)}
+                        onSelectEvent={(e) => handleSelectedEvent(e)}
+                    />
                 </div>
             </div>
         </div>
