@@ -12,6 +12,7 @@ function App() {
 
     if (session) return (
         <div className="App">
+            <Auth />
             <div className="sections-div">
                 <button className='btn sections-btn' onClick={() => setSection('calendar')}>Calendar</button>
                 <button className='btn sections-btn' onClick={() => setSection('tasks')}>Attività</button>
@@ -26,7 +27,6 @@ function App() {
                     :
                     <></>
                 }
-                <Auth />
             </div>
         </div>
     );

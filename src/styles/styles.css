@@ -1,111 +1,126 @@
 body {
-    background-color: #afdaeb;
+	background-color: #afdaeb;
+	font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+	font-size: 14px;
 }
-.sections-div, .auth-div {
-    top: 0px;
-    padding: 5px;
+
+.sections-div,
+.auth-div {
+	top: 0px;
+	padding: 5px;
 }
 
 .sections-div {
-    position: fixed;
-    float: left;
-    left: 0px;
-    width: 20%;
+	position: fixed;
+	float: left;
+	left: 0px;
+	width: 20%;
 }
 
 .auth-div-logout {
-    position: fixed;
-    float: right;
-    right: 0px;
-    margin-left: auto; 
-    margin-right: 0;
-    display: block;
+	position: fixed;
+	float: right;
+	right: 0px;
+	margin-left: auto;
+	margin-right: 0;
+	display: block;
 }
 
 .auth-div-login {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    margin: auto;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	margin: auto;
 }
 
-.google-login-div, .email-login-div, .email-signup-div {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    float: center;
-    width: 200px;
-    margin-bottom: 5px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+.google-login-div,
+.email-login-div,
+.email-signup-div {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	float: center;
+	width: 200px;
+	margin-bottom: 5px;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
 }
 
-.google-login-div > *, .email-login-div > *, .email-signup-div > * {
-    position: relative;
+.google-login-div > *,
+.email-login-div > *,
+.email-signup-div > * {
+	position: relative;
 }
 
-.auth-input[type=email], .auth-input[type=password] {
-    padding: 10px;
-    margin-bottom: 5px;
-    border-radius: 6px;
-    font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
-    font-size: 14px;
-    border: 1px solid rgba(27, 31, 35, 1);
+.auth-input[type="email"],
+.auth-input[type="password"] {
+	padding: 10px;
+	margin-bottom: 5px;
+	border-radius: 6px;
+	font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+	font-size: 14px;
+	border: 1px solid rgba(27, 31, 35, 1);
+}
+
+.calendar-container,
+DateTimePicker {
+	background-color: white;
 }
 
 .calendar-container {
-  background-color: white;
+    width: 75%;
+    padding: 10px;
 }
 
 .btn {
-    margin-bottom: 5px;
-    appearance: none;
-    background-color: #2d3a8a;
-    border: 1px solid rgba(27, 31, 35, 1);
-    border-radius: 6px;
-    box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
-    box-sizing: border-box;
-    color: #fff;
-    cursor: pointer;
-    display: inline-block;
-    font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 20px;
-    padding: 6px 16px;
-    position: relative;
-    text-align: center;
-    text-decoration: none;
-    -webkit-user-select: none;
-    user-select: none;
-    touch-action: manipulation;
-    vertical-align: middle;
-    white-space: nowrap;
+	margin-bottom: 5px;
+	appearance: none;
+	background-color: #2d3a8a;
+	border: 1px solid rgba(27, 31, 35, 1);
+	border-radius: 6px;
+	box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
+	box-sizing: border-box;
+	color: #fff;
+	cursor: pointer;
+	display: inline-block;
+	font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 20px;
+	padding: 6px 16px;
+	position: relative;
+	text-align: center;
+	text-decoration: none;
+	-webkit-user-select: none;
+	user-select: none;
+	touch-action: manipulation;
+	vertical-align: middle;
+	white-space: nowrap;
 }
 
 .btn:focus:not(:focus-visible):not(.focus-visible) {
-  box-shadow: none;
-  outline: none;
+	box-shadow: none;
+	outline: none;
 }
 
 .btn:hover {
-  background-color: #5762a2;
+	background-color: #5762a2;
 }
 
 .btn:focus {
-  box-shadow: rgba(255, 255, 255, .4) 0 0 0 3px;
-  outline: none;
+	box-shadow: rgba(255, 255, 255, 0.4) 0 0 0 3px;
+	outline: none;
 }
 
 .btn:disabled {
-  background-color: #d5d8e8;
-  border-color: rgba(27, 31, 35, .1);
-  color: rgba(255, 255, 255, .8);
-  cursor: default;
+	background-color: #d5d8e8;
+	border-color: rgba(27, 31, 35, 0.1);
+	color: rgba(255, 255, 255, 0.8);
+	cursor: default;
 }
 
 .btn:active {
-  background-color: #8189b9;
-  box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+	background-color: #8189b9;
+	box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
 }

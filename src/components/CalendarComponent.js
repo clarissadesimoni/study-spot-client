@@ -29,16 +29,12 @@ function CalendarComponent() {
 
     const Modal = () => {
         return (
-            <>
-                <div className={`modal-${modalState == true ? 'show' : 'hide'}`}>
-                    {selectedEvent.title}
-                    <p />
-                    <button onClick={() => handleEditEvent(selectedEvent)}>Modifica</button>
-                    <p />
-                    <button onClick={() => handleDeleteEvent(selectedEvent)}>Elimina</button>
-                </div>
-                <hr />
-            </>
+            <div className={`modal-${modalState == true ? 'show' : 'hide'} calendar-input`}>
+                {selectedEvent.title}
+                <p />
+                <button className='btn calendar-btn' onClick={() => handleEditEvent(selectedEvent)}>Modifica</button>
+                <button className='btn calendar-btn' onClick={() => handleDeleteEvent(selectedEvent)}>Elimina</button>
+            </div>
         )
     }
 
@@ -248,10 +244,10 @@ function CalendarComponent() {
         var backgroundColor = event.color;
         var style = {
             backgroundColor: backgroundColor,
-            borderRadius: '0px',
-            opacity: 0.8,
+            borderRadius: '6px',
+            opacity: 1,
             color: 'black',
-            border: '0px',
+            border: '1px solid black',
             display: 'block'
         };
         return {
@@ -260,21 +256,23 @@ function CalendarComponent() {
     }
 
     return (
-        <div className="clendar-div">
+        <div className="calendar-div">
             <div style={{margin: "30px auto"}}>
                 <div>
+                    <p>Name of event:</p>
+                    <input className='calendar-input' type="text" onChange={(e) => setNewEventName(e.target.value)} />
                     <p>Start of event:</p>
                     <DateTimePicker onChange={setNewStart} value={newStart} />
                     <p>End of event:</p>
                     <DateTimePicker onChange={setNewEnd} value={newEnd} />
-                    <p>Name of event:</p>
-                    <input type="text" onChange={(e) => setNewEventName(e.target.value)} />
                 </div>
-                <button onClick={() => createEvent()}>Create calendar event</button>
+                <button className='btn calendar-btn' onClick={() => createEvent()}>Create calendar event</button>
                 <hr />
                 <div>
+                    <hr />
                     {selectedEvent && <Modal />}
                     <div className='calendar-container'>
+                        <hr />
                         <DragAndDropCalendar
                             localizer={localizer}
                             defaultDate={new Date()}
