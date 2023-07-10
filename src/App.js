@@ -8,31 +8,29 @@ function App() {
     const session = useSession();
     const [ section, setSection ] = useState('calendar');
 
-    return (
-        <div className="app">
-            <div className="sections">
-                <button onClick={() => setSection('calendar')}>Calendar</button>
-                <p />
-                <button onClick={() => setSection('tasks')}>Attività</button>
+    if (session) return (
+        <div className="App">
+            <div className="sections-div">
+                <button className='btn sections-btn' onClick={() => setSection('calendar')}>Calendar</button>
+                <button className='btn sections-btn' onClick={() => setSection('tasks')}>Attività</button>
             </div>
-            <div style={{width: '800px', margin: "30px auto"}}>
+            <div className="content-div">
                 {
-                    session &&
-                    <>
-                        {
-                            section.localeCompare('calendar') == 0 ?
-                            <CalendarComponent />
-                            :
-                            section.localeCompare('tasks') == 0 ?
-                            <TMApiContextProvider children={<TMProjectsContextProvider children={<TMLabelsContextProvider children={<TMFilterContextProvider children={<TaskManager />} />} />} />} />
-                            :
-                            <></>
-                        }
-                        <hr />
-                    </>
+                    section.localeCompare('calendar') == 0 ?
+                    <CalendarComponent />
+                    :
+                    section.localeCompare('tasks') == 0 ?
+                    <TMApiContextProvider children={<TMProjectsContextProvider children={<TMLabelsContextProvider children={<TMFilterContextProvider children={<TaskManager />} />} />} />} />
+                    :
+                    <></>
                 }
                 <Auth />
             </div>
+        </div>
+    );
+    else return (
+        <div className="App">
+            <Auth />
         </div>
     );
 }

@@ -56,47 +56,47 @@ function Auth() {
     }
 
     if (session) {
-        return <button onClick={() => signOut()}>Effettua il logout</button>
+        return (
+            <div className="auth-div-logout">
+                <button className='btn auth-btn' onClick={() => signOut()}>Effettua il logout</button>
+            </div>
+        )
     } else {
         return (
-        <>
-            <button onClick={() => googleSignIn()}>Entra con Google</button>
-            {
-                isSignIn ? (
-                    <>
-                        <p />
-                        <input type='email' autoComplete='email' onChange={(e) => setEmail(e.target.value)} />
-                        <p />
-                        <input type='password' autoComplete='password' onChange={(e) => setPassword(e.target.value)} />
-                        <p />
-                        <button onClick={() => emailSignIn()}>Invia</button>
-                    </>
-                ) : (
-                    <>
-                        <p />
-                        <button onClick={() => { setIsSignIn(true); setIsSignUp(false); }}>Accedi tramite email</button>
-                    </>
-                )
-            }
-            {
-                isSignUp ? (
-                    <>
-                        <p />
-                        <input type='email' autoComplete='email' onChange={(e) => setEmail(e.target.value)} />
-                        <p />
-                        <input type='password' autoComplete='password' onChange={(e) => setPassword(e.target.value)} />
-                        <p />
-                        <button onClick={() => signUp()}>Invia</button>
-                        <p>{bottomText}</p>
-                    </>
-                ) : (
-                    <>
-                        <p />
-                        <button onClick={() => { setIsSignIn(false); setIsSignUp(true); }}>Iscriviti</button>
-                    </>
-                )
-            }
-        </>
+            <>
+                <div className="email-login-div">
+                    <button className='btn auth-btn' onClick={() => googleSignIn()}>Entra con Google</button>
+                    {
+                        isSignIn ? (
+                            <>
+                                <input className='auth-input' type='email' autoComplete='email' onChange={(e) => setEmail(e.target.value)} placeholder='Email' />
+                                <input className='auth-input' type='password' autoComplete='password' onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
+                                <button className='btn auth-btn' onClick={() => emailSignIn()}>Invia</button>
+                            </>
+                        ) : (
+                            <>
+                                <button className='btn auth-btn' onClick={() => { setIsSignIn(true); setIsSignUp(false); }}>Accedi tramite email</button>
+                            </>
+                        )
+                    }
+                </div>
+                <div className="email-signup-div">
+                    {
+                        isSignUp ? (
+                            <>
+                                <input className='auth-input' type='email' autoComplete='email' onChange={(e) => setEmail(e.target.value)} placeholder='Email' />
+                                <input className='auth-input' type='password' autoComplete='password' onChange={(e) => setPassword(e.target.value)} placeholder='Password' />
+                                <button className='btn auth-btn' onClick={() => signUp()}>Invia</button>
+                                <p>{bottomText}</p>
+                            </>
+                        ) : (
+                            <>
+                                <button className='btn auth-btn' onClick={() => { setIsSignIn(false); setIsSignUp(true); }}>Iscriviti</button>
+                            </>
+                        )
+                    }
+                </div>
+            </>
         )
     }
 }

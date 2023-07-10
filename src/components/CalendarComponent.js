@@ -17,26 +17,37 @@ const localizer = momentLocalizer(moment);
 function CalendarComponent() {
 
     const session = useSession();
-    const [ start, setStart ] = useState(new Date());
-    const [ end, setEnd ] = useState(new Date());
-    const [calendars, setCalendars ] = useState({});
-    const [ eventName, setEventName ] = useState('');
+    const [ newStart, setNewStart ] = useState(new Date());
+    const [ newEnd, setNewEnd ] = useState(new Date());
+    const [ calendars, setCalendars ] = useState({});
+    const [ newEventName, setNewEventName ] = useState('');
     const [ events, setEvents ] = useState([]);
-    const [selectedEvent, setSelectedEvent] = useState(undefined);
-    const [modalState, setModalState] = useState(false);
+    const [ selectedEvent, setSelectedEvent ] = useState(undefined);
+    const [ modalState, setModalState ] = useState(false);
     let calsTmp = useRef({});
     let eventsTmp = useRef([]);
 
     const Modal = () => {
         return (
-           <div className={`modal-${modalState == true ? 'show' : 'hide'}`}>
-              {selectedEvent.title}
-              <br />
-              <button>Rinomina</button>
-              <br />
-              <button>Elimina</button>
-           </div>
+            <>
+                <div className={`modal-${modalState == true ? 'show' : 'hide'}`}>
+                    {selectedEvent.title}
+                    <p />
+                    <button onClick={() => handleEditEvent(selectedEvent)}>Modifica</button>
+                    <p />
+                    <button onClick={() => handleDeleteEvent(selectedEvent)}>Elimina</button>
+                </div>
+                <hr />
+            </>
         )
+    }
+
+    const handleEditEvent = (event) => {
+        
+    }
+
+    const handleDeleteEvent = (event) => {
+
     }
     
     const handleSelectedEvent = (event) => {
@@ -117,13 +128,13 @@ function CalendarComponent() {
 
     async function createEvent() {
         const event = {
-            summary: eventName,
+            summary: newEventName,
             start: {
-                dateTime: start.toISOString(),
+                dateTime: newStart.toISOString(),
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
             },
             end: {
-                dateTime: end.toISOString(),
+                dateTime: newEnd.toISOString(),
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
             }
         }
@@ -253,11 +264,11 @@ function CalendarComponent() {
             <div style={{margin: "30px auto"}}>
                 <div>
                     <p>Start of event:</p>
-                    <DateTimePicker onChange={setStart} value={start} />
+                    <DateTimePicker onChange={setNewStart} value={newStart} />
                     <p>End of event:</p>
-                    <DateTimePicker onChange={setEnd} value={end} />
+                    <DateTimePicker onChange={setNewEnd} value={newEnd} />
                     <p>Name of event:</p>
-                    <input type="text" onChange={(e) => setEventName(e.target.value)} />
+                    <input type="text" onChange={(e) => setNewEventName(e.target.value)} />
                 </div>
                 <button onClick={() => createEvent()}>Create calendar event</button>
                 <hr />
