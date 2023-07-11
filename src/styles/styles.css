@@ -89,6 +89,10 @@ body {
     border-radius: 6px;
 }
 
+.calendar-add-event-div {
+	margin-top: 40px;
+}
+
 .calendar-btn {
     margin-right: 5px;
 }
