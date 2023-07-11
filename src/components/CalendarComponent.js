@@ -24,8 +24,10 @@ function CalendarComponent() {
     const [ events, setEvents ] = useState([]);
     const [ selectedEvent, setSelectedEvent ] = useState(undefined);
     const [ modalState, setModalState ] = useState(false);
+    const [ isAdding, setIsAdding ] = useState(false);
     let calsTmp = useRef({});
     let eventsTmp = useRef([]);
+    let newEventCalendar = useRef('');
 
     const Modal = () => {
         return (
@@ -116,7 +118,6 @@ function CalendarComponent() {
             alert('Error fetching calendars');
             console.log(error.message);
         });
-        console.log('Calendars fetched');
         calsTmp.current = res;
         setCalendars(res);
         return res;
@@ -134,7 +135,7 @@ function CalendarComponent() {
                 timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
             }
         }
-        await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
+        await fetch(`https://www.googleapis.com/calendar/v3/calendars/${newEventCalendar.current ?? 'primary'}/events`, {
             method: "POST",
             headers: {
                 Authorization: 'Bearer ' + session.provider_token
@@ -142,10 +143,13 @@ function CalendarComponent() {
             body: JSON.stringify(event)
         }).then((data) => data.json())
         .then((data) => {
-            console.log(data);
             eventsTmp.current = [ ...events, ...data.items ];
             setEvents(eventsTmp.current);
-            alert("Event created, check your Google Calendar!");
+            setNewEventName('');
+            newEventCalendar.current = '';
+            setNewStart(new Date());
+            setNewEnd(new Date());
+            setIsAdding(false);
         })
         .catch(error => {
             alert('Error creating event');
@@ -156,7 +160,6 @@ function CalendarComponent() {
     async function editEvent(event, start, end, isAllDay) {
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         let newEvent = eventsTmp.current.find(e => e.id === event.id);
-        console.log(newEvent);
         newEvent = { ...newEvent,
             start: isAllDay ? {
                 date: new Intl.DateTimeFormat('en-CA', {}).format(start).substring(0, 10)
@@ -171,7 +174,6 @@ function CalendarComponent() {
                 timeZone: timeZone
             }
         }
-        console.log(newEvent);
         let result = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${event.calendar}/events/${event.id}`, {
             method: 'PUT',
             headers: {
@@ -201,8 +203,6 @@ function CalendarComponent() {
             })
             .catch(err => console.error(err));
         }
-        console.log('Events fetched successfully');
-        console.log(completeList);
         eventsTmp.current = completeList;
         setEvents(completeList);
     }
@@ -213,7 +213,6 @@ function CalendarComponent() {
             if (!allDay && droppedOnAllDaySlot) {
                 event.allDay = true
             }
-            console.log(droppedOnAllDaySlot, event.allDay);
             editEvent(event, start, end, event.allDay ?? false)
             .then((res) => {
                 setEvents((prev) => {
@@ -257,20 +256,33 @@ function CalendarComponent() {
 
     return (
         <div className="calendar-div">
-            <div>
-                <br />
-                <p>Name of event:</p>
-                <input className='calendar-input' type="text" onChange={(e) => setNewEventName(e.target.value)} />
-                <p>Start of event:</p>
-                <div className='rdtp'>
-                    <DateTimePicker onChange={setNewStart} value={newStart} />
-                </div>
-                <p>End of event:</p>
-                <div className='rdtp'>
-                    <DateTimePicker onChange={setNewEnd} value={newEnd} />
-                </div>
+            <div className='calendar-add-event-div'>
+            {
+                isAdding ? (
+                    <>
+                        <p>Name of event:</p>
+                        <input className='calendar-input' type="text" onChange={(e) => setNewEventName(e.target.value)} />
+                        <Select options={Object.keys(calsTmp.current).map(k => {
+                            return {
+                                value: k,
+                                label: projects[k].name
+                            }
+                        })} onChange={selected => newEventCalendar.current = selected.value} />
+                        <p>Start of event:</p>
+                        <div className='rdtp'>
+                            <DateTimePicker onChange={setNewStart} value={newStart} />
+                        </div>
+                        <p>End of event:</p>
+                        <div className='rdtp'>
+                            <DateTimePicker onChange={setNewEnd} value={newEnd} />
+                        </div>
+                        <button className='btn calendar-btn' onClick={() => createEvent()}>Create calendar event</button>
+                    </>
+                ) : (
+                    <button className='btn calendar-btn' onClick={() => setIsAdding(true)}>Aggiungi un evento</button>
+                )
+            }
             </div>
-            <button className='btn calendar-btn' onClick={() => createEvent()}>Create calendar event</button>
             <div>
                 <hr />
                 {selectedEvent && <Modal />}
@@ -281,7 +293,7 @@ function CalendarComponent() {
                         defaultView="week"
                         events={eventsTmp.current.map(e => generateRBCEvent(e))}
                         step={15}
-                        style={{ height: "100vh" }}
+                        style={{ height: "80vh" }}
                         onEventDrop={handleMove}
                         onEventResize={handleResize}
                         eventPropGetter={(eventStyleGetter)}
