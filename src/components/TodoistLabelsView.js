@@ -15,12 +15,14 @@ function TodoistLabelsView() {
             <>
             {
                 labels ? (
-                    <Select options={Object.entries(labels).map(([k, v]) => {
-                        return {
-                            value: k,
-                            label: v
-                        }
-                    })} onChange={selected => handleFilter(selected.value)} />
+                    <div className='selct tm-select'>
+                        <Select options={Object.entries(labels).map(([k, v]) => {
+                            return {
+                                value: k,
+                                label: v
+                            }
+                        })} onChange={selected => handleFilter(selected.value)} />
+                    </div>
                 ) : null
             }
             </>

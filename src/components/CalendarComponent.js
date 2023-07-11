@@ -263,12 +263,14 @@ function CalendarComponent() {
                     <>
                         <p>Name of event:</p>
                         <input className='calendar-input' type="text" onChange={(e) => setNewEventName(e.target.value)} />
-                        <Select options={Object.entries(calsTmp.current).map(([k, v]) => {
-                            return {
-                                value: k,
-                                label: v.name
-                            }
-                        })} onChange={selected => newEventCalendar.current = selected.value} />
+                        <div className='select calendar-select'>
+                            <Select options={Object.entries(calsTmp.current).map(([k, v]) => {
+                                return {
+                                    value: k,
+                                    label: v.name
+                                }
+                            })} onChange={selected => newEventCalendar.current = selected.value} />
+                        </div>
                         <p>Start of event:</p>
                         <div className='rdtp'>
                             <DateTimePicker onChange={setNewStart} value={newStart} />

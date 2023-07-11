@@ -104,10 +104,10 @@ function TodoistTaskListView() {
     if(!api) return <span>Loading...</span>;
 
     return (
-        <>
+        <div className='tm_div'>
             {
                 isAdding ? (
-                    <>
+                    <div>
                         <input type='text' autoComplete='off' onChange={(e) => newTaskName.current = e.target.value} />
                         {
                             newTaskAllDay.current ? (
@@ -122,38 +122,42 @@ function TodoistTaskListView() {
                         }
                         {
                             projects ? (
-                                <Select options={Object.entries(projects).map(([k, v]) => {
-                                    return {
-                                        value: k,
-                                        label: v
-                                    }
-                                })} onChange={selected => newTaskProject.current = selected.value} />
+                                <div className='select tm-select'>
+                                    <Select options={Object.entries(projects).map(([k, v]) => {
+                                        return {
+                                            value: k,
+                                            label: v
+                                        }
+                                    })} onChange={selected => newTaskProject.current = selected.value} />
+                                </div>
                             ) : (
                                 <p>new task project selection</p>
                             )
                         }
                         {
                             labels ? (
-                                <Select isMulti={true} options={Object.entries(labels).map(([k, v]) => {
-                                    return {
-                                        value: k,
-                                        label: v
-                                    }
-                                })} onChange={selected => newTaskLabels.current = selected.map(selected => selected.value)} />
+                                <div className='select tm-select'>
+                                    <Select isMulti={true} options={Object.entries(labels).map(([k, v]) => {
+                                        return {
+                                            value: k,
+                                            label: v
+                                        }
+                                    })} onChange={selected => newTaskLabels.current = selected.map(selected => selected.value)} />
+                                </div>
                             ) : (
                                 <p>new task labels selection</p>
                             )
                         }
                         <button onClick={createTask}>Invia</button>
-                    </>
+                    </div>
                 ) : <button onClick={() => setIsAdding(true)}>Aggiungi attività</button>
             }
             <ul>
             {
-                tasks.map((task) => <li key={task.id}><TaskComponent obj={task} editFunc={editTask} closeFunc={completeTask} deleteFunc={deleteTask} /></li>)
+                tasks.map((task) => <li key={task.id} className='tm-li'><TaskComponent obj={task} editFunc={editTask} closeFunc={completeTask} deleteFunc={deleteTask} /></li>)
             }
             </ul>
-        </>
+        </div>
     );
 }
 

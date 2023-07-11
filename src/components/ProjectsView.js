@@ -15,12 +15,14 @@ function ProjectsView() {
             <>
             {
                 projects ? (
-                    <Select options={Object.entries(projects).map(([k, v]) => {
-                        return {
-                            value: k,
-                            label: v
-                        }
-                    })} onChange={selected => handleFilter(selected.value)} />
+                    <div className='select tm-select'>
+                        <Select options={Object.entries(projects).map(([k, v]) => {
+                            return {
+                                value: k,
+                                label: v
+                            }
+                        })} onChange={selected => handleFilter(selected.value)} />
+                    </div>
                 ) : null
             }
             </>

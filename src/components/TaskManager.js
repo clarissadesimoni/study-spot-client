@@ -151,7 +151,6 @@ function TaskManager() {
             (tapi.current) ? (
                 <>
                     <TodoistProjectsView />
-                    <hr />
                     <TodoistLabelsView />
                     <hr />
                     <TodoistTaskListView />
@@ -162,7 +161,6 @@ function TaskManager() {
                     <button onClick={() => insertToken()}>Set todoist token</button>
                     <hr />
                     <ProjectsView />
-                    <hr />
                     <LabelsView />
                     <hr />
                     <TaskListView />
