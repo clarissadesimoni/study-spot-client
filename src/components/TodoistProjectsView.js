@@ -7,7 +7,7 @@ function TodoistProjectsView() {
     const { filter, setFilter } = React.useContext(TMFilterContext);
 
     function handleFilter(projectId) {
-        setFilter({projectId: projectId});
+        setFilter({ ...filter, projectId: projectId });
     }
 
     try {

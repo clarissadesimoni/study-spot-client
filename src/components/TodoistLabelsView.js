@@ -7,7 +7,7 @@ function TodoistLabelsView() {
     const { filter, setFilter } = React.useContext(TMFilterContext);
 
     function handleFilter(labelId) {
-        setFilter({labelId: labelId});
+        setFilter({ ...filter, labelId: labelId });
     }
 
     try {

@@ -49,13 +49,13 @@ function TodoistTaskListView() {
                 res.push(`due before: ${todoistFilterToString(filter.dates.end)}`);
             }
         }
-        if (filter.projectId) {
+        if (filter.projectId && filter.projectId.length > 0) {
             res.push(`#${projects[filter.projectId]}`);
         }
-        if (filter.labelId) {
-            res.push(`${labels[filter.labelId]}`);
+        if (filter.labelId && filter.labelId.length > 0) {
+            res.push(`@${labels[filter.labelId]}`);
         }
-        res = res.length == 0 ? '' : res.reduce((acc, f) => acc + f);
+        res = res.length == 0 ? '' : res.reduce((acc, f) => acc + '&' + f);
         return res;
     }
 
@@ -111,15 +111,13 @@ function TodoistTaskListView() {
                         <input type='text' autoComplete='off' onChange={(e) => newTaskName.current = e.target.value} />
                         {
                             newTaskAllDay.current ? (
-                                <>
-                                    <p />
+                                <div className='rdtp'>
                                     <DatePicker minDate={new Date()} value={newTaskDue} onChange={(v) => setNewTaskDue(v)} />
-                                </>
+                                </div>
                             ) : (
-                                <>
-                                    <p />
+                                <div className='rdtp'>
                                     <DateTimePicker minDate={new Date()} value={newTaskDue} onChange={(v) => setNewTaskDue(v)} />
-                                </>
+                                </div>
                             )
                         }
                         {
