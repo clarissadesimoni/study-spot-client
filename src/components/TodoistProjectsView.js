@@ -1,4 +1,5 @@
 import React from 'react';
+import Select from 'react-select';
 import { TMProjectsContext, TMFilterContext } from '../contexts/TMContext';
 
 function TodoistProjectsView() {

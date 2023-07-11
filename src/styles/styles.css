@@ -15,6 +15,7 @@ body {
 	float: left;
 	left: 0px;
 	width: 20%;
+	display: block;
 }
 
 .auth-div-logout {
@@ -73,14 +74,12 @@ body {
 
 .rdtp {
     width: 30%;
+	display: flex;
 }
 
 .calendar-container,
 .rdtp {
 	background-color: white;
-	display: block;
-	justify-content: center;
-	flex-direction: column;
 }
 
 .calendar-container {

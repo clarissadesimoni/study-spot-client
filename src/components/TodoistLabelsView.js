@@ -1,4 +1,5 @@
 import React from 'react';
+import Select from 'react-select';
 import { TMLabelsContext, TMFilterContext } from '../contexts/TMContext';
 
 function TodoistLabelsView() {
