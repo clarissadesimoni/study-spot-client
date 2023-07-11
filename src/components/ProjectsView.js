@@ -13,7 +13,14 @@ function ProjectsView() {
         return (
             <>
             {
-                projects ? Object.keys(projects).map(p => <><button onClick={() => handleFilter(p)}>{projects[p]}</button><p /></>) : null
+                projects ? (
+                    <Select options={Object.entries(projects).map(([k, v]) => {
+                        return {
+                            value: k,
+                            label: v
+                        }
+                    })} onChange={selected => handleFilter(selected.value)} />
+                ) : null
             }
             </>
         )

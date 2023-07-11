@@ -13,7 +13,14 @@ function TodoistLabelsView() {
         return (
             <>
             {
-                labels ? Object.keys(labels).map(l => <><button onClick={() => handleFilter(l)}>{labels[l]}</button><p /></>) : null
+                labels ? (
+                    <Select options={Object.entries(labels).map(([k, v]) => {
+                        return {
+                            value: k,
+                            label: v
+                        }
+                    })} onChange={selected => handleFilter(selected.value)} />
+                ) : null
             }
             </>
         )

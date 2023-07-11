@@ -1,4 +1,5 @@
 import React from 'react';
+import Select from 'react-select';
 import { TMLabelsContext, TMFilterContext } from '../contexts/TMContext';
 
 function LabelsView() {
@@ -13,13 +14,20 @@ function LabelsView() {
         return (
             <>
             {
-                labels ? Object.keys(labels).map(l => <><button onClick={() => handleFilter(l)}>{labels[l]}</button><p /></>) : null
+                labels ? (
+                    <Select options={Object.entries(labels).map(([k, v]) => {
+                        return {
+                            value: k,
+                            label: v
+                        }
+                    })} onChange={selected => handleFilter(selected.value)} />
+                ) : null
             }
             </>
         )
     } catch(error) {
         console.log(error);
-        return <>LabelsView</>;
+        return <p>LabelsView</p>;
     }
 }
 

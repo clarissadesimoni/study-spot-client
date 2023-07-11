@@ -70,7 +70,7 @@ function TaskListView() {
     }
 
     async function createTask() {
-        const tmp = { title: newTaskName.current, projectId: Object.keys(projects).length == 1 ? Object.keys(projects)[0].id : newTaskProject.current, labels: newTaskLabels.current, due: (newTaskDue.toISOString()).toLocaleString('it-IT'), isCompleted: false, owner: session.user.id };
+        const tmp = { title: newTaskName.current, projectId: newTaskProject.current, labels: newTaskLabels.current, due: (newTaskDue.toISOString()).toLocaleString('it-IT'), isCompleted: false, owner: session.user.id };
         const { error } = await supabase
         .from('tasks')
         .insert([tmp]);
@@ -139,10 +139,10 @@ function TaskListView() {
                         }
                         {
                             projects ? (
-                                <Select options={Object.keys(projects).map(k => {
+                                <Select options={Object.entries(projects).map(([k, v]) => {
                                     return {
                                         value: k,
-                                        label: projects[k]
+                                        label: v
                                     }
                                 })} onChange={selected => newTaskProject.current = selected.value} />
                             ) : (
@@ -151,10 +151,10 @@ function TaskListView() {
                         }
                         {
                             labels ? (
-                                <Select isMulti={true} options={Object.keys(labels).map(k => {
+                                <Select isMulti={true} options={Object.entries(labels).map(([k, v]) => {
                                     return {
                                         value: k,
-                                        label: labels[k]
+                                        label: v
                                     }
                                 })} onChange={selected => newTaskLabels.current = selected.map(selected => selected.value)} />
                             ) : (

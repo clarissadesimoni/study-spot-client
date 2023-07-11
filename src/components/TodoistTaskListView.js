@@ -124,10 +124,10 @@ function TodoistTaskListView() {
                         }
                         {
                             projects ? (
-                                <Select options={Object.keys(projects).map(k => {
+                                <Select options={Object.entries(projects).map(([k, v]) => {
                                     return {
                                         value: k,
-                                        label: projects[k]
+                                        label: v
                                     }
                                 })} onChange={selected => newTaskProject.current = selected.value} />
                             ) : (
@@ -136,10 +136,10 @@ function TodoistTaskListView() {
                         }
                         {
                             labels ? (
-                                <Select isMulti={true} options={Object.keys(labels).map(k => {
+                                <Select isMulti={true} options={Object.entries(labels).map(([k, v]) => {
                                     return {
                                         value: k,
-                                        label: labels[k]
+                                        label: v
                                     }
                                 })} onChange={selected => newTaskLabels.current = selected.map(selected => selected.value)} />
                             ) : (

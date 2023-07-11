@@ -263,10 +263,10 @@ function CalendarComponent() {
                     <>
                         <p>Name of event:</p>
                         <input className='calendar-input' type="text" onChange={(e) => setNewEventName(e.target.value)} />
-                        <Select options={Object.keys(calsTmp.current).map(k => {
+                        <Select options={Object.entries(calsTmp.current).map(([k, v]) => {
                             return {
                                 value: k,
-                                label: projects[k].name
+                                label: v.name
                             }
                         })} onChange={selected => newEventCalendar.current = selected.value} />
                         <p>Start of event:</p>
