@@ -269,7 +269,7 @@ function CalendarComponent() {
                                     value: k,
                                     label: v.name
                                 }
-                            })} onChange={selected => newEventCalendar.current = selected.value} isClearable={true} isSearchable={true} />
+                            })} defaultValue={''} onChange={selected => newEventCalendar.current = selected.value} isClearable={true} isSearchable={true} />
                         </div>
                         <p>Start of event:</p>
                         <div className='rdtp'>

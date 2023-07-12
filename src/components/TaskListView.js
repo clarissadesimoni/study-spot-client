@@ -143,7 +143,7 @@ function TaskListView() {
                                             value: k,
                                             label: v
                                         }
-                                    })} onChange={selected => newTaskProject.current = selected.value} isClearable={true} isSearchable={true} />
+                                    })} defaultValue={''} onChange={selected => newTaskProject.current = selected.value} isClearable={true} isSearchable={true} />
                                 </div>
                             ) : (
                                 <p>Nessun progetto trovato</p>
@@ -157,7 +157,7 @@ function TaskListView() {
                                             value: k,
                                             label: v
                                         }
-                                    })} onChange={selected => newTaskLabels.current = selected.map(selected => selected.value)} isClearable={true} isSearchable={true} />
+                                    })} defaultValue={''} onChange={selected => newTaskLabels.current = selected.map(selected => selected.value)} isClearable={true} isSearchable={true} />
                                 </div>
                             ) : (
                                 <p>Nessuna etichetta trovata</p>

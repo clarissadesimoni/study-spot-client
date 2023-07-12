@@ -150,6 +150,7 @@ function TaskManager() {
             :
             (tapi.current) ? (
                 <>
+                    <hr />
                     <TodoistProjectsView />
                     <TodoistLabelsView />
                     <hr />
@@ -157,8 +158,8 @@ function TaskManager() {
                 </>
             ) : (
                 <>
-                    <input type="text" autocomplete="off" onChange={e => token.current = e.target.value} />
-                    <button onClick={() => insertToken()}>Set todoist token</button>
+                    <input className='tm-input' type="text" autocomplete="off" onChange={e => token.current = e.target.value} />
+                    <button className='btn tm-btn' onClick={() => insertToken()}>Set todoist token</button>
                     <hr />
                     <ProjectsView />
                     <LabelsView />

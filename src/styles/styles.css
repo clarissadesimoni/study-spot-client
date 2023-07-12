@@ -46,12 +46,6 @@ body {
 	flex-direction: column;
 }
 
-/* .google-login-div > *,
-.email-login-div > *,
-.email-signup-div > * {
-	position: relative;
-} */
-
 .auth-input,
 .calendar-input,
 .tm-input {
@@ -84,6 +78,7 @@ body {
 
 .rdtp {
 	margin-bottom: 5px;
+	display: flex;
 }
 
 .calendar-container {
