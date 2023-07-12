@@ -143,8 +143,7 @@ function CalendarComponent() {
             body: JSON.stringify(event)
         }).then((data) => data.json())
         .then((data) => {
-            console.log(data);
-            eventsTmp.current = [ ...events ];
+            eventsTmp.current = [ ...events, data ];
             setEvents(eventsTmp.current);
             setNewEventName('');
             newEventCalendar.current = '';
