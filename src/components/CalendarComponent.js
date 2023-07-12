@@ -96,7 +96,6 @@ function CalendarComponent() {
             console.log(error.message);
         });
         colors = await colors.json();
-        console.log(colors.calendar);
         return colors.calendar;
     }
 
@@ -144,7 +143,8 @@ function CalendarComponent() {
             body: JSON.stringify(event)
         }).then((data) => data.json())
         .then((data) => {
-            eventsTmp.current = [ ...events, ...data.items ];
+            console.log(data);
+            eventsTmp.current = [ ...events ];
             setEvents(eventsTmp.current);
             setNewEventName('');
             newEventCalendar.current = '';
