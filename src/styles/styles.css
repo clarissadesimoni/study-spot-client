@@ -46,14 +46,15 @@ body {
 	flex-direction: column;
 }
 
-.google-login-div > *,
+/* .google-login-div > *,
 .email-login-div > *,
 .email-signup-div > * {
 	position: relative;
-}
+} */
 
 .auth-input,
-.calendar-input {
+.calendar-input,
+.tm-input {
 	padding: 10px;
 	margin-bottom: 5px;
 	border-radius: 6px;
@@ -62,17 +63,18 @@ body {
 	border: 1px solid rgba(27, 31, 35, 1);
 }
 
-.calendar-div, .tm-div {
+.calendar-div,
+.tm-div {
 	margin-top: 50px;
-    margin-bottom: 5px;
-    display: block;
+	margin-bottom: 5px;
+	display: block;
 	justify-content: center;
 	flex-direction: column;
 }
 
-.rdtp, .select {
-    width: 30%;
-	display: flex;
+.rdtp,
+.select {
+	width: 40%;
 }
 
 .calendar-container,
@@ -85,12 +87,12 @@ body {
 }
 
 .calendar-container {
-    width: 75%;
-    padding: 10px;
-    border-radius: 6px;
+	width: 75%;
+	padding: 10px;
+	border-radius: 6px;
 }
 
-.tm-li {
+.tm-ul {
 	list-style-image: none;
 }
 
@@ -99,7 +101,7 @@ body {
 }
 
 .calendar-btn {
-    margin-right: 5px;
+	margin-right: 5px;
 }
 
 .btn {
@@ -153,4 +155,3 @@ body {
 	background-color: #8189b9;
 	box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
 }
-

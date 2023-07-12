@@ -21,7 +21,7 @@ function LabelsView() {
                                 value: k,
                                 label: v
                             }
-                        })} onChange={selected => handleFilter(selected.value)} />
+                        })} onChange={selected => handleFilter(selected.value)} isClearable={true} isSearchable={true} />
                     </div>
                 ) : null
             }

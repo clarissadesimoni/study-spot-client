@@ -15,13 +15,13 @@ function TodoistLabelsView() {
             <>
             {
                 labels ? (
-                    <div className='selct tm-select'>
+                    <div className='select tm-select'>
                         <Select options={Object.entries(labels).map(([k, v]) => {
                             return {
                                 value: k,
                                 label: v
                             }
-                        })} onChange={selected => handleFilter(selected.value)} />
+                        })} onChange={selected => handleFilter(selected.value)} isClearable={true} isSearchable={true} />
                     </div>
                 ) : null
             }

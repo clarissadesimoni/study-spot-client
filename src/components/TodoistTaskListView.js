@@ -108,7 +108,7 @@ function TodoistTaskListView() {
             {
                 isAdding ? (
                     <div>
-                        <input type='text' autoComplete='off' onChange={(e) => newTaskName.current = e.target.value} />
+                        <input className='tm-input' type='text' autoComplete='off' onChange={(e) => newTaskName.current = e.target.value} />
                         {
                             newTaskAllDay.current ? (
                                 <div className='rdtp'>
@@ -128,10 +128,10 @@ function TodoistTaskListView() {
                                             value: k,
                                             label: v
                                         }
-                                    })} onChange={selected => newTaskProject.current = selected.value} />
+                                    })} onChange={selected => newTaskProject.current = selected.value} isClearable={true} isSearchable={true} />
                                 </div>
                             ) : (
-                                <p>new task project selection</p>
+                                <p>Nessun progetto trovato</p>
                             )
                         }
                         {
@@ -142,17 +142,17 @@ function TodoistTaskListView() {
                                             value: k,
                                             label: v
                                         }
-                                    })} onChange={selected => newTaskLabels.current = selected.map(selected => selected.value)} />
+                                    })} onChange={selected => newTaskLabels.current = selected.map(selected => selected.value)} isClearable={true} isSearchable={true} />
                                 </div>
                             ) : (
-                                <p>new task labels selection</p>
+                                <p>Nessuna etichetta trovata</p>
                             )
                         }
-                        <button onClick={createTask}>Invia</button>
+                        <button className='btn tm-btn' onClick={createTask}>Invia</button>
                     </div>
-                ) : <button onClick={() => setIsAdding(true)}>Aggiungi attività</button>
+                ) : <button className='btn tm-btn' onClick={() => setIsAdding(true)}>Aggiungi attività</button>
             }
-            <ul>
+            <ul className='tm-ul'>
             {
                 tasks.map((task) => <li key={task.id} className='tm-li'><TaskComponent obj={task} editFunc={editTask} closeFunc={completeTask} deleteFunc={deleteTask} /></li>)
             }
