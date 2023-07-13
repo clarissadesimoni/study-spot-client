@@ -15,7 +15,7 @@ const DragAndDropCalendar = withDragAndDrop(Calendar);
 
 const localizer = momentLocalizer(moment);
 
-function CalendarComponent() {
+function GoogleCalendarComponent() {
 
     const session = useSession();
     const [ newStart, setNewStart ] = useState(new Date());
@@ -307,4 +307,4 @@ function CalendarComponent() {
     );
 }
 
-export default CalendarComponent;
+export default GoogleCalendarComponent;

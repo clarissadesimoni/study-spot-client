@@ -84,6 +84,9 @@ body {
 	width: 75%;
 	padding: 10px;
 	border-radius: 6px;
+	display: block;
+	justify-content: center;
+	flex-direction: column;
 }
 
 .tm-ul {

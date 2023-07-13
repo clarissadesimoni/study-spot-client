@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useSession } from '@supabase/auth-helpers-react';
-import { Auth, CalendarComponent,  TaskManager } from './components';
+import { Auth, GoogleCalendarComponent,  TaskManager } from './components';
 import { TMApiContextProvider, TMProjectsContextProvider, TMLabelsContextProvider, TMFilterContextProvider } from './contexts/TMContext';
 
 import './styles/styles.css';
@@ -9,6 +9,8 @@ function App() {
 
     const session = useSession();
     const [ section, setSection ] = useState('calendar');
+
+    console.log(session.user);
 
     if (session) return (
         <div className="App">
@@ -20,7 +22,7 @@ function App() {
             <div className="content-div">
                 {
                     section.localeCompare('calendar') == 0 ?
-                    <CalendarComponent />
+                    <GoogleCalendarComponent />
                     :
                     section.localeCompare('tasks') == 0 ?
                     <TMApiContextProvider children={<TMProjectsContextProvider children={<TMLabelsContextProvider children={<TMFilterContextProvider children={<TaskManager />} />} />} />} />
