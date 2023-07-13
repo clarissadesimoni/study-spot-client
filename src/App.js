@@ -10,28 +10,29 @@ function App() {
     const session = useSession();
     const [ section, setSection ] = useState('calendar');
 
-    console.log(session.user);
-
-    if (session) return (
-        <div className="App">
-            <Auth />
-            <div className="sections-div">
-                <button className='btn sections-btn' onClick={() => setSection('calendar')}>Calendar</button>
-                <button className='btn sections-btn' onClick={() => setSection('tasks')}>Attività</button>
+    if (session) {
+        console.log(session.user);
+        return (
+            <div className="App">
+                <Auth />
+                <div className="sections-div">
+                    <button className='btn sections-btn' onClick={() => setSection('calendar')}>Calendar</button>
+                    <button className='btn sections-btn' onClick={() => setSection('tasks')}>Attività</button>
+                </div>
+                <div className="content-div">
+                    {
+                        section.localeCompare('calendar') == 0 ?
+                        <GoogleCalendarComponent />
+                        :
+                        section.localeCompare('tasks') == 0 ?
+                        <TMApiContextProvider children={<TMProjectsContextProvider children={<TMLabelsContextProvider children={<TMFilterContextProvider children={<TaskManager />} />} />} />} />
+                        :
+                        <></>
+                    }
+                </div>
             </div>
-            <div className="content-div">
-                {
-                    section.localeCompare('calendar') == 0 ?
-                    <GoogleCalendarComponent />
-                    :
-                    section.localeCompare('tasks') == 0 ?
-                    <TMApiContextProvider children={<TMProjectsContextProvider children={<TMLabelsContextProvider children={<TMFilterContextProvider children={<TaskManager />} />} />} />} />
-                    :
-                    <></>
-                }
-            </div>
-        </div>
-    );
+        );
+    }
     else return (
         <div className="App">
             <Auth />
