@@ -9,3 +9,5 @@ function Modal({ event_obj, editFunc, deleteFunc }) {
         </div>
     )
 }
+
+export default Modal;
