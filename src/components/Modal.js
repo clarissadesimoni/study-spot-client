@@ -11,7 +11,7 @@ function Modal({ event_obj, editFunc, deleteFunc }) {
                 <p>{df.format(event_obj.start)} - {df.format(event_obj.end)}</p>
                 :
                 (
-                    <p>{dtf.format(event_obj.start)} - { df.format(event_obj.start).localeCompare(df.format(event_obj.end)) ? tf.format(event_obj.end) : dtf.format(event_obj.end)}</p>
+                    <p>{dtf.format(event_obj.start)} - { df.format(event_obj.start).localeCompare(df.format(event_obj.end)) == 0 ? tf.format(event_obj.end) : dtf.format(event_obj.end)}</p>
                 )
             }
             <p />

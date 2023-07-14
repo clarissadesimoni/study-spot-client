@@ -60,6 +60,7 @@ function CalendarComponent() {
     }, []);
 
     function generateRBCEvent(ev) {
+        console.log(ev);
         return {
             id: ev.id,
             title: ev.title,
