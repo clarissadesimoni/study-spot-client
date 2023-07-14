@@ -174,8 +174,8 @@ function CalendarComponent() {
         .from('events')
         .select()
         .eq('owner', session.user.id)
-        .gte('start', start.toISOString())
-        .lt('end', end.toISOString());
+        // .gte('start', start.toISOString())
+        // .lt('end', end.toISOString());
         let { data, error } = await query;
         if (error) {
             console.log(error.message);
