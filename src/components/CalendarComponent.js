@@ -126,7 +126,7 @@ function CalendarComponent() {
         if (error) {
             console.log(error.message);
         }
-        return data;
+        return data[0];
     }
 
     async function getEventsInRange(start, end) {
