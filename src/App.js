@@ -22,7 +22,10 @@ function App() {
                 <div className="content-div">
                     {
                         section.localeCompare('calendar') == 0 ?
+                        (session.user.identities[0].provider.localeCompare('google') == 0 ?
                         <GoogleCalendarComponent />
+                        :
+                        <GoogleCalendarComponent />)
                         :
                         section.localeCompare('tasks') == 0 ?
                         <TMApiContextProvider children={<TMProjectsContextProvider children={<TMLabelsContextProvider children={<TMFilterContextProvider children={<TaskManager />} />} />} />} />

@@ -5,7 +5,7 @@ import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import { Modal } from './Modal';
+import Modal from './Modal';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import 'react-datetime-picker/dist/DateTimePicker.css';
@@ -16,9 +16,9 @@ const DragAndDropCalendar = withDragAndDrop(Calendar);
 
 const localizer = momentLocalizer(moment);
 
-function GoogleCalendarComponent() {
-
+function CalendarComponent() {
     const session = useSession();
+    const supabase = useSupabaseClient();
     const [ newStart, setNewStart ] = useState(new Date());
     const [ newEnd, setNewEnd ] = useState(new Date());
     const [ calendars, setCalendars ] = useState({});
@@ -54,67 +54,60 @@ function GoogleCalendarComponent() {
     }
 
     useEffect(() => {
-        fetchColors()
-        .then((cols) => fetchCalendars(cols))
-        .then((cals) => getEventsInRange(new Date(2023, 0, 1), new Date(2023, 11, 31), cals))
+        fetchCalendars()
+        .then(() => getEventsInRange(new Date(2023, 0, 1), new Date(2024, 0, 1)))
         .catch(error => console.log(error));
     }, []);
 
     function generateRBCEvent(ev) {
         return {
             id: ev.id,
-            title: ev.summary,
-            start: moment(ev.start.dateTime ?? ev.start.date).toDate(),
-            end: moment(ev.end.dateTime ?? ev.end.date).toDate(),
-            calendar: ev.organizer.email,
-            color: (calsTmp.current[ev.organizer.email] ?? session.user.email).color,
-            isAllDay: !ev.start.dateTime,
+            title: ev.title,
+            start: moment(ev.start).toDate(),
+            end: moment(ev.end).toDate(),
+            calendar: ev.calendar,
+            color: calsTmp.current[ev.calendar].color,
+            isAllDay: ev.isAllDay,
             isDraggable: true,
             isResizable: true,
         }
     }
 
-    async function fetchColors() {
-        let colors = await fetch('https://www.googleapis.com/calendar/v3/colors', {
-            method: 'GET',
-            headers: {
-                Authorization: 'Bearer ' + session.provider_token
-            }
-        })
-        .catch(error => {
-            alert('Error fetching colors');
+    async function fetchCalendars() {
+        let { data, error } = await supabase
+        .from('calendars')
+        .select()
+        .eq('owner', session.user.id);
+        if (error) {
+            alert('Errore nella lettura dei calendari.');
             console.log(error.message);
-        });
-        colors = await colors.json();
-        return colors.calendar;
-    }
-
-    async function fetchCalendars(colors = {}) {
-        const res = await fetch('https://www.googleapis.com/calendar/v3/users/me/calendarList', {
-            method: 'GET',
-            headers: {
-                Authorization: 'Bearer ' + session.provider_token
-            }
-        })
-        .then(response => response.json())
-        .then(data => data.items.reduce((acc, cal) => {
-            acc[cal.id] = {
-                color: colors[cal.colorId].background,
-                name: cal.summary
-            };
-            return acc;
-        }, {}))
-        .catch(error => {
-            alert('Error fetching calendars');
-            console.log(error.message);
-        });
-        calsTmp.current = res;
-        setCalendars(res);
-        return res;
+        }
+        if (data) {
+            data = data.reduce((acc, cal) => {
+                acc[cal.id] = cal;
+                return acc;
+            }, {});
+        }
+        calsTmp.current = data;
+        setCalendars(data);
+        return data;
     }
 
     async function createEvent() {
-        const event = {
+        console.log(session);
+        let query = supabase
+        .from('events')
+        .insert([{ title: 'it works', start: moment().toDate().toISOString(), end: moment().add(2, 'hours').toDate().toISOString(), calendar: 1, owner: '43d20e86-e89f-4615-93d3-c4598abd21ec' }])
+        .select();
+        let { data, error } = await query;
+        if (error) {
+            console.log(error.message);
+        }
+        if (data) {
+            console.log(data);
+            setEvents(data);
+        }
+        /* const event = {
             summary: newEventName,
             start: {
                 dateTime: newStart.toISOString(),
@@ -144,11 +137,11 @@ function GoogleCalendarComponent() {
         .catch(error => {
             alert('Error creating event');
             console.log(error);
-        });
+        }); */
     }
 
     async function editEvent(event, start, end, isAllDay) {
-        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        /* const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         let newEvent = eventsTmp.current.find(e => e.id === event.id);
         newEvent = { ...newEvent,
             start: isAllDay ? {
@@ -172,11 +165,26 @@ function GoogleCalendarComponent() {
             body: JSON.stringify(newEvent)
         });
         result = await result.json();
-        return result;
+        return result; */
     }
 
-    async function getEventsInRange(start, end, cals = null) {
-        var completeList = [];
+    async function getEventsInRange(start, end) {
+        console.log(session);
+        let query = supabase
+        .from('events')
+        .select()
+        .eq('owner', session.user.id)
+        .gte('start', start.toISOString())
+        .lt('end', end.toISOString());
+        let { data, error } = await query;
+        if (error) {
+            console.log(error.message);
+        }
+        if (data) {
+            console.log(data);
+            setEvents(data);
+        }
+        /* var completeList = [];
         for (var calendarId in (cals ?? calsTmp.current ?? calendars)) {
             await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${start.toISOString()}&timeMax=${end.toISOString()}`, {
                 method: 'GET',
@@ -194,10 +202,10 @@ function GoogleCalendarComponent() {
             .catch(err => console.error(err));
         }
         eventsTmp.current = completeList;
-        setEvents(completeList);
+        setEvents(completeList); */
     }
 
-    const handleMove = useCallback(
+    /* const handleMove = useCallback(
         ({ event, start, end, isAllDay: droppedOnAllDaySlot = false }) => {
             const { allDay } = event
             if (!allDay && droppedOnAllDaySlot) {
@@ -227,7 +235,7 @@ function GoogleCalendarComponent() {
             })
         },
         [setEvents]
-    )
+    ) */
 
     function eventStyleGetter(event, start, end, isSelected) {
         var backgroundColor = event.color;
@@ -277,7 +285,7 @@ function GoogleCalendarComponent() {
             </div>
             <div>
                 <hr />
-                {selectedEvent && modalState && <Modal editFunc={handleEditEvent} deleteFunc={handleDeleteEvent} />}
+                {selectedEvent && modalState && <Modal event_obj={selectedEvent} editFunc={handleEditEvent} deleteFunc={handleDeleteEvent} />}
                 <div className='calendar-container'>
                     <DragAndDropCalendar
                         localizer={localizer}
@@ -286,8 +294,8 @@ function GoogleCalendarComponent() {
                         events={eventsTmp.current.map(e => generateRBCEvent(e))}
                         step={15}
                         style={{ height: "80vh" }}
-                        onEventDrop={handleMove}
-                        onEventResize={handleResize}
+                        // onEventDrop={handleMove}
+                        // onEventResize={handleResize}
                         eventPropGetter={(eventStyleGetter)}
                         onSelectEvent={(e) => handleSelectedEvent(e)}
                     />
@@ -296,5 +304,3 @@ function GoogleCalendarComponent() {
         </div>
     );
 }
-
-export default GoogleCalendarComponent;
