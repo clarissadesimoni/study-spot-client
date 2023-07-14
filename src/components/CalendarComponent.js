@@ -88,7 +88,6 @@ function CalendarComponent() {
                 return acc;
             }, {});
         }
-        console.log(data);
         calsTmp.current = data;
         setCalendars(data);
         return data;
@@ -130,7 +129,6 @@ function CalendarComponent() {
     }
 
     async function getEventsInRange(start, end) {
-        console.log(session);
         let { data, error } = await supabase
         .from('events')
         .select()
@@ -141,7 +139,6 @@ function CalendarComponent() {
             console.log(error.message);
         }
         if (data) {
-            console.log(data);
             eventsTmp.current = data;
             setEvents(data);
         }
@@ -236,8 +233,8 @@ function CalendarComponent() {
                         events={eventsTmp.current.map(e => generateRBCEvent(e))}
                         step={15}
                         style={{ height: "80vh" }}
-                        // onEventDrop={handleMove}
-                        // onEventResize={handleResize}
+                        onEventDrop={handleMove}
+                        onEventResize={handleResize}
                         eventPropGetter={(eventStyleGetter)}
                         onSelectEvent={(e) => handleSelectedEvent(e)}
                     />
