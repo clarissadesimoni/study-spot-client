@@ -11,7 +11,6 @@ function App() {
     const [ section, setSection ] = useState('calendar');
 
     if (session) {
-        console.log(session.user);
         return (
             <div className="App">
                 <Auth />

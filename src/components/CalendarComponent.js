@@ -95,38 +95,14 @@ function CalendarComponent() {
     }
 
     async function createEvent() {
-        console.log(session);
-        let query = supabase
+        let { data, error } = await supabase
         .from('events')
-        .insert([{ title: 'it works', start: moment().toDate().toISOString(), end: moment().add(2, 'hours').toDate().toISOString(), calendar: 1, owner: '43d20e86-e89f-4615-93d3-c4598abd21ec' }])
+        .insert([{ title: newEventName, start: newStart.toISOString(), end: newEnd.toISOString(), calendar: newEventCalendar.current, owner: session.user.id }])
         .select();
-        let { data, error } = await query;
         if (error) {
             console.log(error.message);
         }
         if (data) {
-            console.log(data);
-            setEvents(data);
-        }
-        /* const event = {
-            summary: newEventName,
-            start: {
-                dateTime: newStart.toISOString(),
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-            },
-            end: {
-                dateTime: newEnd.toISOString(),
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-            }
-        }
-        await fetch(`https://www.googleapis.com/calendar/v3/calendars/${newEventCalendar.current ?? 'primary'}/events`, {
-            method: "POST",
-            headers: {
-                Authorization: 'Bearer ' + session.provider_token
-            },
-            body: JSON.stringify(event)
-        }).then((data) => data.json())
-        .then((data) => {
             eventsTmp.current = [ ...events, data ];
             setEvents(eventsTmp.current);
             setNewEventName('');
@@ -134,39 +110,23 @@ function CalendarComponent() {
             setNewStart(new Date());
             setNewEnd(new Date());
             setIsAdding(false);
-        })
-        .catch(error => {
-            alert('Error creating event');
-            console.log(error);
-        }); */
+        }
     }
 
-    async function editEvent(event, start, end, isAllDay) {
-        /* const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        let newEvent = eventsTmp.current.find(e => e.id === event.id);
-        newEvent = { ...newEvent,
-            start: isAllDay ? {
-                date: new Intl.DateTimeFormat('en-CA', {}).format(start).substring(0, 10)
-            } : {
-                dateTime: start.toISOString(),
-                timeZone: timeZone
-            },
-            end: isAllDay ? {
-                date: new Intl.DateTimeFormat('en-CA', {}).format(end).substring(0, 10)
-            } : {
-                dateTime: end.toISOString(),
-                timeZone: timeZone
-            }
+    async function editEvent(eid, start, end, isAllDay) {
+        let { data, error } = await supabase
+        .from('events')
+        .update({
+            start: start.toISOString(),
+            end: end.toISOString(),
+            isAllDay: isAllDay
+        })
+        .eq('id', eid)
+        .select();
+        if (error) {
+            console.log(error.message);
         }
-        let result = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${event.calendar}/events/${event.id}`, {
-            method: 'PUT',
-            headers: {
-                Authorization: 'Bearer ' + session.provider_token
-            },
-            body: JSON.stringify(newEvent)
-        });
-        result = await result.json();
-        return result; */
+        return data;
     }
 
     async function getEventsInRange(start, end) {
@@ -174,44 +134,26 @@ function CalendarComponent() {
         let { data, error } = await supabase
         .from('events')
         .select()
-        // .eq('owner', session.user.id)
-        // .gte('start', start.toISOString())
-        // .lt('end', end.toISOString());
+        .eq('owner', session.user.id)
+        .gte('start', start.toISOString())
+        .lt('end', end.toISOString());
         if (error) {
             console.log(error.message);
         }
         if (data) {
             console.log(data);
+            eventsTmp.current = data;
             setEvents(data);
         }
-        /* var completeList = [];
-        for (var calendarId in (cals ?? calsTmp.current ?? calendars)) {
-            await fetch(`https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?orderBy=startTime&singleEvents=true&timeMin=${start.toISOString()}&timeMax=${end.toISOString()}`, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + session.provider_token
-                }
-            })
-            .then(response => {
-                return response.json();
-            })
-            .then(events => {
-                completeList.push(...events.items);
-                return completeList;
-            })
-            .catch(err => console.error(err));
-        }
-        eventsTmp.current = completeList;
-        setEvents(completeList); */
     }
 
-    /* const handleMove = useCallback(
+    const handleMove = useCallback(
         ({ event, start, end, isAllDay: droppedOnAllDaySlot = false }) => {
             const { allDay } = event
             if (!allDay && droppedOnAllDaySlot) {
                 event.allDay = true
             }
-            editEvent(event, start, end, event.allDay ?? false)
+            editEvent(event.id, start, end, event.allDay ?? false)
             .then((res) => {
                 setEvents((prev) => {
                     const filtered = prev.filter((ev) => ev.id !== event.id);
@@ -225,7 +167,7 @@ function CalendarComponent() {
 
     const handleResize = useCallback(
         ({ event, start, end }) => {
-            editEvent(event, start, end, false)
+            editEvent(event.id, start, end, false)
             .then((res) => {
                 setEvents((prev) => {
                     const filtered = prev.filter((ev) => ev.id !== event.id);
@@ -235,7 +177,7 @@ function CalendarComponent() {
             })
         },
         [setEvents]
-    ) */
+    )
 
     function eventStyleGetter(event, start, end, isSelected) {
         var backgroundColor = event.color;
