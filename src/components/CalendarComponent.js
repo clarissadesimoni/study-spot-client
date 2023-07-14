@@ -88,6 +88,7 @@ function CalendarComponent() {
                 return acc;
             }, {});
         }
+        console.log(data);
         calsTmp.current = data;
         setCalendars(data);
         return data;
@@ -170,13 +171,12 @@ function CalendarComponent() {
 
     async function getEventsInRange(start, end) {
         console.log(session);
-        let query = supabase
+        let { data, error } = await supabase
         .from('events')
         .select()
-        .eq('owner', session.user.id)
+        // .eq('owner', session.user.id)
         // .gte('start', start.toISOString())
         // .lt('end', end.toISOString());
-        let { data, error } = await query;
         if (error) {
             console.log(error.message);
         }
