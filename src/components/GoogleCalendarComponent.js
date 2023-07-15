@@ -14,7 +14,7 @@ import 'react-clock/dist/Clock.css';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
-const localizer = momentLocalizer(moment.locale('it-IT'));
+const localizer = momentLocalizer(moment.locale('it'));
 
 function GoogleCalendarComponent() {
 
