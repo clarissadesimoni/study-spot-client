@@ -8,6 +8,7 @@ class Task {
         this.isCompleted = isCompleted;
         this.duration = duration;
         this.due = !due_obj && !due_dict ? null : due_obj ?? new Date(Date.parse(due_dict.datetime ?? due_dict.date));
+        this.isAllDay = due_dict && !due_dict.datetime
     }
 
     isBefore = function (other) {

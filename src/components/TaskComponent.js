@@ -7,6 +7,9 @@ function TaskComponent({ obj, editFunc, closeFunc, deleteFunc }) {
     const [isEditing, setIsEditing] = useState(false);
     var newName = useRef('');
 
+    var dtf = new Intl.DateTimeFormat('it-IT', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' });
+    var df = new Intl.DateTimeFormat('it-IT', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Europe/Rome' });
+
     function handleEdit() {
         editFunc(obj.id, newName.current);
         setIsEditing(false);
@@ -23,7 +26,7 @@ function TaskComponent({ obj, editFunc, closeFunc, deleteFunc }) {
     return (
         <>
             <input type="checkbox" onChange={handleCheck} />
-            <text>{obj.name} - {projects[obj.projectId]} - {obj.due ? obj.due.toISOString() : 'no due date'} - {obj.labels && obj.labels.length > 0 ? obj.labels.map(label => labels[label]).reduce((acc, label) => acc + ', ' + label) : 'no labels'}</text>
+            <text>{obj.name} - {projects[obj.projectId]} - {obj.due ? (obj.isAllDay ? df.format(obj.due) : dtf.format(obj.due)) : 'no due date'} - {obj.labels && obj.labels.length > 0 ? obj.labels.map(label => labels[label]).reduce((acc, label) => acc + ', ' + label) : 'no labels'}</text>
             <button className='btn tm-btn' onClick={() => setIsEditing(true)}>Rinomina</button>
             {
                 isEditing && (
