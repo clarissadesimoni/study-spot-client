@@ -37,7 +37,26 @@ function GoogleCalendarComponent() {
     }
 
     const handleDeleteEvent = (event) => {
-
+        fetch(`https://www.googleapis.com/calendar/v3/calendars/${event.calendar ?? 'primary'}/events/${event.id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: 'Bearer ' + session.provider_token
+            }
+        }).then((data) => data.json())
+        .then((data) => {
+            console.log(data);
+            /* eventsTmp.current = [ ...events, data ];
+            setEvents(eventsTmp.current);
+            setNewEventName('');
+            newEventCalendar.current = '';
+            setNewStart(new Date());
+            setNewEnd(new Date());
+            setIsAdding(false); */
+        })
+        .catch(error => {
+            alert('Error deleting event');
+            console.log(error);
+        });
     }
     
     const handleSelectedEvent = (event) => {
@@ -282,7 +301,6 @@ function GoogleCalendarComponent() {
                 <div className='calendar-container'>
                     <DragAndDropCalendar
                         localizer={localizer}
-                        culture='it'
                         defaultDate={new Date()}
                         defaultView="week"
                         events={eventsTmp.current.map(e => generateRBCEvent(e))}

@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import Select from 'react-select';
 import moment from 'moment';
+import 'moment/locale/it';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
@@ -238,6 +239,24 @@ function CalendarComponent() {
                         onEventResize={handleResize}
                         eventPropGetter={(eventStyleGetter)}
                         onSelectEvent={(e) => handleSelectedEvent(e)}
+                        messages={{
+                            today: 'Oggi',
+                            previous: 'Indietro',
+                            next: 'Avanti',
+                            month: 'Mese',
+                            week: 'Settimana',
+                            day: 'Giorno',
+                            work_week: 'Settimana lavorativa',
+                            yesterday: 'Ieri',
+                            tomorrow: 'Domani',
+                            agenda: 'Elenco',
+                            allDay: 'Tutto il giorno',
+                            date: 'Giorno',
+                            event: 'Evento',
+                            noEventsInRange: 'Nessun evento in questo periodo.',
+                            showMore: (total) => `+${total} in più`,
+                            time: 'Orario'
+                        }}
                     />
                 </div>
             </div>
