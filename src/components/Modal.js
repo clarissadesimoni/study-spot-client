@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 function Modal({ event_obj, editFunc, deleteFunc }) {
     const [ isRenaming, setIsRenaming ] = useState(false);
     const [ renamed, setRenamed ] = useState('');
