@@ -292,6 +292,24 @@ function GoogleCalendarComponent() {
                         onEventResize={handleResize}
                         eventPropGetter={(eventStyleGetter)}
                         onSelectEvent={(e) => handleSelectedEvent(e)}
+                        messages={{
+                            today: 'Oggi',
+                            previous: 'Indietro',
+                            next: 'Avanti',
+                            month: 'Mese',
+                            week: 'Settimana',
+                            day: 'Giorno',
+                            work_week: 'Settimana lavorativa',
+                            yesterday: 'Ieri',
+                            tomorrow: 'Domani',
+                            agenda: 'Elenco',
+                            allDay: 'Tutto il giorno',
+                            date: 'Giorno',
+                            event: 'Evento',
+                            noEventsInRange: 'Nessun evento in questo periodo.',
+                            showMore: (total) => `+${total} in più`,
+                            time: 'Orario'
+                        }}
                     />
                 </div>
             </div>
