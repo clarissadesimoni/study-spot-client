@@ -34,7 +34,7 @@ function GoogleCalendarComponent() {
 
     const handleEditEvent = (event, renamed) => {
         editEvent(event, renamed, event.start, event.end, event.isAllDay)
-        then((res) => {
+        .then((res) => {
             const filtered = prev.filter((ev) => ev.id !== event.id);
             eventsTmp.current = [ ...filtered, res ];
             setEvents(eventsTmp.current);
