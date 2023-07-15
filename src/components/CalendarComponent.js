@@ -32,12 +32,27 @@ function CalendarComponent() {
     let eventsTmp = useRef([]);
     let newEventCalendar = useRef('');
 
-    const handleEditEvent = (event) => {
-        
+    const handleEditEvent = (event, renamed) => {
+        editEvent(event, renamed, event.start, event.end, event.isAllDay)
+        .then((res) => {
+            const filtered = events.filter((ev) => ev.id !== event.id);
+            eventsTmp.current = [ ...filtered, res ];
+            setEvents(eventsTmp.current);
+        })
     }
 
     const handleDeleteEvent = (event) => {
-
+        supabase
+        .from('events')
+        .delete()
+        .eq('id', event.id)
+        .then(() => {
+            const filtered = events.filter((ev) => ev.id !== event.id);
+            eventsTmp.current = [ ...filtered ];
+            setEvents(eventsTmp.current);
+            setModalState(false);
+        })
+        .catch((error) => console.log(error));
     }
     
     const handleSelectedEvent = (event) => {
@@ -114,10 +129,11 @@ function CalendarComponent() {
         }
     }
 
-    async function editEvent(eid, start, end, isAllDay) {
+    async function editEvent(eid, title, start, end, isAllDay) {
         let { data, error } = await supabase
         .from('events')
         .update({
+            title: title,
             start: start.toISOString(),
             end: end.toISOString(),
             isAllDay: isAllDay
@@ -152,7 +168,7 @@ function CalendarComponent() {
             if (!allDay && droppedOnAllDaySlot) {
                 event.allDay = true
             }
-            editEvent(event.id, start, end, event.allDay ?? false)
+            editEvent(event.id, event.title, start, end, event.allDay ?? false)
             .then((res) => {
                 setEvents((prev) => {
                     const filtered = prev.filter((ev) => ev.id !== event.id);
@@ -166,7 +182,7 @@ function CalendarComponent() {
 
     const handleResize = useCallback(
         ({ event, start, end }) => {
-            editEvent(event.id, start, end, false)
+            editEvent(event.id, event.title, start, end, false)
             .then((res) => {
                 setEvents((prev) => {
                     const filtered = prev.filter((ev) => ev.id !== event.id);
