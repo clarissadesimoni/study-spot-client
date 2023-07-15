@@ -37,14 +37,16 @@ function GoogleCalendarComponent() {
     }
 
     const handleDeleteEvent = (event) => {
-        fetch(`https://www.googleapis.com/calendar/v3/calendars/${event.calendar ?? 'primary'}/events/${event.id}`, {
+        console.log(event);
+        fetch(`https://www.googleapis.com/calendar/v3/calendars/${event.calendar}/events/${event.id}`, {
             method: "DELETE",
             headers: {
                 Authorization: 'Bearer ' + session.provider_token
             }
-        }).then((data) => data.json())
+        })
+        // .then((data) => data.json())
         .then((data) => {
-            console.log(data);
+            console.log(data.text());
             /* eventsTmp.current = [ ...events, data ];
             setEvents(eventsTmp.current);
             setNewEventName('');
