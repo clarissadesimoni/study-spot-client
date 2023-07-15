@@ -21,7 +21,7 @@ function TodoistLabelsView() {
                                 value: k,
                                 label: v
                             }
-                        })} defaultValue={''} onChange={selected => handleFilter(selected.value)} isClearable={true} isSearchable={true} />
+                        })} defaultValue={''} onChange={selected => selected.value ? handleFilter(selected.value) : handleFilter(null)} isClearable={true} isSearchable={true} />
                     </div>
                 ) : null
             }
