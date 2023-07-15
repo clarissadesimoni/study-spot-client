@@ -33,7 +33,7 @@ function CalendarComponent() {
     let newEventCalendar = useRef('');
 
     const handleEditEvent = (event, renamed) => {
-        editEvent(event, renamed, event.start, event.end, event.isAllDay)
+        editEvent(event.id, renamed, event.start, event.end, event.isAllDay)
         .then((res) => {
             const filtered = events.filter((ev) => ev.id !== event.id);
             eventsTmp.current = [ ...filtered, res ];
@@ -76,10 +76,6 @@ function CalendarComponent() {
     }, []);
 
     function generateRBCEvent(ev) {
-        console.log(ev);
-        console.log(ev.calendar);
-        console.log(calsTmp.current[ev.calendar]);
-        console.log(calsTmp.current[ev.calendar].color);
         return {
             id: ev.id,
             title: ev.title,
