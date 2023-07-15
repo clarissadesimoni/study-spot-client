@@ -21,7 +21,7 @@ function LabelsView() {
                                 value: k,
                                 label: v
                             }
-                        })} defaultValue={''} onChange={selected => selected.value ? handleFilter(selected.value) : handleFilter(null)} isClearable={true} isSearchable={true} />
+                        })} defaultValue={''} onChange={selected => selected ? handleFilter(selected.value) : handleFilter(null)} isClearable={true} isSearchable={true} />
                     </div>
                 ) : null
             }
