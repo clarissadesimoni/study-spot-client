@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import Select from 'react-select';
 import moment from 'moment';
+import 'moment/locale/it';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import DateTimePicker from 'react-datetime-picker';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
@@ -285,7 +286,7 @@ function GoogleCalendarComponent() {
                         defaultView="week"
                         events={eventsTmp.current.map(e => generateRBCEvent(e))}
                         step={15}
-                        style={{ height: "80vh" }}
+                        style={{ height: "70vh" }}
                         onEventDrop={handleMove}
                         onEventResize={handleResize}
                         eventPropGetter={(eventStyleGetter)}
