@@ -282,6 +282,7 @@ function GoogleCalendarComponent() {
                 <div className='calendar-container'>
                     <DragAndDropCalendar
                         localizer={localizer}
+                        culture='it'
                         defaultDate={new Date()}
                         defaultView="week"
                         events={eventsTmp.current.map(e => generateRBCEvent(e))}
