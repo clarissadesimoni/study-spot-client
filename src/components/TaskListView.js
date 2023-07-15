@@ -41,7 +41,7 @@ function TaskListView() {
         if (data) {
             if (filter.dates) {
                 data = data.filter(task => {
-                    let due = new Date(Date.parse(task.due + 'Z'));
+                    let due = new Date(task.due);
                     return filter.dates.start <= due <= filter.dates.end;
                 })
             }
@@ -53,7 +53,7 @@ function TaskListView() {
             }
             data = data.map(task => {
                 console.log(task);
-                const tmp = new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, new Date(Date.parse(task.due + 'Z')), null);
+                const tmp = new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, new Date(task.due), null);
                 console.log(tmp);
                 return tmp;
             }).sort((t1, t2) => {
