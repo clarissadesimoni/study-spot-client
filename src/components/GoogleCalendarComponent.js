@@ -277,7 +277,7 @@ function GoogleCalendarComponent() {
             </div>
             <div>
                 <hr />
-                {selectedEvent && modalState && <Modal editFunc={handleEditEvent} deleteFunc={handleDeleteEvent} />}
+                {selectedEvent && modalState && <Modal event_obj={selectedEvent} editFunc={handleEditEvent} deleteFunc={handleDeleteEvent} />}
                 <div className='calendar-container'>
                     <DragAndDropCalendar
                         localizer={localizer}
