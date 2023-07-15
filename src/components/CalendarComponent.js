@@ -122,8 +122,7 @@ function CalendarComponent() {
             console.log(error.message);
         }
         if (data) {
-            console.log(data);
-            eventsTmp.current = [ ...events, data ];
+            eventsTmp.current = [ ...events, ...data ];
             setEvents(eventsTmp.current);
             setNewEventName('');
             newEventCalendar.current = '';
