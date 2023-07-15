@@ -76,7 +76,8 @@ function CalendarComponent() {
     }, []);
 
     function generateRBCEvent(ev) {
-        console.log(calsTmp.current);
+        console.log(calsTmp.current[ev.calendar]);
+        console.log(calsTmp.current[ev.calendar].color);
         return {
             id: ev.id,
             title: ev.title,
