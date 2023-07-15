@@ -52,7 +52,9 @@ function TaskListView() {
                 data = data.filter(task => task.labels.includes(+filter.labelId));
             }
             data = data.map(task => {
+                console.log(task);
                 const tmp = new Task(false, task.id, task.title, task.projectId, task.labels, task.isCompleted, task.durationMinutes, new Date(Date.parse(task.due + 'Z')), null);
+                console.log(tmp);
                 return tmp;
             }).sort((t1, t2) => {
                 if (t1.projectId - t2.projectId != 0)
