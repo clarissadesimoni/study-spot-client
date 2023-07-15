@@ -38,6 +38,7 @@ function CalendarComponent() {
             const filtered = events.filter((ev) => ev.id !== event.id);
             eventsTmp.current = [ ...filtered, res ];
             setEvents(eventsTmp.current);
+            setSelectedEvent(generateRBCEvent(res));
         })
     }
 
