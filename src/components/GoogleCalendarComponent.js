@@ -32,28 +32,32 @@ function GoogleCalendarComponent() {
     let eventsTmp = useRef([]);
     let newEventCalendar = useRef('');
 
-    const handleEditEvent = (event) => {
-        
+    const handleEditEvent = (event, renamed) => {
+        editEvent(event, renamed, event.start, event.end, event.isAllDay)
+        then((res) => {
+            const filtered = prev.filter((ev) => ev.id !== event.id);
+            eventsTmp.current = [ ...filtered, res ];
+            setEvents(eventsTmp.current);
+        })
     }
 
     const handleDeleteEvent = (event) => {
-        console.log(event);
         fetch(`https://www.googleapis.com/calendar/v3/calendars/${event.calendar}/events/${event.id}`, {
             method: "DELETE",
             headers: {
                 Authorization: 'Bearer ' + session.provider_token
             }
         })
-        // .then((data) => data.json())
-        .then((data) => {
-            console.log(data.text());
-            /* eventsTmp.current = [ ...events, data ];
-            setEvents(eventsTmp.current);
-            setNewEventName('');
-            newEventCalendar.current = '';
-            setNewStart(new Date());
-            setNewEnd(new Date());
-            setIsAdding(false); */
+        .then((res) => res.text())
+        .then((txt) => {
+            if (txt.length == 0) {
+                const filtered = events.filter((ev) => ev.id !== event.id);
+                eventsTmp.current = [ ...filtered ];
+                setEvents(eventsTmp.current);
+                setModalState(false);
+            } else {
+                console.log(txt);
+            }
         })
         .catch(error => {
             alert('Error deleting event');
@@ -169,10 +173,11 @@ function GoogleCalendarComponent() {
         });
     }
 
-    async function editEvent(event, start, end, isAllDay) {
+    async function editEvent(event, summary, start, end, isAllDay) {
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         let newEvent = eventsTmp.current.find(e => e.id === event.id);
         newEvent = { ...newEvent,
+            summary: summary,
             start: isAllDay ? {
                 date: new Intl.DateTimeFormat('en-CA', {}).format(start).substring(0, 10)
             } : {
@@ -225,7 +230,7 @@ function GoogleCalendarComponent() {
             if (!allDay && droppedOnAllDaySlot) {
                 event.allDay = true
             }
-            editEvent(event, start, end, event.allDay ?? false)
+            editEvent(event, event.title, start, end, event.allDay ?? false)
             .then((res) => {
                 setEvents((prev) => {
                     const filtered = prev.filter((ev) => ev.id !== event.id);
@@ -239,7 +244,7 @@ function GoogleCalendarComponent() {
 
     const handleResize = useCallback(
         ({ event, start, end }) => {
-            editEvent(event, start, end, false)
+            editEvent(event, event.title, start, end, false)
             .then((res) => {
                 setEvents((prev) => {
                     const filtered = prev.filter((ev) => ev.id !== event.id);
